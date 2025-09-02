@@ -81,7 +81,7 @@ export default function LawyerOnboardingPage() {
       // Update user profile type
       await supabase
         .from('profiles')
-        .update({ user_type: 'lawyer' })
+        .update({ user_type: 'lawyer' } as any)
         .eq('id', user.id)
 
       // If Stripe Connect selected, redirect to Stripe onboarding
