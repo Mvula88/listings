@@ -89,7 +89,7 @@ export default async function PropertyDetailPage({
   // Increment view count
   await supabase
     .from('properties')
-    .update({ views: (property.views || 0) + 1 })
+    .update({ views: (property.views || 0) + 1 } as any)
     .eq('id', property.id)
 
   return (
