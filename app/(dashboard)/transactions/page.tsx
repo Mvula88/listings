@@ -71,7 +71,7 @@ export default async function TransactionsPage() {
 
       {transactions && transactions.length > 0 ? (
         <div className="grid gap-4">
-          {transactions.map((transaction) => {
+          {transactions.map((transaction: any) => {
             const userRole = transaction.buyer_id === user.id ? 'buyer' : 'seller'
             const otherParty = userRole === 'buyer' ? transaction.seller : transaction.buyer
             
