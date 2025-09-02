@@ -79,10 +79,10 @@ export default function LawyerOnboardingPage() {
       if (lawyerError) throw lawyerError
 
       // Update user profile type
-      await supabase
+      await (supabase
         .from('profiles')
-        .update({ user_type: 'lawyer' } as any)
-        .eq('id', user.id)
+        .update({ user_type: 'lawyer' })
+        .eq('id', user.id) as any)
 
       // If Stripe Connect selected, redirect to Stripe onboarding
       if (formData.paymentMethod === 'stripe_connect') {
