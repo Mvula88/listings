@@ -66,7 +66,7 @@ export default function RegisterPage() {
             phone: formData.phone,
             user_type: formData.userType,
             country_id: formData.country || null
-          })
+          } as any)
 
         if (profileError) throw profileError
 
