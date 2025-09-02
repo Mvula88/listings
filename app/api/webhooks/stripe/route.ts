@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const supabase = await createClient()
+  const supabase: any = await createClient()
 
   try {
     switch (event.type) {
@@ -122,7 +122,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function calculateLawyerReferralFees(transactionId: string) {
-  const supabase = await createClient()
+  const supabase: any = await createClient()
   
   // Get transaction details
   const { data: transaction } = await supabase
