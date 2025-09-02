@@ -37,7 +37,7 @@ export default async function PaymentSuccessPage({
       )
     `)
     .eq('id', params.id)
-    .single()
+    .single() as any
 
   if (!transaction) {
     redirect('/transactions')
