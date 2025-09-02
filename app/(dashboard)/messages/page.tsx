@@ -40,7 +40,7 @@ export default async function MessagesPage({
 
   // Get participants info for each conversation
   const conversationsWithParticipants = await Promise.all(
-    (conversations || []).map(async (conv) => {
+    (conversations || []).map(async (conv: any) => {
       const otherParticipantId = conv.participants.find((id: string) => id !== user.id)
       
       const { data: participant } = await supabase
