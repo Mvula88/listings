@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
         )
       `)
       .eq('id', transactionId)
-      .single()
+      .single() as any
 
     if (!transaction) {
       return NextResponse.json(
