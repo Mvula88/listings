@@ -33,8 +33,8 @@ export default async function DashboardPage() {
     .select('id, status')
     .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
 
-  const activeTransactions = transactions?.filter(t => t.status !== 'completed').length || 0
-  const completedTransactions = transactions?.filter(t => t.status === 'completed').length || 0
+  const activeTransactions = (transactions as any)?.filter((t: any) => t.status !== 'completed').length || 0
+  const completedTransactions = (transactions as any)?.filter((t: any) => t.status === 'completed').length || 0
 
   return (
     <div className="space-y-8">
