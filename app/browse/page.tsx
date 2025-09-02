@@ -77,7 +77,7 @@ export default async function BrowsePropertiesPage({
     query = query.eq('country_id', searchParams.country)
   }
 
-  const { data: properties } = await query
+  const { data: properties } = await query as any
 
   // Get countries for filter
   const { data: countries } = await supabase
