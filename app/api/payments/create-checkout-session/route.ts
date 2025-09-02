@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     const { transactionId, userRole, amount, currency } = await request.json()
     
-    const supabase = await createClient()
+    const supabase: any = await createClient()
     
     // Get current user
     const { data: { user } } = await supabase.auth.getUser()
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
       stripeCustomerId = customer.id
 
       // Save Stripe customer ID
-      const updateResult: any = await supabase
+      await supabase
         .from('profiles')
         .update({ stripe_customer_id: stripeCustomerId })
         .eq('id', user.id)
