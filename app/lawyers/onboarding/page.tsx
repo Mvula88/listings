@@ -74,7 +74,7 @@ export default function LawyerOnboardingPage() {
           payment_method: formData.paymentMethod,
           verified: false,
           available: true
-        })
+        } as any)
 
       if (lawyerError) throw lawyerError
 
