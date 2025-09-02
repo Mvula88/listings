@@ -25,7 +25,7 @@ export default function LawyerOnboardingPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase: any = createClient()
   
   const [formData, setFormData] = useState({
     firmName: '',
@@ -74,15 +74,15 @@ export default function LawyerOnboardingPage() {
           payment_method: formData.paymentMethod,
           verified: false,
           available: true
-        } as any)
+        })
 
       if (lawyerError) throw lawyerError
 
       // Update user profile type
-      await (supabase
+      await supabase
         .from('profiles')
         .update({ user_type: 'lawyer' })
-        .eq('id', user.id) as any)
+        .eq('id', user.id)
 
       // If Stripe Connect selected, redirect to Stripe onboarding
       if (formData.paymentMethod === 'stripe_connect') {
