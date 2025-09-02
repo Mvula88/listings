@@ -53,7 +53,7 @@ export default async function PaymentPage({
       )
     `)
     .eq('id', params.id)
-    .single()
+    .single() as any
 
   if (!transaction) {
     notFound()
