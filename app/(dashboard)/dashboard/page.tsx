@@ -15,7 +15,7 @@ export default async function DashboardPage() {
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .single() as any
 
   // Get user-specific stats
   const { data: properties } = await supabase
