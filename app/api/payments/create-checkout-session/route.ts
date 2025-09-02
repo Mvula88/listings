@@ -79,10 +79,10 @@ export async function POST(request: NextRequest) {
       stripeCustomerId = customer.id
 
       // Save Stripe customer ID
-      await (supabase
+      const updateResult: any = await supabase
         .from('profiles')
         .update({ stripe_customer_id: stripeCustomerId })
-        .eq('id', user.id) as any)
+        .eq('id', user.id)
     }
 
     // Create Stripe checkout session
