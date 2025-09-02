@@ -49,7 +49,7 @@ export default async function SelectLawyersPage({
       )
     `)
     .eq('id', params.id)
-    .single()
+    .single() as any
 
   if (!transaction) {
     notFound()
