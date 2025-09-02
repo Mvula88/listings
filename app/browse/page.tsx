@@ -153,7 +153,7 @@ export default async function BrowsePropertiesPage({
 
             {properties && properties.length > 0 ? (
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {properties.map((property) => (
+                {properties.map((property: any) => (
                   <PropertyCard key={property.id} property={property} />
                 ))}
               </div>
