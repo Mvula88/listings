@@ -36,7 +36,7 @@ export default async function MessagesPage({
       )
     `)
     .contains('participants', [user.id])
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false }) as any
 
   // Get participants info for each conversation
   const conversationsWithParticipants = await Promise.all(
