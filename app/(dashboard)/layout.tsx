@@ -20,7 +20,7 @@ export default async function DashboardLayout({
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .single() as any
 
   return (
     <div className="min-h-screen bg-background">
