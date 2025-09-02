@@ -11,17 +11,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Badge } from '@/components/ui/badge'
 import { 
-  Briefcase, 
   Award, 
   DollarSign, 
-  MapPin, 
-  Languages, 
-  FileText,
   CheckCircle,
   Loader2,
-  ArrowRight
+  ArrowRight,
+  Users
 } from 'lucide-react'
 
 export default function LawyerOnboardingPage() {
