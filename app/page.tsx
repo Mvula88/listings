@@ -3,108 +3,43 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ArrowRight, Home, Users, DollarSign, Shield, CheckCircle, MapPin, Bed, Bath, Square } from "lucide-react"
+import { getFeaturedProperties, formatPropertyPrice } from "@/lib/data/properties"
 
-export default function HomePage() {
-  // Sample listings data - in production this would come from your database
-  const featuredListings = [
+export default async function HomePage() {
+  // Fetch real featured properties from Supabase
+  const featuredListings = await getFeaturedProperties(8)
+
+  // Fallback to mock data if no properties in database
+  const displayListings = featuredListings.length > 0 ? featuredListings : [
     {
-      id: 1,
+      id: '1',
       title: "Modern Family Home in Windhoek",
-      location: "Klein Windhoek, Windhoek",
+      city: "Windhoek",
+      province: "Khomas",
       price: 2850000,
-      image: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop",
-      beds: 4,
-      baths: 3,
-      size: 280,
-      type: "House"
+      currency: 'NAD',
+      images: [{ id: '1', url: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop", alt_text: "Modern home", order_index: 0 }],
+      bedrooms: 4,
+      bathrooms: 3,
+      square_meters: 280,
+      property_type: "house",
+      country: { name: "Namibia", currency_symbol: "N$" }
     },
     {
-      id: 2,
+      id: '2',
       title: "Luxury Apartment with Ocean Views",
-      location: "Waterfront, Cape Town",
+      city: "Cape Town",
+      province: "Western Cape",
       price: 4500000,
-      image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop",
-      beds: 3,
-      baths: 2,
-      size: 180,
-      type: "Apartment"
-    },
-    {
-      id: 3,
-      title: "Spacious Townhouse in Secure Estate",
-      location: "Centurion, Pretoria",
-      price: 1950000,
-      image: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&h=600&fit=crop",
-      beds: 3,
-      baths: 2.5,
-      size: 220,
-      type: "Townhouse"
-    },
-    {
-      id: 4,
-      title: "Contemporary Villa with Pool",
-      location: "Sandton, Johannesburg",
-      price: 6800000,
-      image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=800&h=600&fit=crop",
-      beds: 5,
-      baths: 4,
-      size: 450,
-      type: "Villa"
-    },
-    {
-      id: 5,
-      title: "Cozy Studio in City Center",
-      location: "CBD, Cape Town",
-      price: 950000,
-      image: "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=800&h=600&fit=crop",
-      beds: 1,
-      baths: 1,
-      size: 45,
-      type: "Studio"
-    },
-    {
-      id: 6,
-      title: "Beach House with Direct Access",
-      location: "Swakopmund, Namibia",
-      price: 3200000,
-      image: "https://images.unsplash.com/photo-1499793983690-e29da59ef1c2?w=800&h=600&fit=crop",
-      beds: 3,
-      baths: 2,
-      size: 190,
-      type: "House"
-    },
-    {
-      id: 7,
-      title: "Investment Property with Tenants",
-      location: "Rosebank, Johannesburg",
-      price: 1450000,
-      image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=800&h=600&fit=crop",
-      beds: 2,
-      baths: 1,
-      size: 85,
-      type: "Apartment"
-    },
-    {
-      id: 8,
-      title: "Farm House with Large Plot",
-      location: "Stellenbosch, Western Cape",
-      price: 8500000,
-      image: "https://images.unsplash.com/photo-1524634126442-357e0eac3c14?w=800&h=600&fit=crop",
-      beds: 6,
-      baths: 4,
-      size: 520,
-      type: "Farm"
-    }
-  ]
-
-  const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('en-ZA', {
-      style: 'currency',
       currency: 'ZAR',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(price)
-  }
+      images: [{ id: '2', url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop", alt_text: "Apartment", order_index: 0 }],
+      bedrooms: 3,
+      bathrooms: 2,
+      square_meters: 180,
+      property_type: "apartment",
+      country: { name: "South Africa", currency_symbol: "R" }
+    }
+  ] as any[]
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -178,20 +113,20 @@ export default function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredListings.map((listing) => (
+            {displayListings.map((listing) => (
               <Link href={`/properties/${listing.id}`} key={listing.id}>
                 <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <Image
-                      src={listing.image}
-                      alt={listing.title}
+                      src={listing.images?.[0]?.url || "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop"}
+                      alt={listing.images?.[0]?.alt_text || listing.title}
                       fill
                       className="object-cover hover:scale-105 transition-transform duration-300"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
                     />
                     <div className="absolute top-3 left-3">
-                      <span className="bg-background/90 backdrop-blur px-2 py-1 rounded text-xs font-medium">
-                        {listing.type}
+                      <span className="bg-background/90 backdrop-blur px-2 py-1 rounded text-xs font-medium capitalize">
+                        {listing.property_type?.replace('_', ' ') || 'Property'}
                       </span>
                     </div>
                   </div>
@@ -200,31 +135,31 @@ export default function HomePage() {
                       <h3 className="font-semibold text-lg line-clamp-1">{listing.title}</h3>
                       <div className="flex items-center gap-1 text-muted-foreground text-sm mt-1">
                         <MapPin className="h-3 w-3" />
-                        <span className="line-clamp-1">{listing.location}</span>
+                        <span className="line-clamp-1">{listing.city}, {listing.province}</span>
                       </div>
                     </div>
                     
                     <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
                       <div className="flex items-center gap-1">
                         <Bed className="h-4 w-4" />
-                        <span>{listing.beds}</span>
+                        <span>{listing.bedrooms || 0}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Bath className="h-4 w-4" />
-                        <span>{listing.baths}</span>
+                        <span>{listing.bathrooms || 0}</span>
                       </div>
                       <div className="flex items-center gap-1">
                         <Square className="h-4 w-4" />
-                        <span>{listing.size}m²</span>
+                        <span>{listing.square_meters || 0}m²</span>
                       </div>
                     </div>
                     
                     <div className="flex justify-between items-center">
                       <div className="text-2xl font-bold">
-                        {formatPrice(listing.price)}
+                        {formatPropertyPrice(listing.price, listing.country?.currency_symbol || 'R')}
                       </div>
                       <span className="text-xs text-primary font-medium">
-                        Save {formatPrice(listing.price * 0.06)}
+                        Save {formatPropertyPrice(listing.price * 0.06, listing.country?.currency_symbol || 'R')}
                       </span>
                     </div>
                   </CardContent>
