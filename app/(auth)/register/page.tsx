@@ -78,19 +78,19 @@ export default function RegisterPage() {
       if (authError) throw authError
 
       if (authData.user) {
-        // Create profile
-        const { error: profileError } = await supabase
-          .from('profiles')
-          .insert({
-            id: authData.user.id,
-            email: formData.email,
-            full_name: formData.fullName,
-            phone: formData.phone,
-            user_type: formData.userType,
-            country_id: formData.country || null
-          } as any)
-
-        if (profileError) throw profileError
+        // Profile will be created automatically by database trigger
+        // Update the profile with country_id if selected
+        if (formData.country) {
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ country_id: formData.country })
+            .eq('id', authData.user.id)
+          
+          if (updateError) {
+            console.error('Error updating country:', updateError)
+            // Don't throw - profile was created, just country update failed
+          }
+        }
 
         router.push('/dashboard')
         router.refresh()
