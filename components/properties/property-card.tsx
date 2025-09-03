@@ -3,8 +3,9 @@ import Image from 'next/image'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Bed, Bath, Square, MapPin, Heart } from 'lucide-react'
+import { Bed, Bath, Square, MapPin, Heart, TrendingDown } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
+import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
 
 interface PropertyCardProps {
   property: any
@@ -13,6 +14,11 @@ interface PropertyCardProps {
 export function PropertyCard({ property }: PropertyCardProps) {
   const mainImage = property.property_images?.[0]?.url || '/placeholder-property.jpg'
   const currency = property.country?.currency || 'ZAR'
+  const countryCode = property.country?.code || 'ZA'
+  
+  // Calculate savings
+  const savings = calculateSavings(property.price, countryCode, currency)
+  const formatted = formatSavingsDisplay(savings)
   
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
@@ -44,6 +50,18 @@ export function PropertyCard({ property }: PropertyCardProps) {
               Featured
             </Badge>
           )}
+          {/* Savings Badge */}
+          <div className="absolute bottom-2 left-2 right-2">
+            <div className="bg-primary/95 text-primary-foreground rounded-md px-3 py-1.5 flex items-center justify-between">
+              <span className="text-xs font-medium flex items-center gap-1">
+                <TrendingDown className="h-3 w-3" />
+                Save {formatted.totalSavings}
+              </span>
+              <span className="text-xs">
+                vs agent fees
+              </span>
+            </div>
+          </div>
         </div>
       </Link>
       
@@ -84,12 +102,17 @@ export function PropertyCard({ property }: PropertyCardProps) {
         
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-2xl font-bold text-primary">
+            <p className="text-2xl font-bold">
               {formatPrice(property.price, currency)}
             </p>
-            <p className="text-xs text-muted-foreground">
-              Save {formatPrice(property.price * 0.06, currency)} vs agents
-            </p>
+            <div className="mt-1 space-y-1">
+              <p className="text-xs text-muted-foreground line-through">
+                Agent fees: {formatted.traditionalAgentFee}
+              </p>
+              <p className="text-xs font-medium text-primary">
+                DealDirect: {formatted.dealDirectFee} only
+              </p>
+            </div>
           </div>
         </div>
       </CardContent>

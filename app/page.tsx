@@ -2,8 +2,10 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Home, Users, DollarSign, Shield, CheckCircle, MapPin, Bed, Bath, Square } from "lucide-react"
+import { ArrowRight, Home, Users, DollarSign, Shield, CheckCircle, MapPin, Bed, Bath, Square, TrendingDown } from "lucide-react"
 import { getFeaturedProperties, formatPropertyPrice } from "@/lib/data/properties"
+import { SavingsCalculator } from "@/components/calculator/savings-calculator"
+import { calculateSavings, formatSavingsDisplay } from "@/lib/utils/savings-calculator"
 
 export default async function HomePage() {
   // Fetch real featured properties from Supabase
@@ -113,59 +115,83 @@ export default async function HomePage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {displayListings.map((listing) => (
-              <Link href={`/properties/${listing.id}`} key={listing.id}>
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={listing.images?.[0]?.url || "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop"}
-                      alt={listing.images?.[0]?.alt_text || listing.title}
-                      fill
-                      className="object-cover hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-background/90 backdrop-blur px-2 py-1 rounded text-xs font-medium capitalize">
-                        {listing.property_type?.replace('_', ' ') || 'Property'}
-                      </span>
-                    </div>
-                  </div>
-                  <CardContent className="p-4">
-                    <div className="mb-2">
-                      <h3 className="font-semibold text-lg line-clamp-1">{listing.title}</h3>
-                      <div className="flex items-center gap-1 text-muted-foreground text-sm mt-1">
-                        <MapPin className="h-3 w-3" />
-                        <span className="line-clamp-1">{listing.city}, {listing.province}</span>
+            {displayListings.map((listing) => {
+              const countryCode = listing.country?.code || 'ZA'
+              const currency = listing.currency || 'ZAR'
+              const savings = calculateSavings(listing.price, countryCode, currency)
+              const formatted = formatSavingsDisplay(savings)
+              
+              return (
+                <Link href={`/properties/${listing.id}`} key={listing.id}>
+                  <Card className="hover:shadow-lg transition-shadow cursor-pointer h-full">
+                    <div className="relative aspect-[4/3] overflow-hidden">
+                      <Image
+                        src={listing.images?.[0]?.url || "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop"}
+                        alt={listing.images?.[0]?.alt_text || listing.title}
+                        fill
+                        className="object-cover hover:scale-105 transition-transform duration-300"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <span className="bg-background/90 backdrop-blur px-2 py-1 rounded text-xs font-medium capitalize">
+                          {listing.property_type?.replace('_', ' ') || 'Property'}
+                        </span>
+                      </div>
+                      {/* Prominent Savings Badge */}
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <div className="bg-primary/95 text-primary-foreground rounded-md px-3 py-1.5 flex items-center justify-between">
+                          <span className="text-xs font-medium flex items-center gap-1">
+                            <TrendingDown className="h-3 w-3" />
+                            Save {formatted.totalSavings}
+                          </span>
+                          <span className="text-xs">
+                            vs agent fees
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
-                      <div className="flex items-center gap-1">
-                        <Bed className="h-4 w-4" />
-                        <span>{listing.bedrooms || 0}</span>
+                    <CardContent className="p-4">
+                      <div className="mb-2">
+                        <h3 className="font-semibold text-lg line-clamp-1">{listing.title}</h3>
+                        <div className="flex items-center gap-1 text-muted-foreground text-sm mt-1">
+                          <MapPin className="h-3 w-3" />
+                          <span className="line-clamp-1">{listing.city}, {listing.province}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Bath className="h-4 w-4" />
-                        <span>{listing.bathrooms || 0}</span>
+                      
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
+                        <div className="flex items-center gap-1">
+                          <Bed className="h-4 w-4" />
+                          <span>{listing.bedrooms || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Bath className="h-4 w-4" />
+                          <span>{listing.bathrooms || 0}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <Square className="h-4 w-4" />
+                          <span>{listing.square_meters || 0}m²</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Square className="h-4 w-4" />
-                        <span>{listing.square_meters || 0}m²</span>
+                      
+                      <div>
+                        <p className="text-2xl font-bold">
+                          {formatPropertyPrice(listing.price, listing.country?.currency_symbol || 'R')}
+                        </p>
+                        <div className="mt-1 flex items-center gap-2 text-xs">
+                          <span className="text-muted-foreground line-through">
+                            Agent: {formatted.traditionalAgentFee}
+                          </span>
+                          <span className="font-medium text-primary">
+                            DealDirect: {formatted.dealDirectFee}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="text-2xl font-bold">
-                        {formatPropertyPrice(listing.price, listing.country?.currency_symbol || 'R')}
-                      </div>
-                      <span className="text-xs text-primary font-medium">
-                        Save {formatPropertyPrice(listing.price * 0.06, listing.country?.currency_symbol || 'R')}
-                      </span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                    </CardContent>
+                  </Card>
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -215,61 +241,17 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Savings Calculator */}
+      {/* Interactive Savings Calculator */}
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <Card>
-              <CardHeader>
-                <CardTitle>See How Much You Can Save</CardTitle>
-                <CardDescription>
-                  Compare traditional agent fees vs DealDirect
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <label className="text-sm font-medium">Property Price</label>
-                    <div className="text-3xl font-bold">R 2,000,000</div>
-                  </div>
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <h4 className="font-medium text-destructive">Traditional Agent (6%)</h4>
-                      <div className="text-2xl font-bold text-destructive">R 120,000</div>
-                      <ul className="space-y-1 text-sm text-muted-foreground">
-                        <li>• 3% buyer agent fee</li>
-                        <li>• 3% seller agent fee</li>
-                        <li>• Plus conveyancer fees</li>
-                      </ul>
-                    </div>
-                    <div className="space-y-2">
-                      <h4 className="font-medium text-primary">DealDirect</h4>
-                      <div className="text-2xl font-bold text-primary">R 2,000</div>
-                      <ul className="space-y-1 text-sm">
-                        <li className="flex items-center gap-1">
-                          <CheckCircle className="h-4 w-4 text-primary" />
-                          R1,000 buyer success fee
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <CheckCircle className="h-4 w-4 text-primary" />
-                          R1,000 seller success fee
-                        </li>
-                        <li className="flex items-center gap-1">
-                          <CheckCircle className="h-4 w-4 text-primary" />
-                          Direct conveyancer rates
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="pt-4 border-t">
-                    <div className="flex justify-between items-center">
-                      <span className="text-lg font-medium">You Save:</span>
-                      <span className="text-3xl font-bold text-primary">R 118,000</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+          <div className="text-center mb-8">
+            <h2 className="text-3xl font-bold mb-2">Calculate Your Savings</h2>
+            <p className="text-muted-foreground">
+              See exactly how much you'll save by avoiding agent commissions
+            </p>
+          </div>
+          <div className="flex justify-center">
+            <SavingsCalculator />
           </div>
         </div>
       </section>

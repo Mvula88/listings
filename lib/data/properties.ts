@@ -17,6 +17,7 @@ export interface Property {
   views: number
   images: PropertyImage[]
   country: {
+    code: string
     name: string
     currency_symbol: string
   }
@@ -43,6 +44,7 @@ export async function getFeaturedProperties(limit: number = 8) {
         order_index
       ),
       countries (
+        code,
         name,
         currency_symbol
       )
@@ -74,7 +76,7 @@ export async function getFeaturedProperties(limit: number = 8) {
     featured: p.featured,
     views: p.views,
     images: p.property_images || [],
-    country: p.countries || { name: '', currency_symbol: 'R' }
+    country: p.countries || { code: 'ZA', name: '', currency_symbol: 'R' }
   })) || []
 }
 
@@ -92,6 +94,7 @@ export async function getAllActiveProperties() {
         order_index
       ),
       countries (
+        code,
         name,
         currency_symbol
       )
@@ -121,7 +124,7 @@ export async function getAllActiveProperties() {
     featured: p.featured,
     views: p.views,
     images: p.property_images || [],
-    country: p.countries || { name: '', currency_symbol: 'R' }
+    country: p.countries || { code: 'ZA', name: '', currency_symbol: 'R' }
   })) || []
 }
 

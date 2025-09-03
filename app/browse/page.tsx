@@ -40,6 +40,7 @@ export default async function BrowsePropertiesPage({
       ),
       country:countries (
         id,
+        code,
         name,
         currency,
         currency_symbol
