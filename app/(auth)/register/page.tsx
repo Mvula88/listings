@@ -81,10 +81,10 @@ export default function RegisterPage() {
         // Profile will be created automatically by database trigger
         // Update the profile with country_id if selected
         if (formData.country) {
-          const { error: updateError } = await supabase
+          const { error: updateError } = await (supabase
             .from('profiles')
-            .update({ country_id: formData.country } as any)
-            .eq('id', authData.user.id)
+            .update({ country_id: formData.country })
+            .eq('id', authData.user.id) as any)
           
           if (updateError) {
             console.error('Error updating country:', updateError)
