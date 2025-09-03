@@ -33,7 +33,7 @@ export function LawyerSelectionForm({ lawyers, transaction, userRole }: LawyerSe
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase: any = createClient()
 
   async function handleConfirmSelection() {
     if (!selectedLawyer) return
