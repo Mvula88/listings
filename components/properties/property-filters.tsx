@@ -47,7 +47,7 @@ export function PropertyFilters({ countries, currentFilters }: PropertyFiltersPr
               <SelectValue placeholder="All countries" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All countries</SelectItem>
+              <SelectItem value="all">All countries</SelectItem>
               {countries.map((country) => (
                 <SelectItem key={country.id} value={country.id}>
                   {country.name}
@@ -117,7 +117,7 @@ export function PropertyFilters({ countries, currentFilters }: PropertyFiltersPr
               <SelectValue placeholder="Any" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">Any</SelectItem>
+              <SelectItem value="any">Any</SelectItem>
               <SelectItem value="1">1+</SelectItem>
               <SelectItem value="2">2+</SelectItem>
               <SelectItem value="3">3+</SelectItem>
