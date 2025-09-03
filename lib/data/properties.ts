@@ -58,8 +58,21 @@ export async function getFeaturedProperties(limit: number = 8) {
   }
 
   // Transform the data to match our Property interface
-  return properties?.map(p => ({
-    ...p,
+  return properties?.map((p: any) => ({
+    id: p.id,
+    title: p.title,
+    description: p.description,
+    property_type: p.property_type,
+    price: p.price,
+    currency: p.currency,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    square_meters: p.square_meters,
+    city: p.city,
+    province: p.province,
+    status: p.status,
+    featured: p.featured,
+    views: p.views,
     images: p.property_images || [],
     country: p.countries || { name: '', currency_symbol: 'R' }
   })) || []
@@ -92,8 +105,21 @@ export async function getAllActiveProperties() {
     return []
   }
 
-  return properties?.map(p => ({
-    ...p,
+  return properties?.map((p: any) => ({
+    id: p.id,
+    title: p.title,
+    description: p.description,
+    property_type: p.property_type,
+    price: p.price,
+    currency: p.currency,
+    bedrooms: p.bedrooms,
+    bathrooms: p.bathrooms,
+    square_meters: p.square_meters,
+    city: p.city,
+    province: p.province,
+    status: p.status,
+    featured: p.featured,
+    views: p.views,
     images: p.property_images || [],
     country: p.countries || { name: '', currency_symbol: 'R' }
   })) || []
