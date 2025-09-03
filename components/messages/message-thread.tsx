@@ -39,7 +39,7 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
           table: 'messages',
           filter: `conversation_id=eq.${conversation.id}`
         },
-        (payload) => {
+        (payload: any) => {
           setMessages(prev => [...prev, payload.new])
           if (payload.new.sender_id !== currentUserId) {
             markMessagesAsRead()
