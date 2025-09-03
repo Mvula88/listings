@@ -71,6 +71,7 @@ export default function RegisterPage() {
             full_name: formData.fullName,
             phone: formData.phone,
             user_type: formData.userType,
+            country_id: formData.country || null
           }
         }
       })
@@ -79,19 +80,8 @@ export default function RegisterPage() {
 
       if (authData.user) {
         // Profile will be created automatically by database trigger
-        // Update the profile with country_id if selected
-        if (formData.country) {
-          const { error: updateError } = await (supabase
-            .from('profiles')
-            .update({ country_id: formData.country })
-            .eq('id', authData.user.id) as any)
-          
-          if (updateError) {
-            console.error('Error updating country:', updateError)
-            // Don't throw - profile was created, just country update failed
-          }
-        }
-
+        // Note: Country can be updated later in user profile settings
+        
         router.push('/dashboard')
         router.refresh()
       }
