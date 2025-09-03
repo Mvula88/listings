@@ -15,7 +15,7 @@ export default async function PropertyDetailPage({
 }: {
   params: { id: string }
 }) {
-  const supabase = await createClient()
+  const supabase: any = await createClient()
   
   // Get property details
   const { data: property } = await supabase
@@ -43,7 +43,7 @@ export default async function PropertyDetailPage({
       )
     `)
     .eq('id', params.id)
-    .single() as any
+    .single()
 
   if (!property) {
     notFound()
@@ -87,10 +87,10 @@ export default async function PropertyDetailPage({
     .limit(3)
 
   // Increment view count
-  await (supabase
+  await supabase
     .from('properties')
     .update({ views: (property.views || 0) + 1 })
-    .eq('id', property.id) as any)
+    .eq('id', property.id)
 
   return (
     <div className="min-h-screen bg-background">
