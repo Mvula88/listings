@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Loader2, AlertCircle, Check } from 'lucide-react'
 
 export default function RegisterPage() {
@@ -20,8 +19,7 @@ export default function RegisterPage() {
     confirmPassword: '',
     fullName: '',
     phone: '',
-    userType: 'buyer',
-    country: ''
+    userType: 'buyer'
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -64,8 +62,7 @@ export default function RegisterPage() {
             email: formData.email,
             full_name: formData.fullName,
             phone: formData.phone,
-            user_type: formData.userType,
-            country_id: formData.country || null
+            user_type: formData.userType
           } as any)
 
         if (profileError) throw profileError
@@ -190,22 +187,6 @@ export default function RegisterPage() {
               </RadioGroup>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="country">Country</Label>
-              <Select 
-                value={formData.country} 
-                onValueChange={(value) => setFormData({...formData, country: value})}
-                disabled={loading}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select your country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="NA">Namibia</SelectItem>
-                  <SelectItem value="ZA">South Africa</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
             <div className="bg-muted p-3 rounded-lg">
               <h4 className="font-medium mb-2 text-sm">Why join DealDirect?</h4>
