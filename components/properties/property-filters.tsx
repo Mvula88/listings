@@ -41,7 +41,7 @@ export function PropertyFilters({ countries, currentFilters }: PropertyFiltersPr
           <Label>Country</Label>
           <Select 
             value={currentFilters.country || ''} 
-            onValueChange={(value) => updateFilter('country', value)}
+            onValueChange={(value) => updateFilter('country', value === 'all' ? '' : value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="All countries" />
@@ -111,13 +111,13 @@ export function PropertyFilters({ countries, currentFilters }: PropertyFiltersPr
           <Label>Bedrooms</Label>
           <Select 
             value={currentFilters.bedrooms || ''} 
-            onValueChange={(value) => updateFilter('bedrooms', value)}
+            onValueChange={(value) => updateFilter('bedrooms', value === 'all' ? '' : value)}
           >
             <SelectTrigger>
               <SelectValue placeholder="Any" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="any">Any</SelectItem>
+              <SelectItem value="all">Any</SelectItem>
               <SelectItem value="1">1+</SelectItem>
               <SelectItem value="2">2+</SelectItem>
               <SelectItem value="3">3+</SelectItem>

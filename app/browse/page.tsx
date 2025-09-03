@@ -66,7 +66,7 @@ export default async function BrowsePropertiesPage({
   }
   
   if (searchParams.bedrooms) {
-    query = query.eq('bedrooms', parseInt(searchParams.bedrooms))
+    query = query.gte('bedrooms', parseInt(searchParams.bedrooms))
   }
   
   if (searchParams.type) {
@@ -162,9 +162,11 @@ export default async function BrowsePropertiesPage({
                 <p className="text-lg text-muted-foreground">
                   No properties found matching your criteria
                 </p>
-                <Button className="mt-4" variant="outline">
-                  Clear Filters
-                </Button>
+                <a href="/browse">
+                  <Button className="mt-4" variant="outline">
+                    Clear Filters
+                  </Button>
+                </a>
               </div>
             )}
           </main>

@@ -17,12 +17,6 @@ export default function HomePage() {
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
                 Browse Properties
               </Link>
-              <Link href="/how-it-works" className="text-sm font-medium hover:text-primary">
-                How It Works
-              </Link>
-              <Link href="/lawyers" className="text-sm font-medium hover:text-primary">
-                Find Lawyers
-              </Link>
               <Link href="/login">
                 <Button variant="outline" size="sm">Login</Button>
               </Link>
