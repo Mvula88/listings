@@ -22,7 +22,7 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
   const [newMessage, setNewMessage] = useState('')
   const [sending, setSending] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const supabase = createClient()
+  const supabase: any = createClient()
 
   useEffect(() => {
     loadMessages()
