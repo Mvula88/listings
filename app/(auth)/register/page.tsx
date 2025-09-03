@@ -83,7 +83,7 @@ export default function RegisterPage() {
         if (formData.country) {
           const { error: updateError } = await supabase
             .from('profiles')
-            .update({ country_id: formData.country })
+            .update({ country_id: formData.country } as any)
             .eq('id', authData.user.id)
           
           if (updateError) {
