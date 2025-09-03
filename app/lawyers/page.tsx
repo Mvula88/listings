@@ -128,7 +128,7 @@ export default function LawyersPage() {
                       <CardTitle className="flex items-center gap-2">
                         {lawyer.name}
                         {lawyer.verified && (
-                          <CheckCircle className="h-5 w-5 text-primary" title="Verified" />
+                          <CheckCircle className="h-5 w-5 text-primary" />
                         )}
                       </CardTitle>
                       <CardDescription>{lawyer.firm}</CardDescription>
