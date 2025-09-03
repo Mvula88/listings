@@ -87,10 +87,10 @@ export default async function PropertyDetailPage({
     .limit(3)
 
   // Increment view count
-  await supabase
+  await (supabase
     .from('properties')
-    .update({ views: (property.views || 0) + 1 } as any)
-    .eq('id', property.id)
+    .update({ views: (property.views || 0) + 1 })
+    .eq('id', property.id) as any)
 
   return (
     <div className="min-h-screen bg-background">
