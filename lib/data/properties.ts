@@ -1,4 +1,4 @@
-import { createServerClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 
 export interface Property {
   id: string
@@ -30,7 +30,7 @@ export interface PropertyImage {
 }
 
 export async function getFeaturedProperties(limit: number = 8) {
-  const supabase = await createServerClient()
+  const supabase = await createClient()
   
   const { data: properties, error } = await supabase
     .from('properties')
@@ -79,7 +79,7 @@ export async function getFeaturedProperties(limit: number = 8) {
 }
 
 export async function getAllActiveProperties() {
-  const supabase = await createServerClient()
+  const supabase = await createClient()
   
   const { data: properties, error } = await supabase
     .from('properties')
