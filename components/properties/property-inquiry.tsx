@@ -24,7 +24,7 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
   const [success, setSuccess] = useState(false)
   const [showProceedModal, setShowProceedModal] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase: any = createClient()
 
   const isOwner = user?.id === property.seller_id
   const currency = property.country?.currency || 'ZAR'
