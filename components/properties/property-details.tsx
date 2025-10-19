@@ -15,7 +15,7 @@ import { formatPrice, formatDate } from '@/lib/utils/format'
 import type { Property } from '@/lib/types'
 
 interface PropertyDetailsProps {
-  property: Property
+  property: any
 }
 
 export function PropertyDetails({ property }: PropertyDetailsProps) {
