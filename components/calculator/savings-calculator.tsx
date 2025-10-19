@@ -90,25 +90,20 @@ export function SavingsCalculator() {
                 </div>
               </div>
               
-              {/* DealDirect Costs */}
+              {/* DealDirect Fee */}
               <div className="space-y-3">
                 <h3 className="font-medium text-primary flex items-center gap-2">
                   <CheckCircle className="h-4 w-4" />
-                  DealDirect Total Cost
+                  DealDirect Platform Fee
                 </h3>
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Platform fee</span>
-                    <span className="font-medium">{formatted.platformFee}</span>
+                  <div className="flex justify-between font-semibold text-primary pt-2">
+                    <span>Platform Fee</span>
+                    <span className="text-2xl">{formatted.platformFee}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Est. lawyer fee</span>
-                    <span className="font-medium">{formatted.estimatedLawyerFee}</span>
-                  </div>
-                  <div className="flex justify-between font-semibold text-primary border-t pt-2">
-                    <span>Total Cost</span>
-                    <span>{formatted.totalDealDirectCost}</span>
-                  </div>
+                  <p className="text-xs text-muted-foreground pt-2 border-t">
+                    * Collected by lawyer at closing. Lawyer fees (~R15K-R40K) are the same in both traditional and DealDirect models.
+                  </p>
                 </div>
               </div>
             </div>
@@ -131,8 +126,8 @@ export function SavingsCalculator() {
             <div className="text-sm text-muted-foreground space-y-1">
               <p>✓ Free to list properties - no upfront costs</p>
               <p>✓ Platform fee collected by lawyer at closing</p>
+              <p>✓ Lawyer fees (~R15K-R40K) same as traditional model</p>
               <p>✓ Direct communication with buyers/sellers</p>
-              <p>✓ Transparent pricing - know your costs upfront</p>
               <p>✓ Only pay when transaction completes successfully</p>
             </div>
           </>

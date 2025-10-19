@@ -192,14 +192,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
                           {formatPrice(platformFee, currency)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span>Est. Lawyer Fee:</span>
-                        <span className="font-semibold text-muted-foreground">
-                          R15,000 - R40,000
-                        </span>
-                      </div>
                       <p className="text-xs text-muted-foreground mt-3 border-t pt-2">
-                        * Platform fee collected at closing. Lawyer fees vary by property value.
+                        * Platform fee collected by lawyer at closing, replaces agent commission. Lawyer fees (~R15K-R40K) apply to both traditional and DealDirect models.
                       </p>
                     </div>
                     
@@ -291,13 +285,13 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
 
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
             <p className="text-xs text-blue-900 mb-1">
-              <strong>Estimated closing costs:</strong>
+              <strong>Platform fee (replaces agent commission):</strong>
             </p>
-            <p className="text-xs text-blue-800">
-              Platform fee: {formatPrice(platformFee, currency)} + Lawyer fees (R15K-R40K)
+            <p className="text-xs text-blue-800 font-semibold">
+              {formatPrice(platformFee, currency)}
             </p>
-            <p className="text-xs text-blue-700 mt-1">
-              Still save 50-70% vs traditional agent commissions!
+            <p className="text-xs text-blue-700 mt-2">
+              Save up to 90% vs traditional agent fees! Lawyer fees (~R15K-R40K) are the same in both models.
             </p>
           </div>
 

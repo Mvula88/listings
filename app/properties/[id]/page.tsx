@@ -178,20 +178,12 @@ export default async function PropertyDetailPage({
                   </div>
                 </div>
 
-                {/* DealDirect Costs */}
+                {/* DealDirect Platform Fee */}
                 <div className="bg-white rounded p-3 space-y-2">
-                  <div className="font-medium text-green-800 mb-2">DealDirect Costs:</div>
+                  <div className="font-medium text-green-800 mb-2">DealDirect Platform Fee:</div>
                   <div className="flex justify-between text-gray-700">
-                    <span>Platform fee:</span>
-                    <span className="font-medium">{formatted.platformFee}</span>
-                  </div>
-                  <div className="flex justify-between text-gray-700">
-                    <span>Est. lawyer fee:</span>
-                    <span className="font-medium">{formatted.estimatedLawyerFee}</span>
-                  </div>
-                  <div className="flex justify-between pt-2 border-t border-green-200 font-semibold text-green-700">
-                    <span>Total cost:</span>
-                    <span>{formatted.totalDealDirectCost}</span>
+                    <span className="text-lg font-semibold text-green-700">Platform fee:</span>
+                    <span className="text-lg font-semibold text-green-700">{formatted.platformFee}</span>
                   </div>
                 </div>
 
@@ -204,7 +196,7 @@ export default async function PropertyDetailPage({
                     </span>
                   </div>
                   <p className="text-xs text-gray-600 mt-2">
-                    * Platform fee collected by lawyer at closing. Lawyer fees may vary.
+                    * Platform fee collected by lawyer at closing, replaces agent commission. Lawyer fees (~R15K-R40K) are the same in both traditional and DealDirect models.
                   </p>
                 </div>
               </div>
