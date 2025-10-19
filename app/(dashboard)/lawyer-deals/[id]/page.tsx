@@ -78,7 +78,6 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
     try {
       const { data: { user } } = await supabase.auth.getUser()
 
-      // @ts-expect-error - New columns added in migration, types not yet regenerated
       const { error } = await supabase
         .from('transactions')
         .update({
