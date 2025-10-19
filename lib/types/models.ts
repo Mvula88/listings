@@ -112,12 +112,12 @@ export interface Transaction extends Tables<'transactions'> {
   inquiry?: Inquiry
 }
 
-export interface TransactionWithDetails extends Transaction {
+export interface TransactionWithDetails extends Omit<Transaction, 'buyer_lawyer' | 'seller_lawyer'> {
   property: PropertyWithDetails
   buyer: Profile
   seller: Profile
-  buyer_lawyer?: Lawyer | null
-  seller_lawyer?: Lawyer | null
+  buyer_lawyer: Lawyer | null
+  seller_lawyer: Lawyer | null
 }
 
 export interface DealClosureInput {
