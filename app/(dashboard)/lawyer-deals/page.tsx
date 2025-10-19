@@ -17,8 +17,8 @@ export default async function LawyerDealsPage() {
     redirect('/login')
   }
 
-  const { data: profile } = await supabase
-    .from('profiles')
+  const { data: profile } = await (supabase
+    .from('profiles') as any)
     .select('user_type')
     .eq('id', user.id)
     .single()
@@ -28,8 +28,8 @@ export default async function LawyerDealsPage() {
   }
 
   // Get lawyer record
-  const { data: lawyer } = await supabase
-    .from('lawyers')
+  const { data: lawyer } = await (supabase
+    .from('lawyers') as any)
     .select('*')
     .eq('profile_id', user.id)
     .single()
@@ -39,8 +39,8 @@ export default async function LawyerDealsPage() {
   }
 
   // Get all transactions where this lawyer is involved
-  const { data: transactions } = await supabase
-    .from('transactions')
+  const { data: transactions } = await (supabase
+    .from('transactions') as any)
     .select(`
       *,
       property:properties (
