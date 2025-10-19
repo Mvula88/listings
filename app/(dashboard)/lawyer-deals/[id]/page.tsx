@@ -78,8 +78,8 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
     try {
       const { data: { user } } = await supabase.auth.getUser()
 
-      const { error } = await supabase
-        .from('transactions')
+      const { error } = await (supabase
+        .from('transactions') as any)
         .update({
           status: 'completed',
           settlement_reference: formData.settlementReference,
