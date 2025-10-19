@@ -14,7 +14,7 @@ import Link from 'next/link'
 import type { Conversation, Message } from '@/lib/types'
 
 interface MessageThreadProps {
-  conversation: Conversation
+  conversation: any
   currentUserId: string
 }
 

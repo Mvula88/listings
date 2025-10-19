@@ -18,7 +18,7 @@ interface MessageListProps {
 export function MessageList({ conversations, currentUserId, selectedId }: MessageListProps) {
   return (
     <div className="divide-y">
-      {conversations.map((conversation) => {
+      {conversations.map((conversation: any) => {
         const isSelected = conversation.id === selectedId
         const initials = conversation.participant?.full_name
           ?.split(' ')
