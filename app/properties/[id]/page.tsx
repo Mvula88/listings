@@ -9,6 +9,7 @@ import { SimilarProperties } from '@/components/properties/similar-properties'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Share2, Heart } from 'lucide-react'
 import Link from 'next/link'
+import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
 
 export default async function PropertyDetailPage({
   params
@@ -92,6 +93,12 @@ export default async function PropertyDetailPage({
     .update({ views: (property.views || 0) + 1 })
     .eq('id', property.id)
 
+  // Calculate savings
+  const countryCode = property.country?.id || 'ZA'
+  const currency = property.country?.currency || 'ZAR'
+  const savings = calculateSavings(property.price, countryCode, currency)
+  const formatted = formatSavingsDisplay(savings)
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -155,29 +162,50 @@ export default async function PropertyDetailPage({
             {/* Seller Information */}
             <SellerInfo seller={property.seller} />
             
-            {/* Commission Savings */}
+            {/* Fee Disclosure & Savings */}
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-              <h3 className="font-semibold text-green-800 mb-2">
-                Your Savings with DealDirect
+              <h3 className="font-semibold text-green-800 mb-3">
+                Transparent Pricing
               </h3>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>Traditional agent fees (6%):</span>
-                  <span className="line-through text-gray-500">
-                    {property.country?.currency_symbol}{(property.price * 0.06).toLocaleString()}
-                  </span>
+              <div className="space-y-3 text-sm">
+                {/* Traditional Costs */}
+                <div>
+                  <div className="flex justify-between text-gray-600 mb-1">
+                    <span className="font-medium">Traditional Agent Fees:</span>
+                    <span className="line-through">
+                      {formatted.traditionalAgentFee}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex justify-between font-semibold text-green-700">
-                  <span>DealDirect fee:</span>
-                  <span>{property.country?.currency_symbol}2,000</span>
+
+                {/* DealDirect Costs */}
+                <div className="bg-white rounded p-3 space-y-2">
+                  <div className="font-medium text-green-800 mb-2">DealDirect Costs:</div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>Platform fee:</span>
+                    <span className="font-medium">{formatted.platformFee}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-700">
+                    <span>Est. lawyer fee:</span>
+                    <span className="font-medium">{formatted.estimatedLawyerFee}</span>
+                  </div>
+                  <div className="flex justify-between pt-2 border-t border-green-200 font-semibold text-green-700">
+                    <span>Total cost:</span>
+                    <span>{formatted.totalDealDirectCost}</span>
+                  </div>
                 </div>
+
+                {/* Savings */}
                 <div className="pt-2 border-t border-green-200">
                   <div className="flex justify-between font-bold text-green-800">
                     <span>You save:</span>
                     <span className="text-lg">
-                      {property.country?.currency_symbol}{((property.price * 0.06) - 2000).toLocaleString()}
+                      {formatted.totalSavings}
                     </span>
                   </div>
+                  <p className="text-xs text-gray-600 mt-2">
+                    * Platform fee collected by lawyer at closing. Lawyer fees may vary.
+                  </p>
                 </div>
               </div>
             </div>

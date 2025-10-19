@@ -11,6 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { MessageSquare, CheckCircle, ArrowRight, Loader2 } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
+import { getPlatformFee } from '@/lib/utils/savings-calculator'
 
 interface PropertyInquiryProps {
   property: any
@@ -28,6 +29,7 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
 
   const isOwner = user?.id === property.seller_id
   const currency = property.country?.currency || 'ZAR'
+  const platformFee = getPlatformFee(property.price)
 
   async function handleInquiry() {
     if (!user) {
@@ -173,10 +175,10 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
                         <li>Each party selects their conveyancer</li>
                         <li>Conveyancers handle all legal paperwork</li>
                         <li>Property transfer is completed</li>
-                        <li>Success fee paid at closing</li>
+                        <li>Platform fee collected by lawyer at closing</li>
                       </ol>
                     </div>
-                    
+
                     <div className="bg-green-50 p-4 rounded-lg">
                       <div className="flex justify-between mb-2">
                         <span>Purchase Price:</span>
@@ -184,12 +186,21 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
                           {formatPrice(property.price, currency)}
                         </span>
                       </div>
-                      <div className="flex justify-between text-sm">
-                        <span>Your Success Fee:</span>
-                        <span className="font-semibold text-green-700">
-                          {formatPrice(1000, currency)}
+                      <div className="flex justify-between text-sm mb-2">
+                        <span>Platform Fee:</span>
+                        <span className="font-semibold text-primary">
+                          {formatPrice(platformFee, currency)}
                         </span>
                       </div>
+                      <div className="flex justify-between text-sm">
+                        <span>Est. Lawyer Fee:</span>
+                        <span className="font-semibold text-muted-foreground">
+                          R15,000 - R40,000
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-3 border-t pt-2">
+                        * Platform fee collected at closing. Lawyer fees vary by property value.
+                      </p>
                     </div>
                     
                     <Button 
@@ -269,15 +280,27 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
             </Alert>
           )}
           
-          <Button 
-            className="w-full" 
+          <Button
+            className="w-full"
             onClick={handleInquiry}
             disabled={loading || !message.trim()}
           >
             {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {user ? 'Send Inquiry' : 'Sign In to Contact'}
           </Button>
-          
+
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <p className="text-xs text-blue-900 mb-1">
+              <strong>Estimated closing costs:</strong>
+            </p>
+            <p className="text-xs text-blue-800">
+              Platform fee: {formatPrice(platformFee, currency)} + Lawyer fees (R15K-R40K)
+            </p>
+            <p className="text-xs text-blue-700 mt-1">
+              Still save 50-70% vs traditional agent commissions!
+            </p>
+          </div>
+
           <p className="text-xs text-center text-muted-foreground">
             By contacting the seller, you agree to DealDirect's terms of service
           </p>

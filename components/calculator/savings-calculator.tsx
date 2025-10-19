@@ -27,7 +27,7 @@ export function SavingsCalculator() {
       <CardHeader>
         <CardTitle>Commission Savings Calculator</CardTitle>
         <CardDescription>
-          See how much you can save by selling directly without agent commissions
+          See how much you can save using DealDirect vs traditional agents
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -90,24 +90,24 @@ export function SavingsCalculator() {
                 </div>
               </div>
               
-              {/* DealDirect Fees */}
+              {/* DealDirect Costs */}
               <div className="space-y-3">
                 <h3 className="font-medium text-primary flex items-center gap-2">
                   <CheckCircle className="h-4 w-4" />
-                  DealDirect Fees
+                  DealDirect Total Cost
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Buyer success fee</span>
-                    <span className="font-medium">{savings.currencySymbol}1,000</span>
+                    <span className="text-muted-foreground">Platform fee</span>
+                    <span className="font-medium">{formatted.platformFee}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Seller success fee</span>
-                    <span className="font-medium">{savings.currencySymbol}1,000</span>
+                    <span className="text-muted-foreground">Est. lawyer fee</span>
+                    <span className="font-medium">{formatted.estimatedLawyerFee}</span>
                   </div>
                   <div className="flex justify-between font-semibold text-primary border-t pt-2">
-                    <span>Total Fee</span>
-                    <span>{formatted.dealDirectFee}</span>
+                    <span>Total Cost</span>
+                    <span>{formatted.totalDealDirectCost}</span>
                   </div>
                 </div>
               </div>
@@ -129,9 +129,10 @@ export function SavingsCalculator() {
             
             {/* Additional Info */}
             <div className="text-sm text-muted-foreground space-y-1">
-              <p>✓ No hidden fees or surprises</p>
+              <p>✓ Free to list properties - no upfront costs</p>
+              <p>✓ Platform fee collected by lawyer at closing</p>
               <p>✓ Direct communication with buyers/sellers</p>
-              <p>✓ Access to verified conveyancers at competitive rates</p>
+              <p>✓ Transparent pricing - know your costs upfront</p>
               <p>✓ Only pay when transaction completes successfully</p>
             </div>
           </>

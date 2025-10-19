@@ -110,7 +110,10 @@ export function PropertyCard({ property }: PropertyCardProps) {
                 Agent fees: {formatted.traditionalAgentFee}
               </p>
               <p className="text-xs font-medium text-primary">
-                DealDirect: {formatted.dealDirectFee} only
+                Platform fee: {formatted.platformFee}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Total cost: {formatted.totalDealDirectCost}*
               </p>
             </div>
           </div>

@@ -75,8 +75,8 @@ export default async function HomePage() {
               Buy & Sell Properties Without Agent Commissions
             </h1>
             <p className="text-xl text-muted-foreground mb-8">
-              Save thousands on real estate transactions. Connect directly with buyers, sellers, and trusted conveyancers. 
-              Only pay R2,000 success fee when your transaction completes.
+              Save thousands on real estate transactions. Connect directly with buyers, sellers, and trusted conveyancers.
+              Free to list. Free to browse. Platform fee collected at closing.
             </p>
             <div className="flex gap-4 justify-center">
               <Link href="/browse">
@@ -183,7 +183,7 @@ export default async function HomePage() {
                             Agent: {formatted.traditionalAgentFee}
                           </span>
                           <span className="font-medium text-primary">
-                            DealDirect: {formatted.dealDirectFee}
+                            Platform fee: {formatted.platformFee}
                           </span>
                         </div>
                       </div>
@@ -234,7 +234,7 @@ export default async function HomePage() {
               </div>
               <h3 className="font-semibold mb-2">4. Save Thousands</h3>
               <p className="text-sm text-muted-foreground">
-                Pay only R2,000 success fee instead of 6% commission
+                Platform fee collected at closing - still save 50-70% vs agent commissions
               </p>
             </div>
           </div>
@@ -263,11 +263,11 @@ export default async function HomePage() {
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <Card>
               <CardHeader>
-                <CardTitle>No Hidden Fees</CardTitle>
+                <CardTitle>Transparent Pricing</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Transparent pricing with a flat R2,000 success fee. No surprises, no percentage-based commissions.
+                  Tiered platform fees based on property value, collected by your lawyer at closing. No upfront costs, no percentage-based commissions.
                 </p>
               </CardContent>
             </Card>
