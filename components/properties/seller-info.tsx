@@ -29,7 +29,7 @@ export function SellerInfo({ seller }: SellerInfoProps) {
         <div className="space-y-4">
           <div className="flex items-center gap-4">
             <Avatar className="h-12 w-12">
-              <AvatarImage src={seller.avatar_url} alt={seller.full_name} />
+              <AvatarImage src={seller.avatar_url || undefined} alt={seller.full_name || undefined} />
               <AvatarFallback>{initials || <User className="h-5 w-5" />}</AvatarFallback>
             </Avatar>
             <div>
