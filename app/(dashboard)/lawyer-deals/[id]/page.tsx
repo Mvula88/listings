@@ -87,7 +87,7 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
           deal_closed_by: user?.id,
           fee_collected: formData.feeCollected,
           updated_at: new Date().toISOString()
-        })
+        } as any)
         .eq('id', params.id)
 
       if (error) {
