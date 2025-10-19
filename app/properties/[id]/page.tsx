@@ -17,10 +17,10 @@ export default async function PropertyDetailPage({
   params: { id: string }
 }) {
   const supabase = await createClient()
-  
+
   // Get property details
-  const { data: property } = await supabase
-    .from('properties')
+  const { data: property } = await (supabase
+    .from('properties') as any)
     .select(`
       *,
       property_images (
@@ -56,19 +56,19 @@ export default async function PropertyDetailPage({
   // Check if user has already inquired
   let existingInquiry = null
   if (user) {
-    const { data } = await supabase
-      .from('inquiries')
+    const { data } = await (supabase
+      .from('inquiries') as any)
       .select('*')
       .eq('property_id', property.id)
       .eq('buyer_id', user.id)
       .single()
-    
+
     existingInquiry = data
   }
 
   // Get similar properties
-  const { data: similarProperties } = await supabase
-    .from('properties')
+  const { data: similarProperties } = await (supabase
+    .from('properties') as any)
     .select(`
       *,
       property_images (
@@ -88,8 +88,8 @@ export default async function PropertyDetailPage({
     .limit(3)
 
   // Increment view count
-  await supabase
-    .from('properties')
+  await (supabase
+    .from('properties') as any)
     .update({ views: (property.views || 0) + 1 })
     .eq('id', property.id)
 
