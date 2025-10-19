@@ -80,18 +80,18 @@ export default async function LawyerDealsPage() {
     .order('created_at', { ascending: false })
 
   // Separate active and closed deals
-  const activeDeals = transactions?.filter(t => t.status === 'in_progress' || t.status === 'pending') || []
-  const closedDeals = transactions?.filter(t => t.status === 'completed') || []
-  const pendingFeeRemittance = closedDeals.filter(t => t.fee_collected && !t.fee_remitted) || []
+  const activeDeals = transactions?.filter((t: any) => t.status === 'in_progress' || t.status === 'pending') || []
+  const closedDeals = transactions?.filter((t: any) => t.status === 'completed') || []
+  const pendingFeeRemittance = closedDeals.filter((t: any) => t.fee_collected && !t.fee_remitted) || []
 
   // Calculate totals
   const totalPlatformFeesCollected = closedDeals
-    .filter(t => t.fee_collected)
-    .reduce((sum, t) => sum + (parseFloat(t.platform_fee_amount) || 0), 0)
+    .filter((t: any) => t.fee_collected)
+    .reduce((sum: number, t: any) => sum + (parseFloat(t.platform_fee_amount) || 0), 0)
 
   const totalFeesRemitted = closedDeals
-    .filter(t => t.fee_remitted)
-    .reduce((sum, t) => sum + (parseFloat(t.platform_fee_amount) || 0), 0)
+    .filter((t: any) => t.fee_remitted)
+    .reduce((sum: number, t: any) => sum + (parseFloat(t.platform_fee_amount) || 0), 0)
 
   const outstandingBalance = totalPlatformFeesCollected - totalFeesRemitted
 
