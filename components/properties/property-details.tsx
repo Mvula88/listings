@@ -1,20 +1,21 @@
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
-import { 
-  Bed, 
-  Bath, 
-  Square, 
-  MapPin, 
-  Calendar, 
+import {
+  Bed,
+  Bath,
+  Square,
+  MapPin,
+  Calendar,
   Eye,
   Home,
   CheckCircle
 } from 'lucide-react'
 import { formatPrice, formatDate } from '@/lib/utils/format'
+import type { Property } from '@/lib/types'
 
 interface PropertyDetailsProps {
-  property: any
+  property: Property
 }
 
 export function PropertyDetails({ property }: PropertyDetailsProps) {

@@ -3,9 +3,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { User, Calendar, Shield } from 'lucide-react'
 import { formatDate } from '@/lib/utils/format'
+import type { Profile } from '@/lib/types'
 
 interface SellerInfoProps {
-  seller: any
+  seller: Profile
 }
 
 export function SellerInfo({ seller }: SellerInfoProps) {

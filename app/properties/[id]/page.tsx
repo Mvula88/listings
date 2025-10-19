@@ -16,7 +16,7 @@ export default async function PropertyDetailPage({
 }: {
   params: { id: string }
 }) {
-  const supabase: any = await createClient()
+  const supabase = await createClient()
   
   // Get property details
   const { data: property } = await supabase

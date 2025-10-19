@@ -8,7 +8,7 @@ import { CheckCircle, Clock, DollarSign, FileText } from 'lucide-react'
 import Link from 'next/link'
 
 export default async function LawyerDealsPage() {
-  const supabase: any = await createClient()
+  const supabase = await createClient()
 
   // Check if user is authenticated and is a lawyer
   const { data: { user } } = await supabase.auth.getUser()
@@ -80,18 +80,18 @@ export default async function LawyerDealsPage() {
     .order('created_at', { ascending: false })
 
   // Separate active and closed deals
-  const activeDeals = transactions?.filter((t: any) => t.status === 'in_progress' || t.status === 'pending') || []
-  const closedDeals = transactions?.filter((t: any) => t.status === 'completed') || []
-  const pendingFeeRemittance = closedDeals.filter((t: any) => t.fee_collected && !t.fee_remitted) || []
+  const activeDeals = transactions?.filter((t) => t.status === 'in_progress' || t.status === 'pending') || []
+  const closedDeals = transactions?.filter((t) => t.status === 'completed') || []
+  const pendingFeeRemittance = closedDeals.filter((t) => t.fee_collected && !t.fee_remitted) || []
 
   // Calculate totals
   const totalPlatformFeesCollected = closedDeals
-    .filter((t: any) => t.fee_collected)
-    .reduce((sum: number, t: any) => sum + (parseFloat(t.platform_fee_amount) || 0), 0)
+    .filter((t) => t.fee_collected)
+    .reduce((sum, t) => sum + (parseFloat(String(t.platform_fee_amount)) || 0), 0)
 
   const totalFeesRemitted = closedDeals
-    .filter((t: any) => t.fee_remitted)
-    .reduce((sum: number, t: any) => sum + (parseFloat(t.platform_fee_amount) || 0), 0)
+    .filter((t) => t.fee_remitted)
+    .reduce((sum, t) => sum + (parseFloat(String(t.platform_fee_amount)) || 0), 0)
 
   const outstandingBalance = totalPlatformFeesCollected - totalFeesRemitted
 
@@ -196,7 +196,7 @@ export default async function LawyerDealsPage() {
             </p>
           ) : (
             <div className="space-y-4">
-              {activeDeals.map((transaction: any) => (
+              {activeDeals.map((transaction) => (
                 <div key={transaction.id} className="border rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">
@@ -262,7 +262,7 @@ export default async function LawyerDealsPage() {
             </p>
           ) : (
             <div className="space-y-4">
-              {closedDeals.map((transaction: any) => (
+              {closedDeals.map((transaction) => (
                 <div key={transaction.id} className="border rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="space-y-2">

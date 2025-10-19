@@ -4,9 +4,10 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { ChevronLeft, ChevronRight, Grid3x3 } from 'lucide-react'
+import type { PropertyImage } from '@/lib/types'
 
 interface PropertyGalleryProps {
-  images: any[]
+  images: PropertyImage[]
   title: string
 }
 

@@ -2,9 +2,10 @@ import Link from 'next/link'
 import { PropertyCard } from './property-card'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
+import type { Property } from '@/lib/types'
 
 interface SimilarPropertiesProps {
-  properties: any[]
+  properties: Property[]
 }
 
 export function SimilarProperties({ properties }: SimilarPropertiesProps) {
