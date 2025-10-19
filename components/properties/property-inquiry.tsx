@@ -12,11 +12,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { MessageSquare, CheckCircle, ArrowRight, Loader2 } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { getPlatformFee } from '@/lib/utils/savings-calculator'
+import type { Property, Inquiry } from '@/lib/types'
+import type { User } from '@supabase/supabase-js'
 
 interface PropertyInquiryProps {
-  property: any
-  user: any
-  existingInquiry: any
+  property: Property
+  user: User | null
+  existingInquiry: Inquiry | null
 }
 
 export function PropertyInquiry({ property, user, existingInquiry }: PropertyInquiryProps) {
@@ -25,7 +27,7 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
   const [success, setSuccess] = useState(false)
   const [showProceedModal, setShowProceedModal] = useState(false)
   const router = useRouter()
-  const supabase: any = createClient()
+  const supabase = createClient()
 
   const isOwner = user?.id === property.seller_id
   const currency = property.country?.currency || 'ZAR'

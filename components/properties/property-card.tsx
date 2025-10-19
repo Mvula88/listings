@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button'
 import { Bed, Bath, Square, MapPin, Heart, TrendingDown } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
+import type { Property } from '@/lib/types'
 
 interface PropertyCardProps {
-  property: any
+  property: Property
 }
 
 export function PropertyCard({ property }: PropertyCardProps) {
