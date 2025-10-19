@@ -63,20 +63,20 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
   }, [messages])
 
   async function loadMessages() {
-    const { data } = await supabase
-      .from('messages')
+    const { data } = await (supabase
+      .from('messages') as any)
       .select('*')
       .eq('conversation_id', conversation.id)
       .order('created_at', { ascending: true })
-    
+
     if (data) {
       setMessages(data)
     }
   }
 
   async function markMessagesAsRead() {
-    await supabase
-      .from('messages')
+    await (supabase
+      .from('messages') as any)
       .update({ read: true })
       .eq('conversation_id', conversation.id)
       .eq('recipient_id', currentUserId)
@@ -90,8 +90,8 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
     const recipientId = conversation.participants.find((id: string) => id !== currentUserId)
 
     try {
-      const { error } = await supabase
-        .from('messages')
+      const { error } = await (supabase
+        .from('messages') as any)
         .insert({
           conversation_id: conversation.id,
           sender_id: currentUserId,
