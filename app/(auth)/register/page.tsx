@@ -81,12 +81,12 @@ export default function RegisterPage() {
       if (authData.user) {
         // Profile will be created automatically by database trigger
         // Note: Country can be updated later in user profile settings
-        
+
         router.push('/dashboard')
         router.refresh()
       }
-    } catch (error: any) {
-      setError(error.message)
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
       setLoading(false)
     }

@@ -11,18 +11,19 @@ import { cn } from '@/lib/utils/cn'
 import { formatRelativeTime } from '@/lib/utils/format'
 import { Send, User, Home } from 'lucide-react'
 import Link from 'next/link'
+import type { Conversation, Message } from '@/lib/types'
 
 interface MessageThreadProps {
-  conversation: any
+  conversation: Conversation
   currentUserId: string
 }
 
 export function MessageThread({ conversation, currentUserId }: MessageThreadProps) {
-  const [messages, setMessages] = useState<any[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [sending, setSending] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const supabase: any = createClient()
+  const supabase = createClient()
 
   useEffect(() => {
     loadMessages()
@@ -39,9 +40,10 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
           table: 'messages',
           filter: `conversation_id=eq.${conversation.id}`
         },
-        (payload: any) => {
-          setMessages(prev => [...prev, payload.new])
-          if (payload.new.sender_id !== currentUserId) {
+        (payload) => {
+          const newMessage = payload.new as Message
+          setMessages(prev => [...prev, newMessage])
+          if (newMessage.sender_id !== currentUserId) {
             markMessagesAsRead()
           }
         }

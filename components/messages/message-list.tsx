@@ -7,9 +7,10 @@ import { Badge } from '@/components/ui/badge'
 import { cn } from '@/lib/utils/cn'
 import { formatRelativeTime } from '@/lib/utils/format'
 import { User } from 'lucide-react'
+import type { Conversation } from '@/lib/types'
 
 interface MessageListProps {
-  conversations: any[]
+  conversations: Conversation[]
   currentUserId: string
   selectedId?: string
 }
