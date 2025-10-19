@@ -39,9 +39,7 @@ export const registerSchema = z.object({
     .min(10, 'Please enter a valid phone number')
     .max(20, 'Phone number is too long')
     .regex(/^[0-9+\-\s()]+$/, 'Please enter a valid phone number'),
-  userType: z.enum(['buyer', 'seller', 'lawyer'], {
-    required_error: 'Please select your account type',
-  }),
+  userType: z.enum(['buyer', 'seller', 'lawyer']),
   countryId: z.string()
     .min(1, 'Please select your country'),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -64,9 +62,7 @@ export const propertySchema = z.object({
     .positive('Price must be greater than 0')
     .min(10000, 'Price seems too low')
     .max(1000000000, 'Price exceeds maximum value'),
-  propertyType: z.enum(['house', 'apartment', 'townhouse', 'land', 'commercial', 'farm'], {
-    required_error: 'Please select a property type',
-  }),
+  propertyType: z.enum(['house', 'apartment', 'townhouse', 'land', 'commercial', 'farm']),
   bedrooms: z.number()
     .int('Bedrooms must be a whole number')
     .min(0, 'Bedrooms cannot be negative')
@@ -171,9 +167,7 @@ export const dealClosureSchema = z.object({
       const now = new Date()
       return selectedDate <= now
     }, 'Deal closure date cannot be in the future'),
-  feeCollected: z.boolean({
-    required_error: 'Please confirm if platform fee was collected',
-  }),
+  feeCollected: z.boolean(),
   notes: z.string()
     .max(1000, 'Notes are too long')
     .optional(),
