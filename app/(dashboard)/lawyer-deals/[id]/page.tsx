@@ -78,6 +78,7 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
     try {
       const { data: { user } } = await supabase.auth.getUser()
 
+      // @ts-ignore - New columns added in migration, types not yet regenerated
       const { error } = await supabase
         .from('transactions')
         .update({
@@ -87,7 +88,7 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
           deal_closed_by: user?.id,
           fee_collected: formData.feeCollected,
           updated_at: new Date().toISOString()
-        } as any)
+        })
         .eq('id', params.id)
 
       if (error) {
