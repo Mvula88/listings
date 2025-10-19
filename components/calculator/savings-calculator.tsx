@@ -72,21 +72,16 @@ export function SavingsCalculator() {
               <div className="space-y-3">
                 <h3 className="font-medium text-destructive flex items-center gap-2">
                   <DollarSign className="h-4 w-4" />
-                  Traditional Agent Fees
+                  Traditional Agent Model
                 </h3>
                 <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Buyer's agent (3%)</span>
-                    <span className="font-medium">{formatted.buyerAgentFee}</span>
+                  <div className="flex justify-between font-semibold text-destructive pt-2">
+                    <span>Agent Commission ({country === 'NA' ? '5%' : '6%'})</span>
+                    <span className="text-2xl">{formatted.traditionalAgentFee}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Seller's agent (3%)</span>
-                    <span className="font-medium">{formatted.sellerAgentFee}</span>
-                  </div>
-                  <div className="flex justify-between font-semibold text-destructive border-t pt-2">
-                    <span>Total Commission</span>
-                    <span>{formatted.traditionalAgentFee}</span>
-                  </div>
+                  <p className="text-xs text-muted-foreground pt-2 border-t">
+                    Typically paid by seller at closing
+                  </p>
                 </div>
               </div>
               

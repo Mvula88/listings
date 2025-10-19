@@ -95,8 +95,6 @@ export function formatSavingsDisplay(savings: SavingsCalculation) {
     traditionalAgentFee: `${savings.currencySymbol}${format(savings.traditionalAgentFee)}`,
     platformFee: `${savings.currencySymbol}${format(savings.platformFee)}`,
     totalSavings: `${savings.currencySymbol}${format(savings.totalSavings)}`,
-    savingsPercentage: `${savings.savingsPercentage.toFixed(0)}%`,
-    buyerAgentFee: `${savings.currencySymbol}${format(savings.buyerAgentFee)}`,
-    sellerAgentFee: `${savings.currencySymbol}${format(savings.sellerAgentFee)}`
+    savingsPercentage: `${savings.savingsPercentage.toFixed(0)}%`
   }
 }
