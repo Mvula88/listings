@@ -113,7 +113,7 @@ export function PropertyCard({ property }: PropertyCardProps) {
                 Platform fee: {formatted.platformFee}
               </p>
               <p className="text-xs text-muted-foreground">
-                Total cost: {formatted.totalDealDirectCost}*
+                Lawyer fees same in both models*
               </p>
             </div>
           </div>
