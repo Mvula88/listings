@@ -116,8 +116,8 @@ export interface TransactionWithDetails extends Transaction {
   property: PropertyWithDetails
   buyer: Profile
   seller: Profile
-  buyer_lawyer: Lawyer | null
-  seller_lawyer: Lawyer | null
+  buyer_lawyer?: Lawyer | null
+  seller_lawyer?: Lawyer | null
 }
 
 export interface DealClosureInput {
