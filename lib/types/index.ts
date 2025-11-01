@@ -7,6 +7,46 @@
 // Database types
 export type { Database, Tables, TablesInsert, TablesUpdate, Enums, Json } from './database'
 
+// Extended database types (new features from migration 005)
+export type {
+  DatabaseExtended,
+  TablesExtended,
+  TableExtended,
+  TableInsertExtended,
+  TableUpdateExtended,
+  // New table types
+  PropertyView,
+  LawyerReview as LawyerReviewExtended,
+  SavedSearch,
+  SearchAlertHistory,
+  FavoriteProperty,
+  PropertyComparison,
+  Referral,
+  PropertyVerification,
+  NotificationPreference,
+  EmailQueue,
+  PlatformSetting,
+  // Extended models
+  ProfileExtended,
+  PropertyExtended,
+  LawyerExtended,
+  // Relations
+  LawyerReviewWithRelations,
+  SavedSearchWithCount,
+  ReferralWithProfiles,
+  PropertyViewsAnalytics,
+  LawyerPerformanceMetrics,
+  // New enums
+  ReviewerRole,
+  ReferralStatus,
+  ReferralType,
+  VerificationType,
+  VerificationStatus,
+  VerificationLevel,
+  EmailStatus,
+  AlertFrequency,
+} from './database-extended'
+
 // Domain model types
 export type {
   User,

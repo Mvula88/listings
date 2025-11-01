@@ -29,12 +29,15 @@ const AGENT_COMMISSION_RATES = {
 
 // Tiered platform fees based on property value
 // Fee is collected by lawyer and included in closing costs
+// UPDATED: Revised pricing structure for better sustainability and value alignment
 export const PLATFORM_FEE_TIERS = [
-  { max: 500000, fee: 3000, label: 'Under R500K' },
-  { max: 1000000, fee: 6000, label: 'R500K - R1M' },
-  { max: 2000000, fee: 10000, label: 'R1M - R2M' },
-  { max: 5000000, fee: 15000, label: 'R2M - R5M' },
-  { max: Infinity, fee: 25000, label: 'R5M+' },
+  { max: 500000, fee: 4500, label: 'Under R500K' },
+  { max: 1000000, fee: 7500, label: 'R500K - R1M' },
+  { max: 1500000, fee: 9500, label: 'R1M - R1.5M' },
+  { max: 2500000, fee: 12500, label: 'R1.5M - R2.5M' },
+  { max: 5000000, fee: 18000, label: 'R2.5M - R5M' },
+  { max: 10000000, fee: 30000, label: 'R5M - R10M' },
+  { max: Infinity, fee: 45000, label: 'R10M+' },
 ]
 
 // Calculate platform fee based on property value

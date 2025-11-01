@@ -6,6 +6,7 @@ import { PropertyInquiry } from '@/components/properties/property-inquiry'
 import { SellerInfo } from '@/components/properties/seller-info'
 import { PropertyMap } from '@/components/properties/property-map'
 import { SimilarProperties } from '@/components/properties/similar-properties'
+import { PropertyViewTracker } from '@/components/properties/property-view-tracker'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Share2, Heart } from 'lucide-react'
 import Link from 'next/link'
@@ -101,6 +102,9 @@ export default async function PropertyDetailPage({
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Property View Tracker - Invisible analytics component */}
+      <PropertyViewTracker propertyId={property.id} />
+
       {/* Header */}
       <header className="border-b sticky top-0 bg-background z-40">
         <div className="container mx-auto px-4 py-4">
