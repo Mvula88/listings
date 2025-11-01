@@ -26,11 +26,11 @@ export default async function PropertyAnalyticsPage({ params }: PageProps) {
   }
 
   // Get property details
-  const { data: property, error } = await supabase
+  const { data: property, error } = await (supabase
     .from('properties')
     .select('*, property_images(*), countries(*)')
     .eq('id', id)
-    .single()
+    .single() as any)
 
   if (error || !property) {
     redirect('/properties')
