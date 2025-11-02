@@ -585,7 +585,7 @@ export default async function HomePage() {
               {/* Headline */}
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
                 Ready to Save on Your{' '}
-                <span className="bg-gradient-to-r from-yellow-300 via-yellow-200 to-yellow-300 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-yellow-400 via-amber-400 to-yellow-400 bg-clip-text text-transparent">
                   Next Property?
                 </span>
               </h2>
