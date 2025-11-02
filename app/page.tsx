@@ -229,77 +229,139 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
+      {/* How It Works - Modern Design */}
+      <section className="py-20 bg-gradient-to-b from-background via-muted/20 to-background relative overflow-hidden">
+        {/* Decorative background elements */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">How DealDirect Works</h2>
-            <p className="text-center text-muted-foreground mb-16 max-w-2xl mx-auto">
-              Four simple steps to save thousands on your property transaction
-            </p>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">How DealDirect Works</h2>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                Four simple steps to save thousands on your property transaction
+              </p>
+            </div>
           </FadeIn>
 
-          <div className="grid md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto">
             <FadeIn delay={0.1}>
-              <div className="text-center group">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-                  <Home className="h-10 w-10 text-primary" />
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full bg-background/50 backdrop-blur overflow-hidden">
+                {/* Step number badge */}
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="text-4xl font-bold text-primary/30">1</span>
                 </div>
-                <div className="bg-primary text-primary-foreground w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                  1
+
+                <CardContent className="p-6 pt-8">
+                  <div className="relative mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <Home className="h-8 w-8 text-primary-foreground" />
+                    </div>
+                  </div>
+
+                  <h3 className="font-bold text-xl mb-3 text-center">List or Browse</h3>
+                  <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                    List your property for free or browse available properties across Namibia and South Africa
+                  </p>
+                </CardContent>
+
+                {/* Arrow connector for desktop */}
+                <div className="hidden lg:block absolute top-1/2 -right-8 transform -translate-y-1/2 z-10">
+                  <ArrowRight className="h-6 w-6 text-primary/40" />
                 </div>
-                <h3 className="font-semibold mb-3 text-lg">List or Browse</h3>
-                <p className="text-sm text-muted-foreground">
-                  List your property for free or browse available properties
-                </p>
-              </div>
+              </Card>
             </FadeIn>
 
             <FadeIn delay={0.2}>
-              <div className="text-center group">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-                  <Users className="h-10 w-10 text-primary" />
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full bg-background/50 backdrop-blur overflow-hidden">
+                {/* Step number badge */}
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="text-4xl font-bold text-primary/30">2</span>
                 </div>
-                <div className="bg-primary text-primary-foreground w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                  2
+
+                <CardContent className="p-6 pt-8">
+                  <div className="relative mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <Users className="h-8 w-8 text-primary-foreground" />
+                    </div>
+                  </div>
+
+                  <h3 className="font-bold text-xl mb-3 text-center">Connect Directly</h3>
+                  <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                    Buyers and sellers communicate directly through our secure messaging platform
+                  </p>
+                </CardContent>
+
+                {/* Arrow connector for desktop */}
+                <div className="hidden lg:block absolute top-1/2 -right-8 transform -translate-y-1/2 z-10">
+                  <ArrowRight className="h-6 w-6 text-primary/40" />
                 </div>
-                <h3 className="font-semibold mb-3 text-lg">Connect Directly</h3>
-                <p className="text-sm text-muted-foreground">
-                  Buyers and sellers communicate directly without agents
-                </p>
-              </div>
+              </Card>
             </FadeIn>
 
             <FadeIn delay={0.3}>
-              <div className="text-center group">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-                  <Shield className="h-10 w-10 text-primary" />
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full bg-background/50 backdrop-blur overflow-hidden">
+                {/* Step number badge */}
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="text-4xl font-bold text-primary/30">3</span>
                 </div>
-                <div className="bg-primary text-primary-foreground w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                  3
+
+                <CardContent className="p-6 pt-8">
+                  <div className="relative mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <Shield className="h-8 w-8 text-primary-foreground" />
+                    </div>
+                  </div>
+
+                  <h3 className="font-bold text-xl mb-3 text-center">Choose Conveyancer</h3>
+                  <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                    Select from our network of verified lawyers with transparent flat-rate pricing
+                  </p>
+                </CardContent>
+
+                {/* Arrow connector for desktop */}
+                <div className="hidden lg:block absolute top-1/2 -right-8 transform -translate-y-1/2 z-10">
+                  <ArrowRight className="h-6 w-6 text-primary/40" />
                 </div>
-                <h3 className="font-semibold mb-3 text-lg">Choose Conveyancer</h3>
-                <p className="text-sm text-muted-foreground">
-                  Select from verified lawyers to handle the legal work
-                </p>
-              </div>
+              </Card>
             </FadeIn>
 
             <FadeIn delay={0.4}>
-              <div className="text-center group">
-                <div className="w-20 h-20 bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:shadow-lg transition-all duration-300">
-                  <DollarSign className="h-10 w-10 text-primary" />
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full bg-background/50 backdrop-blur overflow-hidden">
+                {/* Step number badge */}
+                <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                  <span className="text-4xl font-bold text-primary/30">4</span>
                 </div>
-                <div className="bg-primary text-primary-foreground w-8 h-8 rounded-full flex items-center justify-center mx-auto mb-4 font-bold">
-                  4
-                </div>
-                <h3 className="font-semibold mb-3 text-lg">Save Thousands</h3>
-                <p className="text-sm text-muted-foreground">
-                  Platform fee collected at closing - still save 50-70% vs agent commissions
-                </p>
-              </div>
+
+                <CardContent className="p-6 pt-8">
+                  <div className="relative mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-green-500 via-green-600 to-green-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-green-500/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                      <DollarSign className="h-8 w-8 text-white" />
+                    </div>
+                  </div>
+
+                  <h3 className="font-bold text-xl mb-3 text-center">Save Thousands</h3>
+                  <p className="text-sm text-muted-foreground text-center leading-relaxed">
+                    Pay a small platform fee at closing and save 50-70% compared to traditional agent commissions
+                  </p>
+                </CardContent>
+              </Card>
             </FadeIn>
           </div>
+
+          {/* Call to action */}
+          <FadeIn delay={0.5}>
+            <div className="text-center mt-16">
+              <Link href="/how-it-works">
+                <Button size="lg" variant="outline" className="group">
+                  See Detailed Process
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
