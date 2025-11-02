@@ -249,7 +249,7 @@ export function newPropertyMatchEmail(
       (p) => `
       <div style="background-color: #f4f4f5; padding: 20px; border-radius: 6px; margin: 16px 0;">
         <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #18181b;">${p.title}</h3>
-        <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(p.price, p.currency)}</p>
+        <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(p.price, (p as any).currency || 'ZAR')}</p>
         <p style="margin: 0 0 12px 0; font-size: 14px; color: #71717a;">${p.bedrooms} bed • ${p.bathrooms} bath • ${p.square_meters}m² • ${p.city}</p>
         <a href="${PLATFORM_URL}/properties/${p.id}" style="color: #0ea5e9; text-decoration: none; font-weight: 600;">View Property →</a>
       </div>
