@@ -43,7 +43,6 @@ const navItems: NavItem[] = [
     title: 'List Property',
     href: '/properties/new',
     icon: PlusCircle,
-    userTypes: ['seller']
   },
   {
     title: 'Transactions',
