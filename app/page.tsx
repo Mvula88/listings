@@ -94,7 +94,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-5xl mx-auto text-center">
+          <div className="max-w-5xl mx-auto text-center pt-8 md:pt-4">
             {/* Badge */}
             <FadeIn direction="down" duration={0.6}>
               <div className="inline-flex items-center justify-center px-4 py-2 mb-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
