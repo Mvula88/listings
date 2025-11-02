@@ -71,59 +71,117 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Enhanced Hero Section */}
-      <section className="relative py-8 md:py-12 overflow-hidden h-[65vh] md:h-[60vh] flex items-center">
-        {/* Background Image */}
+      {/* Modern Hero Section */}
+      <section className="relative py-20 md:py-32 overflow-hidden min-h-[85vh] md:min-h-[90vh] flex items-center">
+        {/* Background Image with Parallax Effect */}
         <div className="absolute inset-0">
           <Image
             src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop&q=80"
             alt="Modern luxury home"
             fill
-            className="object-cover"
+            className="object-cover scale-105"
             priority
           />
-          {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
+          {/* Modern gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-black/70 to-primary/30" />
+
+          {/* Animated gradient orbs */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
         </div>
 
+        {/* Decorative grid pattern */}
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
+
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            <FadeIn direction="down" duration={0.8}>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white px-4">
-                Buy & Sell Properties Without&nbsp;Agent&nbsp;Commissions
+          <div className="max-w-5xl mx-auto text-center">
+            {/* Badge */}
+            <FadeIn direction="down" duration={0.6}>
+              <div className="inline-flex items-center justify-center px-4 py-2 mb-8 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
+                <TrendingDown className="h-4 w-4 text-white mr-2" />
+                <span className="text-sm font-medium text-white">Save 50-70% on Agent Fees</span>
+              </div>
+            </FadeIn>
+
+            {/* Main Headline */}
+            <FadeIn direction="down" duration={0.8} delay={0.1}>
+              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 text-white leading-tight">
+                Buy & Sell Properties{' '}
+                <span className="bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
+                  Without Agent Commissions
+                </span>
               </h1>
             </FadeIn>
 
-            <FadeIn delay={0.2} duration={0.8}>
-              <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+            {/* Subtitle */}
+            <FadeIn delay={0.3} duration={0.8}>
+              <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto font-light">
                 Save thousands on real estate transactions. Connect directly with buyers, sellers, and trusted conveyancers.
               </p>
             </FadeIn>
 
-            <FadeIn delay={0.4} duration={0.8}>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            {/* CTA Buttons */}
+            <FadeIn delay={0.5} duration={0.8}>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
                 <Link href="/browse">
-                  <Button size="lg" className="w-full sm:w-auto group transition-all hover:shadow-xl hover:scale-105">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto group px-8 py-6 text-lg font-semibold shadow-2xl shadow-primary/50 hover:shadow-primary/70 transition-all hover:scale-105"
+                  >
                     Browse Properties
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 <Link href="/list">
-                  <Button size="lg" variant="secondary" className="w-full sm:w-auto transition-all hover:shadow-xl hover:scale-105">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="w-full sm:w-auto px-8 py-6 text-lg font-semibold bg-white/10 backdrop-blur-sm border-2 border-white/30 text-white hover:bg-white hover:text-primary transition-all hover:scale-105"
+                  >
                     List Your Property
                   </Button>
                 </Link>
               </div>
             </FadeIn>
 
-            <FadeIn delay={0.6} duration={0.8}>
-              <p className="mt-8 text-sm text-white/80 flex items-center justify-center gap-2">
-                <MapPin className="h-4 w-4" />
-                Currently serving Namibia and South Africa
-              </p>
+            {/* Trust Indicators */}
+            <FadeIn delay={0.7} duration={0.8}>
+              <div className="flex flex-wrap items-center justify-center gap-8 text-white/80">
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-sm font-medium">No Upfront Costs</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-sm font-medium">Verified Lawyers</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse" />
+                  <span className="text-sm font-medium">Direct Communication</span>
+                </div>
+              </div>
+            </FadeIn>
+
+            {/* Location Badge */}
+            <FadeIn delay={0.9} duration={0.8}>
+              <div className="mt-12 inline-flex items-center gap-2 px-6 py-3 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full">
+                <MapPin className="h-4 w-4 text-white" />
+                <span className="text-sm text-white font-medium">
+                  Currently serving Namibia and South Africa
+                </span>
+              </div>
             </FadeIn>
           </div>
         </div>
+
+        {/* Scroll indicator */}
+        <FadeIn delay={1.1} duration={0.8}>
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
+              <div className="w-1 h-3 bg-white/60 rounded-full animate-pulse" />
+            </div>
+          </div>
+        </FadeIn>
       </section>
 
       {/* Featured Listings */}
