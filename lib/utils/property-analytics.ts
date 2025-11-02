@@ -243,7 +243,7 @@ export async function getPopularProperties(limit: number = 10, days: number = 7)
 
     // Get top property IDs
     const topPropertyIds = Object.entries(propertyViews)
-      .sort((a, b) => b[1] - a[1])
+      .sort((a, b) => (b[1] as number) - (a[1] as number))
       .slice(0, limit)
       .map(([id]) => id)
 
