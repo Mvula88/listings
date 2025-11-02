@@ -72,20 +72,30 @@ export default async function HomePage() {
       </nav>
 
       {/* Enhanced Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/10 via-background to-primary/5 py-24 md:py-32 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+      <section className="relative py-24 md:py-32 overflow-hidden">
+        {/* Background Image */}
+        <div className="absolute inset-0">
+          <Image
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop&q=80"
+            alt="Modern luxury home"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/70" />
+        </div>
 
-        <div className="container mx-auto px-4 relative">
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
             <FadeIn direction="down" duration={0.8}>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent px-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white px-4">
                 Buy & Sell Properties Without&nbsp;Agent&nbsp;Commissions
               </h1>
             </FadeIn>
 
             <FadeIn delay={0.2} duration={0.8}>
-              <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
                 Save thousands on real estate transactions. Connect directly with buyers, sellers, and trusted conveyancers.
                 Free to list. Free to browse. Platform fee collected at closing.
               </p>
@@ -94,13 +104,13 @@ export default async function HomePage() {
             <FadeIn delay={0.4} duration={0.8}>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/browse">
-                  <Button size="lg" className="w-full sm:w-auto group transition-all hover:shadow-lg hover:scale-105">
+                  <Button size="lg" className="w-full sm:w-auto group transition-all hover:shadow-xl hover:scale-105">
                     Browse Properties
                     <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 <Link href="/list">
-                  <Button size="lg" variant="outline" className="w-full sm:w-auto transition-all hover:shadow-lg hover:scale-105">
+                  <Button size="lg" variant="secondary" className="w-full sm:w-auto transition-all hover:shadow-xl hover:scale-105">
                     List Your Property
                   </Button>
                 </Link>
@@ -108,7 +118,7 @@ export default async function HomePage() {
             </FadeIn>
 
             <FadeIn delay={0.6} duration={0.8}>
-              <p className="mt-8 text-sm text-muted-foreground flex items-center justify-center gap-2">
+              <p className="mt-8 text-sm text-white/80 flex items-center justify-center gap-2">
                 <MapPin className="h-4 w-4" />
                 Currently serving Namibia and South Africa
               </p>
