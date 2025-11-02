@@ -252,7 +252,7 @@ export async function getPopularProperties(limit: number = 10, days: number = 7)
     }
 
     // Get property details
-    const { data: properties, error: propError } = await supabase
+    const { data: properties, error: propError }: any = await supabase
       .from('properties')
       .select('*, property_images(*), countries(*)')
       .in('id', topPropertyIds)
@@ -265,7 +265,7 @@ export async function getPopularProperties(limit: number = 10, days: number = 7)
 
     // Sort by view count
     return (properties || []).sort(
-      (a, b) => propertyViews[b.id] - propertyViews[a.id]
+      (a: any, b: any) => propertyViews[b.id] - propertyViews[a.id]
     )
   } catch (error) {
     console.error('Exception getting popular properties:', error)
