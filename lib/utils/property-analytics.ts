@@ -66,7 +66,7 @@ export async function updateViewDuration(
   try {
     const supabase = createClient()
 
-    await supabase
+    await (supabase as any)
       .from('property_views')
       .update({ duration_seconds: Math.round(durationSeconds) })
       .eq('property_id', propertyId)
