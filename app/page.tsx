@@ -80,7 +80,7 @@ export default async function HomePage() {
           <div className="max-w-4xl mx-auto text-center">
             <FadeIn direction="down" duration={0.8}>
               <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                Buy & Sell Properties Without Agent Commissions
+                Buy & Sell Properties <span className="whitespace-nowrap">Without Agent Commissions</span>
               </h1>
             </FadeIn>
 
