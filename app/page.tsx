@@ -72,7 +72,7 @@ export default async function HomePage() {
       </nav>
 
       {/* Modern Hero Section */}
-      <section className="relative py-20 md:py-32 overflow-hidden min-h-[85vh] md:min-h-[90vh] flex items-center">
+      <section className="relative py-8 md:py-12 overflow-hidden h-[65vh] md:h-[60vh] flex items-center">
         {/* Background Image with Parallax Effect */}
         <div className="absolute inset-0">
           <Image
