@@ -95,7 +95,7 @@ export async function getPropertyAnalytics(
     dateFrom.setDate(dateFrom.getDate() - days)
 
     // Get all views for the property
-    const { data: views, error } = await supabase
+    const { data: views, error }: any = await (supabase as any)
       .from('property_views')
       .select('*')
       .eq('property_id', propertyId)
