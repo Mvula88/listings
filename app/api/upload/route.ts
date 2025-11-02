@@ -79,7 +79,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
     const filePath = `${folder}/${user.id}/${filename}`
 
     // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('property-images')
       .upload(filePath, optimized.buffer, {
         contentType: `image/${optimized.format}`,

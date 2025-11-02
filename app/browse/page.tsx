@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, MapPin, SlidersHorizontal } from 'lucide-react'
 import { FadeIn } from '@/components/ui/fade-in'
-import { PropertyGridSkeleton } from '@/components/skeletons/property-card-skeleton'
 import Link from 'next/link'
 
 interface SearchParams {

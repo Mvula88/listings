@@ -30,19 +30,19 @@ export default function RegisterPage() {
   const supabase = createClient()
 
   useEffect(() => {
-    fetchCountries()
-  }, [])
-
-  async function fetchCountries() {
+    async function fetchCountries() {
     const { data } = await supabase
       .from('countries')
       .select('*')
       .order('name')
-    
+
     if (data) {
       setCountries(data)
     }
-  }
+    }
+    fetchCountries()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   async function handleRegister(e: React.FormEvent) {
     e.preventDefault()

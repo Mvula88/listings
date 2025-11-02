@@ -6,7 +6,7 @@ import { ArrowRight, Home, Users, DollarSign, Shield, MapPin, Bed, Bath, Square,
 import { getFeaturedProperties, formatPropertyPrice } from "@/lib/data/properties"
 import { SavingsCalculator } from "@/components/calculator/savings-calculator"
 import { calculateSavings, formatSavingsDisplay } from "@/lib/utils/savings-calculator"
-import { FadeIn, Stagger } from "@/components/ui/fade-in"
+import { FadeIn } from "@/components/ui/fade-in"
 
 export default async function HomePage() {
   // Fetch real featured properties from Supabase

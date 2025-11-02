@@ -1,7 +1,7 @@
 // Property Analytics Utilities
 // Track and analyze property views, engagement, and performance
 
-import type { PropertyView, PropertyViewsAnalytics } from '@/lib/types'
+import type { PropertyViewsAnalytics } from '@/lib/types'
 import { createClient } from '@/lib/supabase/client'
 
 /**

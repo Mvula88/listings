@@ -6,7 +6,7 @@ import { formatPrice } from '@/lib/utils/format'
 
 const PLATFORM_NAME = 'DealDirect'
 const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://dealdirect.com'
-const PLATFORM_LOGO = `${PLATFORM_URL}/logo.png`
+// const PLATFORM_LOGO = `${PLATFORM_URL}/logo.png`
 const FROM_EMAIL = 'support@dealdirect.com'
 
 // Base email layout

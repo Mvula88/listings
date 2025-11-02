@@ -12,7 +12,6 @@ import {
   CheckCircle
 } from 'lucide-react'
 import { formatPrice, formatDate } from '@/lib/utils/format'
-import type { Property } from '@/lib/types'
 
 interface PropertyDetailsProps {
   property: any

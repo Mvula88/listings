@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils/cn'
 import { formatRelativeTime } from '@/lib/utils/format'
 import { Send, User, Home } from 'lucide-react'
 import Link from 'next/link'
-import type { Conversation, Message } from '@/lib/types'
+import type { Message } from '@/lib/types'
 
 interface MessageThreadProps {
   conversation: any
@@ -26,9 +26,30 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
   const supabase = createClient()
 
   useEffect(() => {
+    async function loadMessages() {
+      const { data } = await (supabase
+        .from('messages') as any)
+        .select('*')
+        .eq('conversation_id', conversation.id)
+        .order('created_at', { ascending: true })
+
+      if (data) {
+        setMessages(data)
+      }
+    }
+
+    async function markMessagesAsRead() {
+      await (supabase
+        .from('messages') as any)
+        .update({ read: true })
+        .eq('conversation_id', conversation.id)
+        .eq('recipient_id', currentUserId)
+        .eq('read', false)
+    }
+
     loadMessages()
     markMessagesAsRead()
-    
+
     // Subscribe to new messages
     const channel = supabase
       .channel(`messages:${conversation.id}`)
@@ -53,7 +74,7 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [conversation.id])
+  }, [conversation.id, currentUserId, supabase])
 
   useEffect(() => {
     // Scroll to bottom when messages change
@@ -61,27 +82,6 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages])
-
-  async function loadMessages() {
-    const { data } = await (supabase
-      .from('messages') as any)
-      .select('*')
-      .eq('conversation_id', conversation.id)
-      .order('created_at', { ascending: true })
-
-    if (data) {
-      setMessages(data)
-    }
-  }
-
-  async function markMessagesAsRead() {
-    await (supabase
-      .from('messages') as any)
-      .update({ read: true })
-      .eq('conversation_id', conversation.id)
-      .eq('recipient_id', currentUserId)
-      .eq('read', false)
-  }
 
   async function sendMessage() {
     if (!newMessage.trim() || sending) return

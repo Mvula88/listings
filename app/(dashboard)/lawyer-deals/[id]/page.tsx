@@ -28,10 +28,7 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
   })
 
   useEffect(() => {
-    fetchTransaction()
-  }, [params.id])
-
-  async function fetchTransaction() {
+    async function fetchTransaction() {
     const { data, error } = await supabase
       .from('transactions')
       .select(`
@@ -70,7 +67,9 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
       setTransaction(data)
     }
     setLoading(false)
-  }
+    }
+    fetchTransaction()
+  }, [params.id, supabase])
 
   async function handleMarkAsClosed() {
     setSubmitting(true)
