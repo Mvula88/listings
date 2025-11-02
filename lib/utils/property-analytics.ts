@@ -120,15 +120,15 @@ export async function getPropertyAnalytics(
     // Calculate metrics
     const totalViews = views.length
     const uniqueVisitors = new Set(
-      views.map((v) => v.viewer_id || v.ip_address || v.session_id).filter(Boolean)
+      views.map((v: any) => v.viewer_id || v.ip_address || v.session_id).filter(Boolean)
     ).size
 
     const averageDuration =
-      views.reduce((sum, v) => sum + (v.duration_seconds || 0), 0) / totalViews
+      views.reduce((sum: number, v: any) => sum + (v.duration_seconds || 0), 0) / totalViews
 
     // Group views by date
     const viewsByDate = views.reduce(
-      (acc, view) => {
+      (acc: Record<string, number>, view: any) => {
         const date = view.viewed_at.split('T')[0]
         acc[date] = (acc[date] || 0) + 1
         return acc
@@ -142,7 +142,7 @@ export async function getPropertyAnalytics(
 
     // Group by referrer
     const viewsByReferrer = views.reduce(
-      (acc, view) => {
+      (acc: Record<string, number>, view: any) => {
         const referrer = view.referrer || 'Direct'
         acc[referrer] = (acc[referrer] || 0) + 1
         return acc
