@@ -222,7 +222,7 @@ export async function getPopularProperties(limit: number = 10, days: number = 7)
     dateFrom.setDate(dateFrom.getDate() - days)
 
     // Get view counts grouped by property
-    const { data: viewCounts, error: viewError } = await supabase
+    const { data: viewCounts, error: viewError }: any = await (supabase as any)
       .from('property_views')
       .select('property_id')
       .gte('viewed_at', dateFrom.toISOString())
@@ -234,7 +234,7 @@ export async function getPopularProperties(limit: number = 10, days: number = 7)
 
     // Count views per property
     const propertyViews = viewCounts.reduce(
-      (acc, view) => {
+      (acc: Record<string, number>, view: any) => {
         acc[view.property_id] = (acc[view.property_id] || 0) + 1
         return acc
       },
