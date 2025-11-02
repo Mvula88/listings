@@ -1,5 +1,13 @@
 # Supabase Local Development Guide
 
+## 🚨 IMPORTANT: READ DATABASE_WORKFLOW_RULES.md FIRST! 🚨
+
+**Before making ANY database changes, read `DATABASE_WORKFLOW_RULES.md`**
+
+This file contains the MANDATORY workflow for database changes. Following it ensures safety for millions of users.
+
+---
+
 ## ✅ Setup Complete!
 
 You now have a professional local development setup with:
