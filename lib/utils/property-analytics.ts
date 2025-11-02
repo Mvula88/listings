@@ -137,7 +137,7 @@ export async function getPropertyAnalytics(
     )
 
     const viewsByDateArray = Object.entries(viewsByDate)
-      .map(([date, count]) => ({ date, count }))
+      .map(([date, count]) => ({ date, count: count as number }))
       .sort((a, b) => a.date.localeCompare(b.date))
 
     // Group by referrer
@@ -151,7 +151,7 @@ export async function getPropertyAnalytics(
     )
 
     const topReferrers = Object.entries(viewsByReferrer)
-      .map(([referrer, count]) => ({ referrer, count }))
+      .map(([referrer, count]) => ({ referrer, count: count as number }))
       .sort((a, b) => b.count - a.count)
       .slice(0, 5)
 
