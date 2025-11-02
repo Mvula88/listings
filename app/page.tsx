@@ -105,7 +105,7 @@ export default async function HomePage() {
 
             {/* Main Headline */}
             <FadeIn direction="down" duration={0.8} delay={0.1}>
-              <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold mb-6 text-white leading-tight">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-white leading-tight">
                 Buy & Sell Properties{' '}
                 <span className="bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent">
                   Without Agent Commissions
@@ -115,7 +115,7 @@ export default async function HomePage() {
 
             {/* Subtitle */}
             <FadeIn delay={0.3} duration={0.8}>
-              <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto font-light">
+              <p className="text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto font-light">
                 Save thousands on real estate transactions. Connect directly with buyers, sellers, and trusted conveyancers.
               </p>
             </FadeIn>
@@ -567,7 +567,7 @@ export default async function HomePage() {
       </section>
 
       {/* Modern CTA Section */}
-      <section className="py-32 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white relative overflow-hidden">
+      <section className="py-24 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white relative overflow-hidden">
         {/* Animated background elements */}
         <div className="absolute inset-0 bg-grid-pattern opacity-10" />
         <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500/30 rounded-full blur-3xl animate-pulse" />
