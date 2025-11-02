@@ -9,6 +9,6 @@ export default async function ListPropertyPage() {
     redirect('/login')
   }
 
-  // Redirect to dashboard for now - property listing will be added there
-  redirect('/dashboard/properties/new')
+  // Redirect to dashboard - property listing functionality is available there
+  redirect('/dashboard')
 }
