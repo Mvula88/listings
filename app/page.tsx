@@ -329,15 +329,15 @@ export default async function HomePage() {
             <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Why Choose DealDirect?</h2>
           </FadeIn>
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            <FadeIn delay={0.1}>
-              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50">
+            <FadeIn delay={0.1} className="h-full">
+              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50 h-full flex flex-col">
                 <CardHeader>
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                     <DollarSign className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle>Transparent Pricing</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-1">
                   <p className="text-muted-foreground">
                     Tiered platform fees based on property value, collected by your lawyer at closing. No upfront costs, no percentage-based commissions.
                   </p>
@@ -345,15 +345,15 @@ export default async function HomePage() {
               </Card>
             </FadeIn>
 
-            <FadeIn delay={0.2}>
-              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50">
+            <FadeIn delay={0.2} className="h-full">
+              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50 h-full flex flex-col">
                 <CardHeader>
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                     <Shield className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle>Verified Lawyers</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-1">
                   <p className="text-muted-foreground">
                     All conveyancers are verified professionals with transparent flat-rate pricing.
                   </p>
@@ -361,15 +361,15 @@ export default async function HomePage() {
               </Card>
             </FadeIn>
 
-            <FadeIn delay={0.3}>
-              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50">
+            <FadeIn delay={0.3} className="h-full">
+              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50 h-full flex flex-col">
                 <CardHeader>
                   <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
                     <Users className="h-6 w-6 text-primary" />
                   </div>
                   <CardTitle>Direct Communication</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-1">
                   <p className="text-muted-foreground">
                     Connect directly with buyers and sellers. No middleman delays or miscommunication.
                   </p>
