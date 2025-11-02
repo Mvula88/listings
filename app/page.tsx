@@ -365,76 +365,142 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Interactive Savings Calculator */}
-      <section className="py-20 bg-gradient-to-b from-muted/50 to-background">
-        <div className="container mx-auto px-4">
+      {/* Interactive Savings Calculator - Modern Design */}
+      <section className="py-24 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+          <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Calculate Your Savings</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <div className="inline-flex items-center justify-center px-4 py-2 bg-primary/10 rounded-full mb-6">
+                <TrendingDown className="h-4 w-4 text-primary mr-2" />
+                <span className="text-sm font-medium text-primary">Save 50-70% on Fees</span>
+              </div>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Calculate Your Savings</h2>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
                 See exactly how much you'll save by avoiding agent commissions
               </p>
             </div>
           </FadeIn>
+
           <FadeIn delay={0.2}>
             <div className="flex justify-center">
-              <SavingsCalculator />
+              <div className="w-full max-w-2xl">
+                <Card className="border-2 shadow-2xl bg-background/80 backdrop-blur">
+                  <CardContent className="p-8">
+                    <SavingsCalculator />
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Trust indicators */}
+          <FadeIn delay={0.4}>
+            <div className="mt-12 flex flex-wrap justify-center gap-8 text-center">
+              <div className="flex flex-col items-center">
+                <div className="text-3xl font-bold text-primary mb-1">50-70%</div>
+                <div className="text-sm text-muted-foreground">Lower Fees</div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="text-3xl font-bold text-primary mb-1">100%</div>
+                <div className="text-sm text-muted-foreground">Transparent</div>
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="text-3xl font-bold text-primary mb-1">0</div>
+                <div className="text-sm text-muted-foreground">Upfront Costs</div>
+              </div>
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
+      {/* Why Choose DealDirect - Modern Design */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+
+        <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">Why Choose DealDirect?</h2>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Why Choose DealDirect?</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                The smarter way to buy and sell property
+              </p>
+            </div>
           </FadeIn>
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+
+          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             <FadeIn delay={0.1} className="h-full">
-              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50 h-full flex flex-col">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <DollarSign className="h-6 w-6 text-primary" />
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full flex flex-col overflow-hidden bg-gradient-to-br from-background to-primary/5">
+                {/* Decorative corner accent */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full" />
+
+                <CardHeader className="relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    <DollarSign className="h-8 w-8 text-primary-foreground" />
                   </div>
-                  <CardTitle>Transparent Pricing</CardTitle>
+                  <CardTitle className="text-2xl mb-2">Transparent Pricing</CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1">
-                  <p className="text-muted-foreground">
+                <CardContent className="flex-1 relative z-10">
+                  <p className="text-muted-foreground leading-relaxed mb-4">
                     Tiered platform fees based on property value, collected by your lawyer at closing. No upfront costs, no percentage-based commissions.
                   </p>
+                  <div className="flex items-center text-sm text-primary font-medium">
+                    <span>Learn about pricing</span>
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </CardContent>
               </Card>
             </FadeIn>
 
             <FadeIn delay={0.2} className="h-full">
-              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50 h-full flex flex-col">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <Shield className="h-6 w-6 text-primary" />
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full flex flex-col overflow-hidden bg-gradient-to-br from-background to-primary/5">
+                {/* Decorative corner accent */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full" />
+
+                <CardHeader className="relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    <Shield className="h-8 w-8 text-primary-foreground" />
                   </div>
-                  <CardTitle>Verified Lawyers</CardTitle>
+                  <CardTitle className="text-2xl mb-2">Verified Lawyers</CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1">
-                  <p className="text-muted-foreground">
-                    All conveyancers are verified professionals with transparent flat-rate pricing.
+                <CardContent className="flex-1 relative z-10">
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    All conveyancers are verified professionals with transparent flat-rate pricing. Your transaction is in safe hands.
                   </p>
+                  <div className="flex items-center text-sm text-primary font-medium">
+                    <span>Find a lawyer</span>
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </CardContent>
               </Card>
             </FadeIn>
 
             <FadeIn delay={0.3} className="h-full">
-              <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-2 hover:border-primary/50 h-full flex flex-col">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <Users className="h-6 w-6 text-primary" />
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full flex flex-col overflow-hidden bg-gradient-to-br from-background to-primary/5">
+                {/* Decorative corner accent */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full" />
+
+                <CardHeader className="relative z-10">
+                  <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    <Users className="h-8 w-8 text-primary-foreground" />
                   </div>
-                  <CardTitle>Direct Communication</CardTitle>
+                  <CardTitle className="text-2xl mb-2">Direct Communication</CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1">
-                  <p className="text-muted-foreground">
-                    Connect directly with buyers and sellers. No middleman delays or miscommunication.
+                <CardContent className="flex-1 relative z-10">
+                  <p className="text-muted-foreground leading-relaxed mb-4">
+                    Connect directly with buyers and sellers through our secure platform. No middleman delays or miscommunication.
                   </p>
+                  <div className="flex items-center text-sm text-primary font-medium">
+                    <span>How it works</span>
+                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </CardContent>
               </Card>
             </FadeIn>
