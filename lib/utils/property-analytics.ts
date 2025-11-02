@@ -283,7 +283,7 @@ export async function getPropertyConversionRate(propertyId: string) {
     const supabase = createClient()
 
     // Get property with counts
-    const { data: property, error } = await supabase
+    const { data: property, error }: any = await supabase
       .from('properties')
       .select('view_count, inquiry_count, save_count')
       .eq('id', propertyId)
