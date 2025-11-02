@@ -152,54 +152,41 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-              {profile?.user_type === 'buyer' && (
-                <>
-                  <Link href="/browse">
-                    <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
-                          <Home className="h-5 w-5" />
-                        </div>
-                        <span className="font-medium">Browse Properties</span>
-                      </div>
-                    </Button>
-                  </Link>
-                  <Link href="/properties/saved">
-                    <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
-                          <Building className="h-5 w-5" />
-                        </div>
-                        <span className="font-medium">Saved Properties</span>
-                      </div>
-                    </Button>
-                  </Link>
-                </>
-              )}
+              {/* List Property - Available to all users */}
+              <Link href="/properties/new">
+                <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
+                      <Building className="h-5 w-5" />
+                    </div>
+                    <span className="font-medium">List New Property</span>
+                  </div>
+                </Button>
+              </Link>
+
+              {/* Browse Properties */}
+              <Link href="/browse">
+                <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
+                      <Home className="h-5 w-5" />
+                    </div>
+                    <span className="font-medium">Browse Properties</span>
+                  </div>
+                </Button>
+              </Link>
 
               {profile?.user_type === 'seller' && (
-                <>
-                  <Link href="/properties/new">
-                    <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
-                          <Building className="h-5 w-5" />
-                        </div>
-                        <span className="font-medium">List New Property</span>
+                <Link href="/properties">
+                  <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
+                        <FileText className="h-5 w-5" />
                       </div>
-                    </Button>
-                  </Link>
-                  <Link href="/properties">
-                    <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
-                          <FileText className="h-5 w-5" />
-                        </div>
-                        <span className="font-medium">Manage Listings</span>
-                      </div>
-                    </Button>
-                  </Link>
-                </>
+                      <span className="font-medium">Manage Listings</span>
+                    </div>
+                  </Button>
+                </Link>
               )}
 
               {profile?.user_type === 'lawyer' && (
