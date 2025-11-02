@@ -72,7 +72,7 @@ export default async function HomePage() {
       </nav>
 
       {/* Enhanced Hero Section */}
-      <section className="relative py-12 md:py-16 lg:py-20 overflow-hidden min-h-[50vh] md:min-h-[55vh] flex items-center">
+      <section className="relative py-8 md:py-12 overflow-hidden h-[65vh] md:h-[60vh] flex items-center">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
