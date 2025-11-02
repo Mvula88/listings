@@ -15,9 +15,9 @@ interface PropertyViewTrackerProps {
 }
 
 export function PropertyViewTracker({ propertyId }: PropertyViewTrackerProps) {
-  const sessionIdRef = useRef<string>()
-  const startTimeRef = useRef<number>()
-  const trackedRef = useRef(false)
+  const sessionIdRef = useRef<string | undefined>(undefined)
+  const startTimeRef = useRef<number | undefined>(undefined)
+  const trackedRef = useRef<boolean>(false)
 
   useEffect(() => {
     // Generate or get session ID
