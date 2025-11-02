@@ -97,7 +97,6 @@ export default async function HomePage() {
             <FadeIn delay={0.2} duration={0.8}>
               <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
                 Save thousands on real estate transactions. Connect directly with buyers, sellers, and trusted conveyancers.
-                Free to list. Free to browse. Platform fee collected at closing.
               </p>
             </FadeIn>
 
