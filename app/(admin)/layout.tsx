@@ -39,7 +39,7 @@ export default async function AdminLayout({
 
   // Attach profile to adminProfile for components
   const adminWithProfile = {
-    ...adminProfile,
+    ...(adminProfile as any),
     profile: profile
   }
 
