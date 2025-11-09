@@ -33,9 +33,9 @@ export default async function FavoritesPage() {
       )
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+    .order('created_at', { ascending: false }) as any
 
-  const properties = favorites?.map(f => f.property).filter(Boolean) || []
+  const properties = favorites?.map((f: any) => f.property).filter(Boolean) || []
 
   return (
     <div className="space-y-6">
