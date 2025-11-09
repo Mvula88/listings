@@ -316,7 +316,7 @@ export default async function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {recentUsers?.map((user) => (
+                {recentUsers?.map((user: any) => (
                   <Link
                     key={user.id}
                     href={`/admin/users/${user.id}`}
