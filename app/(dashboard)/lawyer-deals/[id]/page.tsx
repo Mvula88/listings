@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { use, useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,8 @@ import { ArrowLeft, CheckCircle } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-export default function LawyerDealDetailPage({ params }: { params: { id: string } }) {
+export default function LawyerDealDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params)
   const router = useRouter()
   const supabase = createClient()
   const [transaction, setTransaction] = useState<any>(null)
@@ -58,7 +59,7 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
           phone
         )
       `)
-      .eq('id', params.id)
+      .eq('id', id)
       .single()
 
     if (error) {
@@ -69,7 +70,7 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
     setLoading(false)
     }
     fetchTransaction()
-  }, [params.id, supabase])
+  }, [id, supabase])
 
   async function handleMarkAsClosed() {
     setSubmitting(true)
@@ -87,7 +88,7 @@ export default function LawyerDealDetailPage({ params }: { params: { id: string 
           fee_collected: formData.feeCollected,
           updated_at: new Date().toISOString()
         })
-        .eq('id', params.id)
+        .eq('id', id)
 
       if (error) {
         alert('Error updating transaction: ' + error.message)
