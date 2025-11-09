@@ -52,9 +52,9 @@ export default async function RewardsPage() {
   }
 
   // Get rewards data
-  const { rewards } = await getUserRewards()
-  const { transactions } = await getRewardTransactions()
-  const { redemptions } = await getRewardRedemptions()
+  const { rewards } = await getUserRewards() as any
+  const { transactions } = await getRewardTransactions() as any
+  const { redemptions } = await getRewardRedemptions() as any
 
   if (!rewards) {
     return (
