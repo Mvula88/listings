@@ -8,8 +8,9 @@ import Link from 'next/link'
 export default async function PaymentCancelledPage({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -22,7 +23,7 @@ export default async function PaymentCancelledPage({
   const { data: property } = await supabase
     .from('properties')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (!property || property.seller_id !== user.id) {
@@ -55,7 +56,7 @@ export default async function PaymentCancelledPage({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href={`/properties/${params.id}`} className="flex-1">
+              <Link href={`/properties/${id}`} className="flex-1">
                 <Button variant="outline" className="w-full">
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back to Property
