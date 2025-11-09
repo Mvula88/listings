@@ -348,7 +348,7 @@ export default async function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                {recentProperties?.map((property) => (
+                {recentProperties?.map((property: any) => (
                   <Link
                     key={property.id}
                     href={`/admin/properties/${property.id}`}
