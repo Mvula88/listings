@@ -23,7 +23,7 @@ export default async function AdminDashboard() {
   const supabase = await createClient()
 
   // Get platform stats
-  const stats = await getPlatformStats()
+  const stats = await getPlatformStats() as any
 
   // Get pending items that need attention
   const { data: pendingProperties } = await supabase
