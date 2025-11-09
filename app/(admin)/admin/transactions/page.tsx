@@ -10,7 +10,7 @@ async function TransactionsPageContent() {
   const [transactionsData, stats] = await Promise.all([
     getTransactions({ page: 1, pageSize: 20 }),
     getPlatformStats(),
-  ])
+  ]) as any
 
   // Calculate transaction stats
   const totalTransactions = stats?.total_transactions || 0
