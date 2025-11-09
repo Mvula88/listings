@@ -10,14 +10,15 @@ import type { Metadata } from 'next'
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }): Promise<Metadata> {
+  const { slug } = await params
   const supabase = await createClient()
 
   const { data: post } = await supabase
     .from('blog_posts')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('status', 'published')
     .single()
 
@@ -50,8 +51,9 @@ export async function generateMetadata({
 export default async function BlogPostPage({
   params,
 }: {
-  params: { slug: string }
+  params: Promise<{ slug: string }>
 }) {
+  const { slug } = await params
   const supabase = await createClient()
 
   const { data: post } = await supabase
@@ -60,7 +62,7 @@ export default async function BlogPostPage({
       *,
       author:profiles!author_id(full_name, avatar_url)
     `)
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .eq('status', 'published')
     .single()
 
