@@ -8,12 +8,13 @@ import { CheckCircle, AlertCircle } from 'lucide-react'
 export default async function SelectLawyersPage({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   if (!user) return null
 
   // Get transaction details
@@ -48,7 +49,7 @@ export default async function SelectLawyersPage({
         flat_fee_seller
       )
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single() as any
 
   if (!transaction) {
