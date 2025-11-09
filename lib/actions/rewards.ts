@@ -132,7 +132,7 @@ export async function redeemFeaturedListing(propertyId: string, days: number) {
 
     return {
       success: true,
-      usedFreeL isting: data.used_free_listing,
+      usedFreeListing: data.used_free_listing,
       pointsUsed: data.points_used,
     }
   } catch (error: any) {
