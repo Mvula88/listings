@@ -7,12 +7,13 @@ import { MessageSquare } from 'lucide-react'
 export default async function MessagesPage({
   searchParams
 }: {
-  searchParams: { conversation?: string }
+  searchParams: Promise<{ conversation?: string }>
 }) {
+  const params = await searchParams
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   if (!user) return null
 
   // Get user's conversations
@@ -66,8 +67,8 @@ export default async function MessagesPage({
     })
   )
 
-  const selectedConversation = searchParams.conversation
-    ? conversationsWithParticipants.find(c => c.id === searchParams.conversation)
+  const selectedConversation = params.conversation
+    ? conversationsWithParticipants.find(c => c.id === params.conversation)
     : null
 
   return (

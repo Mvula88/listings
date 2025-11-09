@@ -9,9 +9,11 @@ export default async function PaymentSuccessPage({
   params,
   searchParams
 }: {
-  params: { id: string }
-  searchParams: { session_id?: string }
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ session_id?: string }>
 }) {
+  const resolvedParams = await params
+  const resolvedSearchParams = await searchParams
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -24,7 +26,7 @@ export default async function PaymentSuccessPage({
   const { data: property } = await supabase
     .from('properties')
     .select('*, country:countries(currency, currency_symbol)')
-    .eq('id', params.id)
+    .eq('id', resolvedParams.id)
     .single()
 
   if (!property || property.seller_id !== user.id) {
@@ -62,7 +64,7 @@ export default async function PaymentSuccessPage({
               </div>
               <div className="flex justify-between py-2 border-b">
                 <span className="text-muted-foreground">Session ID</span>
-                <span className="font-mono text-xs">{searchParams.session_id?.slice(0, 20)}...</span>
+                <span className="font-mono text-xs">{resolvedSearchParams.session_id?.slice(0, 20)}...</span>
               </div>
             </div>
 
@@ -77,7 +79,7 @@ export default async function PaymentSuccessPage({
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3">
-              <Link href={`/properties/${params.id}`} className="flex-1">
+              <Link href={`/properties/${resolvedParams.id}`} className="flex-1">
                 <Button variant="outline" className="w-full">
                   View Property
                 </Button>

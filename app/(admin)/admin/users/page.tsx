@@ -9,19 +9,20 @@ import { Search, UserPlus, Download } from 'lucide-react'
 import Link from 'next/link'
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string
     search?: string
     userType?: string
     suspended?: string
-  }
+  }>
 }
 
 export default async function UsersPage({ searchParams }: PageProps) {
-  const page = Number(searchParams.page) || 1
-  const search = searchParams.search || ''
-  const userType = searchParams.userType || ''
-  const suspended = searchParams.suspended === 'true' ? true : searchParams.suspended === 'false' ? false : undefined
+  const params = await searchParams
+  const page = Number(params.page) || 1
+  const search = params.search || ''
+  const userType = params.userType || ''
+  const suspended = params.suspended === 'true' ? true : params.suspended === 'false' ? false : undefined
 
   const { users, pagination } = await getUsers({
     page,

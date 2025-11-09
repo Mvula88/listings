@@ -8,19 +8,20 @@ import { Building, Download, CheckCircle, Clock, XCircle } from 'lucide-react'
 import Link from 'next/link'
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     page?: string
     search?: string
     status?: string
     moderationStatus?: string
-  }
+  }>
 }
 
 export default async function PropertiesPage({ searchParams }: PageProps) {
-  const page = Number(searchParams.page) || 1
-  const search = searchParams.search || ''
-  const status = searchParams.status || ''
-  const moderationStatus = searchParams.moderationStatus || ''
+  const params = await searchParams
+  const page = Number(params.page) || 1
+  const search = params.search || ''
+  const status = params.status || ''
+  const moderationStatus = params.moderationStatus || ''
 
   const { properties, pagination } = await getProperties({
     page,

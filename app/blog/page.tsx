@@ -15,8 +15,9 @@ export const metadata: Metadata = {
 export default async function BlogPage({
   searchParams,
 }: {
-  searchParams: { category?: string }
+  searchParams: Promise<{ category?: string }>
 }) {
+  const params = await searchParams
   const supabase = await createClient()
 
   // Get categories
@@ -36,8 +37,8 @@ export default async function BlogPage({
     .order('published_at', { ascending: false })
     .limit(20)
 
-  if (searchParams.category) {
-    query = query.eq('category', searchParams.category)
+  if (params.category) {
+    query = query.eq('category', params.category)
   }
 
   const { data: posts } = await query
@@ -70,7 +71,7 @@ export default async function BlogPage({
                 <Link
                   href="/blog"
                   className={`block px-3 py-2 rounded-lg transition-colors ${
-                    !searchParams.category
+                    !params.category
                       ? 'bg-primary text-primary-foreground'
                       : 'hover:bg-muted'
                   }`}
@@ -82,7 +83,7 @@ export default async function BlogPage({
                     key={category.id}
                     href={`/blog?category=${category.slug}`}
                     className={`block px-3 py-2 rounded-lg transition-colors ${
-                      searchParams.category === category.slug
+                      params.category === category.slug
                         ? 'bg-primary text-primary-foreground'
                         : 'hover:bg-muted'
                     }`}
