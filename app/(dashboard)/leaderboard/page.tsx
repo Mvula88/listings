@@ -42,7 +42,7 @@ export default async function LeaderboardPage() {
     if (userIndex !== -1) {
       userRank = {
         rank: userIndex + 1,
-        ...leaderboard[userIndex],
+        ...(leaderboard[userIndex] as any),
       }
     }
   }
