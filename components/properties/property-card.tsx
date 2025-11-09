@@ -3,24 +3,26 @@ import Image from 'next/image'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Bed, Bath, Square, MapPin, Heart, TrendingDown } from 'lucide-react'
+import { Bed, Bath, Square, MapPin, TrendingDown } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
+import { FavoriteButton } from '@/components/properties/favorite-button'
 import type { Property } from '@/lib/types'
 
 interface PropertyCardProps {
   property: Property
+  initialFavorited?: boolean
 }
 
-export function PropertyCard({ property }: PropertyCardProps) {
+export function PropertyCard({ property, initialFavorited = false }: PropertyCardProps) {
   const mainImage = property.property_images?.[0]?.url || '/placeholder-property.jpg'
   const currency = property.country?.currency || 'ZAR'
   const countryCode = property.country?.code || 'ZA'
-  
+
   // Calculate savings
   const savings = calculateSavings(property.price, countryCode, currency)
   const formatted = formatSavingsDisplay(savings)
-  
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <Link href={`/properties/${property.id}`}>
@@ -34,17 +36,11 @@ export function PropertyCard({ property }: PropertyCardProps) {
             />
           )}
           <div className="absolute top-2 right-2">
-            <Button
-              size="icon"
-              variant="secondary"
-              className="h-8 w-8 rounded-full bg-white/80 hover:bg-white"
-              onClick={(e) => {
-                e.preventDefault()
-                // Handle save property
-              }}
-            >
-              <Heart className="h-4 w-4" />
-            </Button>
+            <FavoriteButton
+              propertyId={property.id}
+              initialFavorited={initialFavorited}
+              variant="icon"
+            />
           </div>
           {property.featured && (
             <Badge className="absolute top-2 left-2" variant="default">

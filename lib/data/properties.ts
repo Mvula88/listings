@@ -32,7 +32,7 @@ export interface PropertyImage {
 
 export async function getFeaturedProperties(limit: number = 8) {
   const supabase = await createClient()
-  
+
   const { data: properties, error } = await supabase
     .from('properties')
     .select(`
@@ -43,7 +43,7 @@ export async function getFeaturedProperties(limit: number = 8) {
         alt_text,
         order_index
       ),
-      countries (
+      country:countries (
         code,
         name,
         currency_symbol
@@ -76,13 +76,13 @@ export async function getFeaturedProperties(limit: number = 8) {
     featured: p.featured,
     views: p.views,
     images: p.property_images || [],
-    country: p.countries || { code: 'ZA', name: '', currency_symbol: 'R' }
+    country: p.country || { code: 'ZA', name: '', currency_symbol: 'R' }
   })) || []
 }
 
 export async function getAllActiveProperties() {
   const supabase = await createClient()
-  
+
   const { data: properties, error } = await supabase
     .from('properties')
     .select(`
@@ -93,7 +93,7 @@ export async function getAllActiveProperties() {
         alt_text,
         order_index
       ),
-      countries (
+      country:countries (
         code,
         name,
         currency_symbol
@@ -124,7 +124,7 @@ export async function getAllActiveProperties() {
     featured: p.featured,
     views: p.views,
     images: p.property_images || [],
-    country: p.countries || { code: 'ZA', name: '', currency_symbol: 'R' }
+    country: p.country || { code: 'ZA', name: '', currency_symbol: 'R' }
   })) || []
 }
 

@@ -12,7 +12,11 @@ BEGIN
     new.raw_user_meta_data->>'full_name',
     new.raw_user_meta_data->>'phone',
     COALESCE(new.raw_user_meta_data->>'user_type', 'buyer'),
-    NULL  -- Country will be updated later
+    CASE
+      WHEN new.raw_user_meta_data->>'country_id' IS NOT NULL
+      THEN (new.raw_user_meta_data->>'country_id')::uuid
+      ELSE NULL
+    END
   );
   RETURN new;
 END;

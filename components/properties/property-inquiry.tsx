@@ -57,7 +57,7 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
       if (error) throw error
 
       // Create conversation
-      await (supabase
+      const { data: conversation } = await (supabase
         .from('conversations') as any)
         .insert({
           inquiry_id: inquiry.id,
@@ -65,6 +65,23 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
           participants: [user.id, property.seller_id],
           status: 'active'
         })
+        .select()
+        .single()
+
+      // Send email notification to seller
+      try {
+        await fetch('/api/send-inquiry-notification', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            inquiryId: inquiry.id,
+            conversationId: conversation?.id,
+          })
+        })
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError)
+        // Don't fail the inquiry if email fails
+      }
 
       setSuccess(true)
       setMessage('')

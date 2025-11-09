@@ -2,59 +2,31 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Star, Briefcase, CheckCircle } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
+import { formatPrice } from "@/lib/utils/format"
 
-export default function LawyersPage() {
-  // Mock data for lawyers - in production this would come from database
-  const lawyers = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      firm: "Johnson & Associates",
-      location: "Cape Town, South Africa",
-      specialization: "Residential Property",
-      experience: "15 years",
-      flatFee: "R15,000",
-      rating: 4.8,
-      reviews: 127,
-      verified: true
-    },
-    {
-      id: 2,
-      name: "Michael van der Merwe",
-      firm: "Van der Merwe Legal",
-      location: "Johannesburg, South Africa",
-      specialization: "Commercial & Residential",
-      experience: "20 years",
-      flatFee: "R18,000",
-      rating: 4.9,
-      reviews: 89,
-      verified: true
-    },
-    {
-      id: 3,
-      name: "David Namibu",
-      firm: "Namibu Conveyancing",
-      location: "Windhoek, Namibia",
-      specialization: "Residential Property",
-      experience: "12 years",
-      flatFee: "N$12,000",
-      rating: 4.7,
-      reviews: 64,
-      verified: true
-    },
-    {
-      id: 4,
-      name: "Lisa Shikongo",
-      firm: "Shikongo & Partners",
-      location: "Swakopmund, Namibia",
-      specialization: "Coastal Properties",
-      experience: "10 years",
-      flatFee: "N$14,000",
-      rating: 4.6,
-      reviews: 42,
-      verified: true
-    }
-  ]
+export default async function LawyersPage() {
+  const supabase = await createClient()
+
+  // Get verified lawyers with their profiles
+  const { data: lawyers } = await supabase
+    .from('lawyers')
+    .select(`
+      *,
+      profile:profiles!profile_id (
+        full_name,
+        avatar_url
+      ),
+      country:countries (
+        name,
+        currency,
+        currency_symbol
+      )
+    `)
+    .eq('verified', true)
+    .eq('available', true)
+    .order('rating', { ascending: false })
+    .limit(20) as any
 
   return (
     <div className="min-h-screen">
@@ -119,64 +91,79 @@ export default function LawyersPage() {
       {/* Lawyers List */}
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-            {lawyers.map((lawyer) => (
-              <Card key={lawyer.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="flex items-center gap-2">
-                        {lawyer.name}
-                        {lawyer.verified && (
-                          <CheckCircle className="h-5 w-5 text-primary" />
-                        )}
-                      </CardTitle>
-                      <CardDescription>{lawyer.firm}</CardDescription>
-                    </div>
-                    <div className="text-right">
-                      <div className="flex items-center gap-1">
-                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                        <span className="font-semibold">{lawyer.rating}</span>
-                        <span className="text-sm text-muted-foreground">({lawyer.reviews})</span>
-                      </div>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-start gap-2">
-                      <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                      <span>{lawyer.location}</span>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5" />
-                      <span>{lawyer.experience}</span>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <div className="text-sm text-muted-foreground mb-1">Specialization</div>
-                    <div className="font-medium">{lawyer.specialization}</div>
-                  </div>
+          {lawyers && lawyers.length > 0 ? (
+            <>
+              <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                {lawyers.map((lawyer: any) => {
+                  const currency = lawyer.country?.currency || 'ZAR'
+                  const specialization = lawyer.specializations?.[0] || 'Property Conveyancing'
 
-                  <div className="flex justify-between items-center pt-4 border-t">
-                    <div>
-                      <div className="text-sm text-muted-foreground">Flat Fee</div>
-                      <div className="text-xl font-bold text-primary">{lawyer.flatFee}</div>
-                    </div>
-                    <Button>View Profile</Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  return (
+                    <Card key={lawyer.id} className="hover:shadow-lg transition-shadow">
+                      <CardHeader>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <CardTitle className="flex items-center gap-2">
+                              {lawyer.profile?.full_name || 'Unknown'}
+                              {lawyer.verified && (
+                                <CheckCircle className="h-5 w-5 text-primary" />
+                              )}
+                            </CardTitle>
+                            <CardDescription>{lawyer.firm_name}</CardDescription>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex items-center gap-1">
+                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                              <span className="font-semibold">{lawyer.rating || 0}</span>
+                              <span className="text-sm text-muted-foreground">
+                                ({lawyer.transactions_completed || 0})
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div className="flex items-start gap-2">
+                            <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
+                            <span>{lawyer.city}, {lawyer.country?.name}</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5" />
+                            <span>{lawyer.years_experience || 0} years</span>
+                          </div>
+                        </div>
 
-          {/* Load More */}
-          <div className="text-center mt-8">
-            <Button variant="outline" size="lg">
-              Load More Lawyers
-            </Button>
-          </div>
+                        <div>
+                          <div className="text-sm text-muted-foreground mb-1">Specialization</div>
+                          <div className="font-medium">{specialization}</div>
+                        </div>
+
+                        <div className="flex justify-between items-center pt-4 border-t">
+                          <div>
+                            <div className="text-sm text-muted-foreground">Buyer Fee</div>
+                            <div className="text-xl font-bold text-primary">
+                              {formatPrice(lawyer.flat_fee_buyer, currency)}
+                            </div>
+                          </div>
+                          <Button>View Profile</Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-lg text-muted-foreground mb-4">
+                No verified lawyers available yet.
+              </p>
+              <Link href="/lawyers/onboarding">
+                <Button>Join as a Conveyancer</Button>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

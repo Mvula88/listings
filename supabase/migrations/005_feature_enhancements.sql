@@ -332,7 +332,7 @@ BEGIN
 
   RETURN code;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- Automatically generate referral code for new users
 CREATE OR REPLACE FUNCTION set_user_referral_code()
@@ -343,8 +343,12 @@ BEGIN
   END IF;
 
   RETURN NEW;
+EXCEPTION
+  WHEN OTHERS THEN
+    -- If referral code generation fails, just continue without it
+    RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
 DROP TRIGGER IF EXISTS trigger_set_referral_code ON profiles;
 CREATE TRIGGER trigger_set_referral_code

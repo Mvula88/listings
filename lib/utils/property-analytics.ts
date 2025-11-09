@@ -38,13 +38,20 @@ export async function trackPropertyView(
     })
 
     if (error) {
+      // If table doesn't exist, silently ignore (feature not available yet)
+      if (error.code === 'PGRST205' || error.code === 'PGRST204' || error.code === '42P01' || error.message?.includes('Could not find') || error.message?.includes('relation') || error.message?.includes('does not exist')) {
+        return { success: true }
+      }
       console.error('Failed to track property view:', error)
       return { success: false, error: error.message }
     }
 
     return { success: true }
-  } catch (error) {
-    console.error('Exception tracking property view:', error)
+  } catch (error: any) {
+    // Don't log if table doesn't exist
+    if (error.code !== 'PGRST205' && error.code !== 'PGRST204' && error.code !== '42P01' && !error.message?.includes('relation') && !error.message?.includes('does not exist')) {
+      console.error('Exception tracking property view:', error)
+    }
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',

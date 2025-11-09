@@ -7,19 +7,69 @@ import { SellerInfo } from '@/components/properties/seller-info'
 import { PropertyMap } from '@/components/properties/property-map'
 import { SimilarProperties } from '@/components/properties/similar-properties'
 import { PropertyViewTracker } from '@/components/properties/property-view-tracker'
+import { FavoriteButton } from '@/components/properties/favorite-button'
+import { ReviewForm } from '@/components/reviews/review-form'
+import { ReviewList } from '@/components/reviews/review-list'
+import { RatingSummary } from '@/components/reviews/rating-summary'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Share2, Heart } from 'lucide-react'
+import { ArrowLeft, Share2 } from 'lucide-react'
 import Link from 'next/link'
 import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
+import { checkIfFavorited } from '@/lib/actions/favorites'
+import { getPropertyReviews, checkUserReview } from '@/lib/actions/reviews'
+import type { Metadata } from 'next'
+
+// Generate metadata for SEO
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ id: string }>
+}): Promise<Metadata> {
+  const supabase = await createClient()
+  const { id } = await params
+
+  const { data: property } = await supabase
+    .from('properties')
+    .select('*, country:countries(name, currency)')
+    .eq('id', id)
+    .single()
+
+  if (!property) {
+    return {
+      title: 'Property Not Found',
+    }
+  }
+
+  const mainImage = property.property_images?.[0]?.url
+
+  return {
+    title: `${property.title} | DealDirect`,
+    description: property.description?.slice(0, 160) || `${property.property_type} for sale in ${property.city}`,
+    keywords: `${property.property_type}, ${property.city}, ${property.province}, ${property.country?.name}, property for sale, real estate`,
+    openGraph: {
+      title: property.title,
+      description: property.description?.slice(0, 160),
+      images: mainImage ? [mainImage] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: property.title,
+      description: property.description?.slice(0, 160),
+      images: mainImage ? [mainImage] : [],
+    },
+  }
+}
 
 export default async function PropertyDetailPage({
   params
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const supabase = await createClient()
+  const { id } = await params
 
-  // Get property details
+  // Get property details - only show active properties
   const { data: property } = await (supabase
     .from('properties') as any)
     .select(`
@@ -44,7 +94,8 @@ export default async function PropertyDetailPage({
         currency_symbol
       )
     `)
-    .eq('id', params.id)
+    .eq('id', id)
+    .eq('status', 'active')
     .single()
 
   if (!property) {
@@ -53,7 +104,7 @@ export default async function PropertyDetailPage({
 
   // Get current user
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   // Check if user has already inquired
   let existingInquiry = null
   if (user) {
@@ -67,7 +118,22 @@ export default async function PropertyDetailPage({
     existingInquiry = data
   }
 
-  // Get similar properties
+  // Check if property is favorited
+  const { favorited } = user ? await checkIfFavorited(property.id) : { favorited: false }
+
+  // Get reviews
+  const { reviews } = await getPropertyReviews(property.id)
+
+  // Check if user has already reviewed
+  const { hasReviewed, review: userReview } = user ? await checkUserReview(property.id) : { hasReviewed: false, review: null }
+
+  // Calculate rating distribution
+  const ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+  reviews.forEach((review: any) => {
+    ratingDistribution[review.rating as keyof typeof ratingDistribution]++
+  })
+
+  // Get similar properties - only show active AND approved
   const { data: similarProperties } = await (supabase
     .from('properties') as any)
     .select(`
@@ -86,6 +152,7 @@ export default async function PropertyDetailPage({
     .eq('city', property.city)
     .neq('id', property.id)
     .eq('status', 'active')
+    .eq('moderation_status', 'approved')
     .limit(3)
 
   // Increment view count
@@ -100,8 +167,71 @@ export default async function PropertyDetailPage({
   const savings = calculateSavings(property.price, countryCode, currency)
   const formatted = formatSavingsDisplay(savings)
 
+  // JSON-LD structured data for SEO
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'RealEstateListing',
+    name: property.title,
+    description: property.description,
+    url: `${baseUrl}/properties/${property.id}`,
+    image: property.property_images?.map((img: any) => img.url) || [],
+    price: property.price,
+    priceCurrency: currency,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: property.address_line1,
+      addressLocality: property.city,
+      addressRegion: property.province,
+      postalCode: property.postal_code,
+      addressCountry: property.country?.code || 'ZA',
+    },
+    numberOfRooms: property.bedrooms,
+    numberOfBathroomsTotal: property.bathrooms,
+    floorSize: {
+      '@type': 'QuantitativeValue',
+      value: property.square_meters,
+      unitCode: 'MTK',
+    },
+    // Add aggregate rating if reviews exist
+    ...(property.review_count > 0 && {
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: property.average_rating,
+        reviewCount: property.review_count,
+        bestRating: 5,
+        worstRating: 1,
+      },
+    }),
+    // Add individual reviews
+    ...(reviews.length > 0 && {
+      review: reviews.map((review: any) => ({
+        '@type': 'Review',
+        author: {
+          '@type': 'Person',
+          name: review.user.full_name,
+        },
+        datePublished: review.created_at,
+        reviewBody: review.review,
+        name: review.title,
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: review.rating,
+          bestRating: 5,
+          worstRating: 1,
+        },
+      })),
+    }),
+  }
+
   return (
     <div className="min-h-screen bg-background">
+      {/* JSON-LD Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       {/* Property View Tracker - Invisible analytics component */}
       <PropertyViewTracker propertyId={property.id} />
 
@@ -123,9 +253,11 @@ export default async function PropertyDetailPage({
               <Button variant="outline" size="icon">
                 <Share2 className="h-4 w-4" />
               </Button>
-              <Button variant="outline" size="icon">
-                <Heart className="h-4 w-4" />
-              </Button>
+              <FavoriteButton
+                propertyId={property.id}
+                initialFavorited={favorited}
+                variant="icon"
+              />
               {!user && (
                 <Link href="/login">
                   <Button>Sign In</Button>
@@ -147,11 +279,49 @@ export default async function PropertyDetailPage({
             <PropertyDetails property={property} />
             
             {/* Map Section */}
-            <PropertyMap 
-              latitude={property.latitude} 
+            <PropertyMap
+              latitude={property.latitude}
               longitude={property.longitude}
               address={`${property.address_line1}, ${property.city}`}
             />
+
+            {/* Reviews Section */}
+            <div className="space-y-6">
+              <h2 className="text-2xl font-bold">Reviews & Ratings</h2>
+
+              {/* Rating Summary */}
+              <RatingSummary
+                averageRating={property.average_rating || 0}
+                reviewCount={property.review_count || 0}
+                ratingDistribution={ratingDistribution}
+              />
+
+              {/* Review Form - Only show if user is logged in and hasn't reviewed */}
+              {user && !hasReviewed && (
+                <ReviewForm propertyId={property.id} />
+              )}
+
+              {/* User's Review (if they have one) */}
+              {hasReviewed && userReview && (
+                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                  <p className="text-sm font-medium text-blue-800 mb-2">
+                    Your review (status: {userReview.status})
+                  </p>
+                  <div className="space-y-1">
+                    <p className="font-semibold">{userReview.title}</p>
+                    <p className="text-sm text-muted-foreground">{userReview.review}</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Reviews List */}
+              <div>
+                <h3 className="text-lg font-semibold mb-4">
+                  Customer Reviews ({reviews.length})
+                </h3>
+                <ReviewList reviews={reviews} propertyId={property.id} />
+              </div>
+            </div>
           </div>
 
           {/* Right Column - Contact & Seller Info */}

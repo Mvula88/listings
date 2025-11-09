@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { PropertyCard } from '@/components/properties/property-card'
 import { PropertyFilters } from '@/components/properties/property-filters'
 import { FilterDrawer } from '@/components/properties/filter-drawer'
+import { SortSelect } from '@/components/properties/sort-select'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, MapPin, SlidersHorizontal } from 'lucide-react'
@@ -16,16 +17,18 @@ interface SearchParams {
   bedrooms?: string
   type?: string
   country?: string
+  sort?: string
 }
 
 export default async function BrowsePropertiesPage({
   searchParams,
 }: {
-  searchParams: SearchParams
+  searchParams: Promise<SearchParams>
 }) {
   const supabase = await createClient()
-  
-  // Build query
+  const params = await searchParams
+
+  // Build query - show active properties
   let query = supabase
     .from('properties')
     .select(`
@@ -50,35 +53,52 @@ export default async function BrowsePropertiesPage({
       )
     `)
     .eq('status', 'active')
-    .order('created_at', { ascending: false })
+
+  // Apply sorting
+  const sortBy = params.sort || 'newest'
+  switch (sortBy) {
+    case 'price-asc':
+      query = query.order('price', { ascending: true })
+      break
+    case 'price-desc':
+      query = query.order('price', { ascending: false })
+      break
+    case 'popular':
+      query = query.order('views', { ascending: false })
+      break
+    case 'newest':
+    default:
+      query = query.order('created_at', { ascending: false })
+      break
+  }
 
   // Apply filters
-  if (searchParams.q) {
-    query = query.or(`title.ilike.%${searchParams.q}%,description.ilike.%${searchParams.q}%`)
+  if (params.q) {
+    query = query.or(`title.ilike.%${params.q}%,description.ilike.%${params.q}%`)
   }
-  
-  if (searchParams.city) {
-    query = query.ilike('city', `%${searchParams.city}%`)
+
+  if (params.city) {
+    query = query.ilike('city', `%${params.city}%`)
   }
-  
-  if (searchParams.minPrice) {
-    query = query.gte('price', parseInt(searchParams.minPrice))
+
+  if (params.minPrice) {
+    query = query.gte('price', parseInt(params.minPrice))
   }
-  
-  if (searchParams.maxPrice) {
-    query = query.lte('price', parseInt(searchParams.maxPrice))
+
+  if (params.maxPrice) {
+    query = query.lte('price', parseInt(params.maxPrice))
   }
-  
-  if (searchParams.bedrooms) {
-    query = query.gte('bedrooms', parseInt(searchParams.bedrooms))
+
+  if (params.bedrooms) {
+    query = query.gte('bedrooms', parseInt(params.bedrooms))
   }
-  
-  if (searchParams.type) {
-    query = query.eq('property_type', searchParams.type)
+
+  if (params.type) {
+    query = query.eq('property_type', params.type)
   }
-  
-  if (searchParams.country) {
-    query = query.eq('country_id', searchParams.country)
+
+  if (params.country) {
+    query = query.eq('country_id', params.country)
   }
 
   const { data: properties } = await query as any
@@ -119,7 +139,7 @@ export default async function BrowsePropertiesPage({
                 <Input
                   name="q"
                   placeholder="Search by location, property type, or keyword..."
-                  defaultValue={searchParams.q}
+                  defaultValue={params.q}
                   className="pl-10 h-12"
                 />
               </div>
@@ -128,7 +148,7 @@ export default async function BrowsePropertiesPage({
                 <Input
                   name="city"
                   placeholder="City"
-                  defaultValue={searchParams.city}
+                  defaultValue={params.city}
                   className="pl-10 h-12"
                 />
               </div>
@@ -142,7 +162,7 @@ export default async function BrowsePropertiesPage({
             <div className="mt-4 md:hidden">
               <FilterDrawer
                 countries={countries || []}
-                currentFilters={searchParams}
+                currentFilters={params}
               />
             </div>
           </div>
@@ -159,7 +179,7 @@ export default async function BrowsePropertiesPage({
                 </div>
                 <PropertyFilters
                   countries={countries || []}
-                  currentFilters={searchParams}
+                  currentFilters={params}
                 />
               </div>
             </div>
@@ -179,15 +199,7 @@ export default async function BrowsePropertiesPage({
                 </div>
 
                 {/* Sort Options */}
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground hidden sm:inline">Sort by:</span>
-                  <select className="border rounded-lg px-3 py-2 text-sm bg-background">
-                    <option>Newest First</option>
-                    <option>Price: Low to High</option>
-                    <option>Price: High to Low</option>
-                    <option>Most Popular</option>
-                  </select>
-                </div>
+                <SortSelect currentSort={params.sort} />
               </div>
             </FadeIn>
 
