@@ -51,13 +51,13 @@ export default async function AdminDashboard() {
     .from('profiles')
     .select('id, full_name, email, created_at')
     .order('created_at', { ascending: false })
-    .limit(5)
+    .limit(5) as any
 
   const { data: recentProperties } = await supabase
     .from('properties')
     .select('id, title, created_at, status')
     .order('created_at', { ascending: false })
-    .limit(5)
+    .limit(5) as any
 
   return (
     <div className="space-y-8">

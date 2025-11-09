@@ -5,12 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { CheckCircle, AlertCircle } from 'lucide-react'
 
-export default async function SelectLawyersPage({
-  params
-}: {
+export default async function SelectLawyersPage(props: {
   params: Promise<{ id: string }>
 }) {
-  const { id } = await params
+  const params = await props.params
+  const { id } = params
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
