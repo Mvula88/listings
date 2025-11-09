@@ -33,7 +33,7 @@ export default async function LeaderboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   // Get leaderboard
-  const { leaderboard } = await getLeaderboard(50)
+  const { leaderboard } = await getLeaderboard(50) as any
 
   // Get current user's rank if logged in
   let userRank = null
