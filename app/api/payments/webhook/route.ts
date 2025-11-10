@@ -48,7 +48,7 @@ export async function POST(request: Request) {
       featuredUntil.setDate(featuredUntil.getDate() + days)
 
       // Update property to be featured
-      // @ts-ignore - Supabase type inference issue with dynamic updates
+      // @ts-expect-error - Supabase type inference issue with dynamic updates
       const { error: updateError } = await supabase
         .from('properties')
         .update({
