@@ -24,7 +24,7 @@ export async function POST(
       .from('properties')
       .select('seller_id')
       .eq('id', propertyId)
-      .single()
+      .single() as { data: { seller_id: string } | null; error: any }
 
     if (!property || property.seller_id !== user.id) {
       return NextResponse.json(
