@@ -13,8 +13,8 @@ export async function getUserRewards() {
     }
 
     // Get user's rewards
-    const { data: rewards, error } = await supabase
-      .from('referral_rewards')
+    const { data: rewards, error } = await (supabase
+      .from('referral_rewards') as any)
       .select('*')
       .eq('user_id', user.id)
       .single()
@@ -25,8 +25,8 @@ export async function getUserRewards() {
 
     // If no rewards record exists, create one
     if (!rewards) {
-      const { data: newRewards, error: createError } = await supabase
-        .from('referral_rewards')
+      const { data: newRewards, error: createError } = await (supabase
+        .from('referral_rewards') as any)
         .insert({
           user_id: user.id,
           points: 0,
@@ -58,8 +58,8 @@ export async function getRewardTransactions(limit = 20) {
       return { success: false, error: 'Not authenticated', transactions: [] }
     }
 
-    const { data: transactions, error } = await supabase
-      .from('referral_transactions')
+    const { data: transactions, error } = await (supabase
+      .from('referral_transactions') as any)
       .select(`
         *,
         related_user:profiles!related_user_id(full_name),
@@ -145,8 +145,8 @@ export async function getLeaderboard(limit = 10) {
   try {
     const supabase = await createClient()
 
-    const { data: leaderboard, error } = await supabase
-      .from('referral_rewards')
+    const { data: leaderboard, error } = await (supabase
+      .from('referral_rewards') as any)
       .select(`
         user_id,
         lifetime_points,
