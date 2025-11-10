@@ -8,7 +8,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import type { Database } from '@/lib/types/database'
 
 export type AdminRole = 'super_admin' | 'admin' | 'moderator'
-export type AdminPermission = Database['public']['Enums']['admin_permission']
+export type AdminPermission = string // TODO: Define specific admin permissions enum
 
 interface AdminProfile {
   id: string
