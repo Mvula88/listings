@@ -208,6 +208,26 @@ export interface Database {
           created_at?: string
         }
       }
+      property_favorites: {
+        Row: {
+          id: string
+          user_id: string
+          property_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          property_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          property_id?: string
+          created_at?: string
+        }
+      }
       inquiries: {
         Row: {
           id: string
