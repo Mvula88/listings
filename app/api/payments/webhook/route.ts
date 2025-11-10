@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
 import Stripe from 'stripe'
 import { createClient } from '@/lib/supabase/server'
-import type { Database } from '@/lib/supabase/types'
+import type { TablesUpdate } from '@/lib/supabase/types'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-10-29.clover',
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       featuredUntil.setDate(featuredUntil.getDate() + days)
 
       // Update property to be featured
-      const updateData: Database['public']['Tables']['properties']['Update'] = {
+      const updateData: TablesUpdate<'properties'> = {
         featured: true,
         featured_until: featuredUntil.toISOString(),
         premium: plan?.includes('premium') || false,
