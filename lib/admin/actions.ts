@@ -627,8 +627,8 @@ export async function cancelTransaction(transactionId: string, reason: string) {
     .eq('id', transactionId)
     .single()
 
-  const { error } = await supabase
-    .from('transactions')
+  const { error } = await (supabase
+    .from('transactions') as any)
     .update({
       status: 'cancelled',
       updated_at: new Date().toISOString(),
@@ -795,8 +795,8 @@ export async function reviewContentFlag(
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
-  const { error } = await supabase
-    .from('content_flags')
+  const { error } = await (supabase
+    .from('content_flags') as any)
     .update({
       status,
       reviewed_by: admin.id,
@@ -904,8 +904,8 @@ export async function updatePlatformSetting(key: string, value: any) {
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
-  const { error } = await supabase
-    .from('platform_settings')
+  const { error } = await (supabase
+    .from('platform_settings') as any)
     .update({
       value,
       updated_by: admin.id,
