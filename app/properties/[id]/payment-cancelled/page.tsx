@@ -20,7 +20,7 @@ export default async function PaymentCancelledPage({
   }
 
   // Get property details
-  const { data: property } = await supabase
+  const { data: property } = await (supabase as any)
     .from('properties')
     .select('*')
     .eq('id', id)
