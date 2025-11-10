@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       featuredUntil.setDate(featuredUntil.getDate() + days)
 
       // Update property to be featured
-      const { error: updateError } = await supabase
+      const updateResult = await supabase
         .from('properties')
         .update({
           featured: true,
@@ -57,6 +57,8 @@ export async function POST(request: Request) {
           premium: plan?.includes('premium') || false,
         } as any)
         .eq('id', propertyId)
+
+      const { error: updateError } = updateResult as any
 
       if (updateError) {
         console.error('Error updating property:', updateError)
