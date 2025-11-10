@@ -19,12 +19,14 @@ export async function toggleFavorite(propertyId: string) {
     .eq('property_id', propertyId)
     .maybeSingle()
 
+  type FavoriteData = { id: string } | null
+
   if (existing) {
     // Remove favorite
     const { error } = await supabase
       .from('property_favorites')
       .delete()
-      .eq('id', existing.id)
+      .eq('id', (existing as { id: string }).id)
 
     if (error) {
       return { success: false, error: error.message }
