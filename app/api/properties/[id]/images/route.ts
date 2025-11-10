@@ -45,8 +45,8 @@ export async function POST(
     }
 
     // Upload images to Supabase Storage and create records
-    const uploadedImages = []
-    const errors = []
+    const uploadedImages: any[] = []
+    const errors: any[] = []
 
     for (let i = 0; i < files.length; i++) {
       const file = files[i]
