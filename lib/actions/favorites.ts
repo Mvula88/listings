@@ -13,8 +13,8 @@ export async function toggleFavorite(propertyId: string) {
   }
 
   // Check if already favorited
-  const { data: existing } = await supabase
-    .from('property_favorites')
+  const { data: existing } = await (supabase
+    .from('property_favorites') as any)
     .select('id')
     .eq('user_id', user.id)
     .eq('property_id', propertyId)
@@ -22,10 +22,10 @@ export async function toggleFavorite(propertyId: string) {
 
   if (existing) {
     // Remove favorite
-    const { error } = await supabase
-      .from('property_favorites')
+    const { error } = await (supabase
+      .from('property_favorites') as any)
       .delete()
-      .eq('id', (existing as { id: string }).id)
+      .eq('id', existing.id)
 
     if (error) {
       return { success: false, error: error.message }
@@ -37,13 +37,12 @@ export async function toggleFavorite(propertyId: string) {
     return { success: true, favorited: false }
   } else {
     // Add favorite
-    type FavoriteInsert = Database['public']['Tables']['property_favorites']['Insert']
-    const { error } = await supabase
-      .from('property_favorites')
+    const { error } = await (supabase
+      .from('property_favorites') as any)
       .insert({
         user_id: user.id,
         property_id: propertyId,
-      } as FavoriteInsert)
+      })
 
     if (error) {
       return { success: false, error: error.message }
@@ -64,8 +63,8 @@ export async function getFavorites() {
     return { favorites: [], error: 'Not authenticated' }
   }
 
-  const { data, error } = await supabase
-    .from('property_favorites')
+  const { data, error } = await (supabase
+    .from('property_favorites') as any)
     .select(`
       id,
       created_at,
@@ -94,8 +93,8 @@ export async function checkIfFavorited(propertyId: string) {
     return { favorited: false }
   }
 
-  const { data } = await supabase
-    .from('property_favorites')
+  const { data } = await (supabase
+    .from('property_favorites') as any)
     .select('id')
     .eq('user_id', user.id)
     .eq('property_id', propertyId)
