@@ -71,9 +71,9 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Premium Hero Section - World Class Design */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-        {/* Layered Background System */}
+      {/* Compact Hero Section - Airbnb Style */}
+      <section className="relative py-12 md:py-16 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        {/* Compact Background System */}
         <div className="absolute inset-0">
           {/* Base Image Layer */}
           <div className="absolute inset-0">
@@ -81,223 +81,126 @@ export default async function HomePage() {
               src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop&q=80"
               alt="Modern luxury home"
               fill
-              className="object-cover opacity-40"
+              className="object-cover opacity-30"
               priority
             />
           </div>
 
-          {/* Dynamic Mesh Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-950 via-slate-900/95 to-slate-950" />
+          {/* Compact gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/90 to-slate-950/90" />
 
-          {/* Animated Gradient Orbs - Advanced */}
+          {/* Subtle animated orbs */}
           <div className="absolute inset-0">
-            <div className="absolute top-[20%] left-[10%] w-[600px] h-[600px] bg-gradient-to-br from-primary/30 via-primary/20 to-transparent rounded-full blur-[140px] animate-pulse" />
-            <div className="absolute bottom-[15%] right-[5%] w-[700px] h-[700px] bg-gradient-to-tl from-primary/25 via-primary/15 to-transparent rounded-full blur-[150px] animate-pulse" style={{ animationDelay: '1.5s', animationDuration: '4s' }} />
-            <div className="absolute top-[40%] right-[20%] w-[500px] h-[500px] bg-gradient-to-br from-primary/20 via-primary/10 to-transparent rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '3s', animationDuration: '5s' }} />
+            <div className="absolute top-0 left-[20%] w-[400px] h-[400px] bg-primary/20 rounded-full blur-[100px] animate-pulse" />
+            <div className="absolute top-0 right-[15%] w-[350px] h-[350px] bg-primary/15 rounded-full blur-[90px] animate-pulse" style={{ animationDelay: '2s', animationDuration: '4s' }} />
           </div>
 
-          {/* Sophisticated Grid System */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.015)_1.5px,transparent_1.5px),linear-gradient(90deg,rgba(255,255,255,.015)_1.5px,transparent_1.5px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_60%_at_50%_50%,black_40%,transparent)]" />
+          {/* Subtle grid */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
-          {/* Radial Vignette */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />
-
-          {/* Spotlight Effect */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
-
-          {/* Premium Noise Texture */}
+          {/* Noise texture */}
           <div className="absolute inset-0 opacity-[0.015] mix-blend-soft-light bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center min-h-[85vh]">
-              {/* Left Column - Content */}
-              <div className="text-left space-y-8 pt-20 lg:pt-0">
-                {/* Premium Badge */}
-                <FadeIn direction="down" duration={0.6}>
-                  <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-white/10 via-white/5 to-transparent backdrop-blur-xl rounded-full border border-white/10 shadow-2xl group hover:scale-105 transition-transform duration-300">
-                    <div className="relative">
-                      <div className="absolute inset-0 bg-primary/30 rounded-full blur-lg animate-pulse" />
-                      <TrendingDown className="h-4 w-4 text-primary relative z-10" />
-                    </div>
-                    <span className="text-sm font-bold text-white tracking-wide">Save 50-70% on Agent Fees</span>
-                    <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
+          <div className="max-w-6xl mx-auto">
+            {/* Compact centered content */}
+            <div className="text-center space-y-6">
+              {/* Premium Badge */}
+              <FadeIn direction="down" duration={0.6}>
+                <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-white/10 via-white/5 to-transparent backdrop-blur-xl rounded-full border border-white/10 shadow-2xl group hover:scale-105 transition-transform duration-300">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/30 rounded-full blur-lg animate-pulse" />
+                    <TrendingDown className="h-4 w-4 text-primary relative z-10" />
                   </div>
-                </FadeIn>
-
-                {/* Headline - Split with Dynamic Typography */}
-                <div className="space-y-4">
-                  <FadeIn direction="right" duration={0.8} delay={0.1}>
-                    <h1 className="text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black leading-[1.1] tracking-tight">
-                      <span className="block bg-gradient-to-br from-white via-white to-white/80 bg-clip-text text-transparent">
-                        Buy & Sell
-                      </span>
-                      <span className="block bg-gradient-to-br from-white via-white to-white/80 bg-clip-text text-transparent">
-                        Properties
-                      </span>
-                      <span className="block mt-2 bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent relative">
-                        Without Agents
-                        {/* Decorative underline */}
-                        <svg className="absolute -bottom-3 left-0 w-[70%] h-3 text-primary/40" viewBox="0 0 300 12" preserveAspectRatio="none">
-                          <path d="M0,7 Q75,0 150,7 T300,7" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/>
-                        </svg>
-                      </span>
-                    </h1>
-                  </FadeIn>
+                  <span className="text-xs md:text-sm font-bold text-white tracking-wide">Save 50-70% on Agent Fees</span>
+                  <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
                 </div>
+              </FadeIn>
 
-                {/* Subheadline with Emphasis */}
-                <FadeIn delay={0.3} duration={0.8}>
-                  <p className="text-xl md:text-2xl text-white/70 max-w-xl leading-relaxed font-light">
-                    Connect directly with buyers and sellers.{" "}
-                    <span className="text-white font-medium">Save thousands</span> on commissions.{" "}
-                    <span className="text-primary font-medium">Zero upfront costs.</span>
-                  </p>
-                </FadeIn>
+              {/* Compact Headline */}
+              <FadeIn direction="down" duration={0.8} delay={0.1}>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight">
+                  <span className="block bg-gradient-to-br from-white via-white to-white/80 bg-clip-text text-transparent">
+                    Buy & Sell Properties
+                  </span>
+                  <span className="block mt-1 bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent relative inline-block">
+                    Without Agents
+                    {/* Decorative underline */}
+                    <svg className="absolute -bottom-2 left-0 w-full h-2 text-primary/40" viewBox="0 0 300 8" preserveAspectRatio="none">
+                      <path d="M0,5 Q75,0 150,5 T300,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </span>
+                </h1>
+              </FadeIn>
 
-                {/* CTA Buttons - Enhanced */}
-                <FadeIn delay={0.5} duration={0.8}>
-                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                    <Link href="/browse">
-                      <Button
-                        size="lg"
-                        className="w-full sm:w-auto group px-10 py-7 text-lg font-bold shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-[1.02] relative overflow-hidden"
-                      >
-                        <span className="relative z-10 flex items-center">
-                          Browse Properties
-                          <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                        </span>
-                        {/* Button glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-primary opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
-                      </Button>
-                    </Link>
-                    <Link href="/list">
-                      <Button
-                        size="lg"
-                        variant="outline"
-                        className="w-full sm:w-auto px-10 py-7 text-lg font-bold bg-white/5 backdrop-blur-xl border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all hover:scale-[1.02]"
-                      >
-                        List Your Property
-                      </Button>
-                    </Link>
+              {/* Compact Subheadline */}
+              <FadeIn delay={0.2} duration={0.8}>
+                <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
+                  Connect directly with buyers and sellers.{" "}
+                  <span className="text-white font-semibold">Save thousands</span> on commissions.{" "}
+                  <span className="text-primary font-semibold">Zero upfront costs.</span>
+                </p>
+              </FadeIn>
+
+              {/* Compact CTA Buttons */}
+              <FadeIn delay={0.3} duration={0.8}>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                  <Link href="/browse">
+                    <Button
+                      size="lg"
+                      className="w-full sm:w-auto group px-8 py-6 text-base font-bold shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-[1.02] relative overflow-hidden"
+                    >
+                      <span className="relative z-10 flex items-center">
+                        Browse Properties
+                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                      </span>
+                      {/* Button glow effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-primary opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
+                    </Button>
+                  </Link>
+                  <Link href="/list">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="w-full sm:w-auto px-8 py-6 text-base font-bold bg-white/5 backdrop-blur-xl border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all hover:scale-[1.02]"
+                    >
+                      List Your Property
+                    </Button>
+                  </Link>
+                </div>
+              </FadeIn>
+
+              {/* Compact Trust Indicators */}
+              <FadeIn delay={0.4} duration={0.8}>
+                <div className="flex flex-wrap justify-center gap-4 md:gap-6 pt-4">
+                  {[
+                    { label: "No Upfront Costs", icon: "💰" },
+                    { label: "Verified Lawyers", icon: "✓" },
+                    { label: "Direct Communication", icon: "💬" }
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-center gap-2 group">
+                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl group-hover:bg-white/10 transition-all">
+                        <span className="text-sm">{item.icon}</span>
+                      </div>
+                      <span className="text-xs md:text-sm font-medium text-white/80">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </FadeIn>
+
+              {/* Compact Location Badge */}
+              <FadeIn delay={0.5} duration={0.8}>
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full group hover:bg-white/10 transition-all">
+                  <div className="relative">
+                    <MapPin className="h-4 w-4 text-primary relative z-10" />
+                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-md" />
                   </div>
-                </FadeIn>
-
-                {/* Trust Indicators - Redesigned */}
-                <FadeIn delay={0.7} duration={0.8}>
-                  <div className="flex flex-wrap gap-6 pt-6">
-                    {[
-                      { label: "No Upfront Costs", icon: "💰" },
-                      { label: "Verified Lawyers", icon: "✓" },
-                      { label: "Direct Communication", icon: "💬" }
-                    ].map((item, i) => (
-                      <div key={i} className="flex items-center gap-3 group">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/5 border border-white/10 backdrop-blur-xl group-hover:bg-white/10 transition-all">
-                          <span className="text-base">{item.icon}</span>
-                        </div>
-                        <span className="text-sm font-medium text-white/80">{item.label}</span>
-                      </div>
-                    ))}
-                  </div>
-                </FadeIn>
-
-                {/* Location Badge - Enhanced */}
-                <FadeIn delay={0.9} duration={0.8}>
-                  <div className="inline-flex items-center gap-3 px-6 py-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl group hover:bg-white/10 transition-all">
-                    <div className="relative">
-                      <MapPin className="h-5 w-5 text-primary relative z-10" />
-                      <div className="absolute inset-0 bg-primary/20 rounded-full blur-md" />
-                    </div>
-                    <span className="text-sm text-white/90 font-medium">
-                      Serving Namibia & South Africa
-                    </span>
-                  </div>
-                </FadeIn>
-              </div>
-
-              {/* Right Column - Interactive Stat Cards */}
-              <div className="hidden lg:block relative">
-                <FadeIn delay={0.4} duration={1}>
-                  <div className="grid grid-cols-2 gap-6">
-                    {/* Stat Card 1 */}
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
-                      <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 hover:border-white/20 transition-all">
-                        <div className="text-5xl font-black bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-3">
-                          R0
-                        </div>
-                        <div className="text-white/80 font-medium">
-                          Listing Fees
-                        </div>
-                        <div className="text-xs text-white/50 mt-2">
-                          100% Free to list
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Stat Card 2 */}
-                    <div className="relative group mt-12">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
-                      <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 hover:border-white/20 transition-all">
-                        <div className="text-5xl font-black bg-gradient-to-br from-green-400 to-green-600 bg-clip-text text-transparent mb-3">
-                          98%
-                        </div>
-                        <div className="text-white/80 font-medium">
-                          Fee Savings
-                        </div>
-                        <div className="text-xs text-white/50 mt-2">
-                          vs traditional agents
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Stat Card 3 */}
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
-                      <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 hover:border-white/20 transition-all">
-                        <div className="text-5xl font-black bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-3">
-                          1000+
-                        </div>
-                        <div className="text-white/80 font-medium">
-                          Properties
-                        </div>
-                        <div className="text-xs text-white/50 mt-2">
-                          Active listings
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Stat Card 4 */}
-                    <div className="relative group mt-12">
-                      <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 rounded-3xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity" />
-                      <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-3xl p-8 hover:border-white/20 transition-all">
-                        <div className="text-5xl font-black bg-gradient-to-br from-primary to-primary/70 bg-clip-text text-transparent mb-3">
-                          24/7
-                        </div>
-                        <div className="text-white/80 font-medium">
-                          Support
-                        </div>
-                        <div className="text-xs text-white/50 mt-2">
-                          Always available
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </FadeIn>
-
-                {/* Floating Icon Cards */}
-                <FadeIn delay={0.8}>
-                  <div className="absolute -top-8 -right-8">
-                    <div className="relative group">
-                      <div className="absolute inset-0 bg-primary/30 rounded-2xl blur-2xl" />
-                      <div className="relative bg-white/5 backdrop-blur-2xl border border-white/10 rounded-2xl p-5 shadow-2xl">
-                        <Home className="h-10 w-10 text-primary" />
-                      </div>
-                    </div>
-                  </div>
-                </FadeIn>
-              </div>
+                  <span className="text-xs md:text-sm text-white/90 font-medium">
+                    Serving Namibia & South Africa
+                  </span>
+                </div>
+              </FadeIn>
             </div>
           </div>
         </div>
