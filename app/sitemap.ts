@@ -12,7 +12,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .eq('status', 'active')
     .eq('moderation_status', 'approved')
 
-  const propertyUrls = (properties || []).map((property) => ({
+  type PropertyData = {
+    id: string
+    updated_at: string
+  }
+
+  const propertyUrls = ((properties || []) as PropertyData[]).map((property) => ({
     url: `${baseUrl}/properties/${property.id}`,
     lastModified: new Date(property.updated_at || new Date()),
     changeFrequency: 'weekly' as const,
