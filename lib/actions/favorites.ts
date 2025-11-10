@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import type { Database } from '@/lib/types/database'
 
 export async function toggleFavorite(propertyId: string) {
   const supabase = await createClient()
@@ -36,12 +37,13 @@ export async function toggleFavorite(propertyId: string) {
     return { success: true, favorited: false }
   } else {
     // Add favorite
+    type FavoriteInsert = Database['public']['Tables']['property_favorites']['Insert']
     const { error } = await supabase
       .from('property_favorites')
       .insert({
         user_id: user.id,
         property_id: propertyId,
-      })
+      } as FavoriteInsert)
 
     if (error) {
       return { success: false, error: error.message }
