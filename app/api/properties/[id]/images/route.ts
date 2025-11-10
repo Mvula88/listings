@@ -149,7 +149,7 @@ export async function DELETE(
       .from('property_images')
       .select('*, property:properties!property_id(seller_id)')
       .eq('id', imageId)
-      .single()
+      .single() as { data: { url: string; property: { seller_id: string } } | null; error: any }
 
     if (!image || (image.property as any)?.seller_id !== user.id) {
       return NextResponse.json(
