@@ -255,8 +255,8 @@ export async function approveProperty(propertyId: string, notes?: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Get property and seller details before updating
-  const { data: property } = await supabase
-    .from('properties')
+  const { data: property } = await (supabase
+    .from('properties') as any)
     .select('*, seller:profiles!seller_id(full_name, email), property_images(url)')
     .eq('id', propertyId)
     .single()
@@ -308,8 +308,8 @@ export async function rejectProperty(propertyId: string, reason: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Get property and seller details before updating
-  const { data: property } = await supabase
-    .from('properties')
+  const { data: property } = await (supabase
+    .from('properties') as any)
     .select('*, seller:profiles!seller_id(full_name, email)')
     .eq('id', propertyId)
     .single()
