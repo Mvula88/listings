@@ -20,7 +20,20 @@ export async function generateMetadata({
     .select('*')
     .eq('slug', slug)
     .eq('status', 'published')
-    .single()
+    .single() as {
+      data: {
+        title: string;
+        slug: string;
+        excerpt: string;
+        content: string;
+        cover_image: string | null;
+        meta_title: string | null;
+        meta_description: string | null;
+        meta_keywords: string[] | null;
+        published_at: string;
+      } | null;
+      error: any;
+    }
 
   if (!post) {
     return {
@@ -64,30 +77,44 @@ export default async function BlogPostPage({
     `)
     .eq('slug', slug)
     .eq('status', 'published')
-    .single()
+    .single() as {
+      data: {
+        id: string;
+        title: string;
+        slug: string;
+        excerpt: string;
+        content: string;
+        cover_image: string | null;
+        category_id: string | null;
+        published_at: string;
+        views: number;
+        author: { full_name: string | null; avatar_url: string | null };
+      } | null;
+      error: any;
+    }
 
   if (!post) {
     notFound()
   }
 
   // Get category
-  const { data: category } = await supabase
+  const { data: category } = await (supabase as any)
     .from('blog_categories')
     .select('*')
-    .eq('slug', post.category)
+    .eq('slug', (post as any).category)
     .single()
 
   // Get related posts
-  const { data: relatedPosts } = await supabase
+  const { data: relatedPosts } = await (supabase as any)
     .from('blog_posts')
     .select('id, title, slug, excerpt, cover_image, published_at')
     .eq('status', 'published')
-    .eq('category', post.category)
+    .eq('category', (post as any).category)
     .neq('id', post.id)
     .limit(3)
 
   // Increment views
-  await supabase
+  await (supabase as any)
     .from('blog_posts')
     .update({ views: (post.views || 0) + 1 })
     .eq('id', post.id)
