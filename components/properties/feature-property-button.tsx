@@ -14,7 +14,6 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Star, Zap, Check, Loader2, TrendingUp } from 'lucide-react'
-import { loadStripe } from '@stripe/stripe-js'
 import { formatPrice } from '@/lib/utils/format'
 
 interface FeaturePropertyButtonProps {
@@ -22,8 +21,6 @@ interface FeaturePropertyButtonProps {
   currentlyFeatured?: boolean
   featuredUntil?: string
 }
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
 
 export function FeaturePropertyButton({
   propertyId,
@@ -99,16 +96,10 @@ export function FeaturePropertyButton({
         throw new Error('Failed to create checkout session')
       }
 
-      const { sessionId, url } = await response.json()
+      const { url } = await response.json()
 
       // Redirect to Stripe Checkout
-      const stripe = await stripePromise
-      if (stripe && sessionId) {
-        const { error } = await stripe.redirectToCheckout({ sessionId })
-        if (error) {
-          console.error('Stripe redirect error:', error)
-        }
-      } else if (url) {
+      if (url) {
         window.location.href = url
       }
     } catch (error) {
