@@ -77,8 +77,8 @@ export async function suspendUser(
     .single()
 
   // Create suspension record
-  const { error: suspensionError } = await supabase
-    .from('user_suspensions')
+  const { error: suspensionError } = await (supabase
+    .from('user_suspensions') as any)
     .insert({
       user_id: userId,
       suspended_by: admin.id,
@@ -123,8 +123,8 @@ export async function unsuspendUser(userId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Deactivate suspension records
-  await supabase
-    .from('user_suspensions')
+  await (supabase
+    .from('user_suspensions') as any)
     .update({
       is_active: false,
       lifted_at: new Date().toISOString(),
