@@ -500,8 +500,8 @@ export async function verifyLawyer(lawyerId: string) {
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
-  const { error } = await supabase
-    .from('lawyers')
+  const { error } = await (supabase
+    .from('lawyers') as any)
     .update({ verified: true })
     .eq('id', lawyerId)
 
@@ -536,8 +536,8 @@ export async function unverifyLawyer(lawyerId: string) {
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
-  const { error } = await supabase
-    .from('lawyers')
+  const { error } = await (supabase
+    .from('lawyers') as any)
     .update({ verified: false })
     .eq('id', lawyerId)
 
