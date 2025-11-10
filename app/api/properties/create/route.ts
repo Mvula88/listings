@@ -25,7 +25,7 @@ export async function POST(request: Request) {
 
     if (!existingProfile) {
       // Create profile if it doesn't exist
-      await supabase
+      await (supabase as any)
         .from('profiles')
         .insert({
           id: user.id,
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
       .single()
 
     // Insert property
-    const { data: property, error: insertError } = await supabase
+    const { data: property, error: insertError } = await (supabase as any)
       .from('properties')
       .insert({
         ...propertyData,
