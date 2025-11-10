@@ -204,7 +204,7 @@ export default async function BlogPostPage({
               {post.author?.avatar_url && (
                 <Image
                   src={post.author.avatar_url}
-                  alt={post.author.full_name}
+                  alt={post.author.full_name || 'Author'}
                   width={32}
                   height={32}
                   className="rounded-full"
