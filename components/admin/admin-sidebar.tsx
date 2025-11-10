@@ -24,7 +24,15 @@ interface AdminSidebarProps {
   admin: any
 }
 
-const navigation = [
+interface NavigationItem {
+  name: string
+  href: string
+  icon: React.ComponentType<{ className?: string }>
+  permission: string | null
+  badge?: string | number
+}
+
+const navigation: NavigationItem[] = [
   {
     name: 'Dashboard',
     href: '/admin',
