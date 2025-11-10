@@ -33,9 +33,9 @@ export async function POST(request: Request) {
     // Get property details
     const { data: property, error: propertyError } = await supabase
       .from('properties')
-      .select('*, seller:profiles!seller_id(id)')
+      .select('id, title, seller_id')
       .eq('id', propertyId)
-      .single() as any
+      .single()
 
     if (propertyError || !property) {
       return NextResponse.json(
