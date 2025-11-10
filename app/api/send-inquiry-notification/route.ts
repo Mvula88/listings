@@ -24,7 +24,15 @@ export async function POST(request: Request) {
         seller:profiles!seller_id(full_name, email)
       `)
       .eq('id', inquiryId)
-      .single()
+      .single() as {
+        data: {
+          message: string;
+          property: { id: string; title: string };
+          buyer: { full_name: string | null; email: string };
+          seller: { full_name: string | null; email: string };
+        } | null;
+        error: any;
+      }
 
     if (error || !inquiry) {
       console.error('Failed to get inquiry:', error)
