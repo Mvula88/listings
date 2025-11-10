@@ -35,7 +35,10 @@ export async function POST(request: Request) {
       .from('properties')
       .select('id, title, seller_id')
       .eq('id', propertyId)
-      .single()
+      .single() as {
+        data: { id: string; title: string; seller_id: string } | null;
+        error: any;
+      }
 
     if (propertyError || !property) {
       return NextResponse.json(
