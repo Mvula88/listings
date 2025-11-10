@@ -71,7 +71,7 @@ export async function POST(
           .getPublicUrl(fileName)
 
         // Create database record
-        const { data: imageRecord, error: dbError } = await supabase
+        const { data: imageRecord, error: dbError } = await (supabase as any)
           .from('property_images')
           .insert({
             property_id: propertyId,
