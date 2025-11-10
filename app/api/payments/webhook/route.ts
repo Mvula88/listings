@@ -69,7 +69,7 @@ export async function POST(request: Request) {
       }
 
       // Create payment record
-      await supabase.from('payments').insert({
+      await (supabase as any).from('payments').insert({
         user_id: userId,
         property_id: propertyId,
         type: 'premium_listing',
