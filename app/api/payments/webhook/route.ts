@@ -49,15 +49,13 @@ export async function POST(request: Request) {
       featuredUntil.setDate(featuredUntil.getDate() + days)
 
       // Update property to be featured
-      const updateData: TablesUpdate<'properties'> = {
-        featured: true,
-        featured_until: featuredUntil.toISOString(),
-        premium: plan?.includes('premium') || false,
-      }
-
       const { error: updateError } = await supabase
         .from('properties')
-        .update(updateData as any)
+        .update({
+          featured: true,
+          featured_until: featuredUntil.toISOString(),
+          premium: plan?.includes('premium') || false,
+        } as any)
         .eq('id', propertyId)
 
       if (updateError) {
