@@ -122,6 +122,8 @@ export interface Database {
           features: string[] | null
           views: number
           featured: boolean
+          featured_until: string | null
+          premium: boolean
           created_at: string
           updated_at: string
         }
@@ -147,6 +149,8 @@ export interface Database {
           features?: string[] | null
           views?: number
           featured?: boolean
+          featured_until?: string | null
+          premium?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -172,6 +176,8 @@ export interface Database {
           features?: string[] | null
           views?: number
           featured?: boolean
+          featured_until?: string | null
+          premium?: boolean
           created_at?: string
           updated_at?: string
         }
