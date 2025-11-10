@@ -55,9 +55,9 @@ export async function POST(request: Request) {
         premium: plan?.includes('premium') || false,
       }
 
-      const { error: updateError } = await supabase
+      const { error: updateError } = await (supabase
         .from('properties')
-        .update(updateData)
+        .update(updateData) as any)
         .eq('id', propertyId)
 
       if (updateError) {
