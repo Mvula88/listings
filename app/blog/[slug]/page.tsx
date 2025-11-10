@@ -87,6 +87,7 @@ export default async function BlogPostPage({
         cover_image: string | null;
         category_id: string | null;
         published_at: string;
+        updated_at: string;
         views: number;
         author: { full_name: string | null; avatar_url: string | null };
       } | null;
