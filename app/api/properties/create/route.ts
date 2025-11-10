@@ -70,7 +70,7 @@ export async function POST(request: Request) {
       .from('countries')
       .select('currency')
       .eq('id', propertyData.country_id)
-      .single()
+      .single() as { data: { currency: string } | null; error: any }
 
     // Insert property
     const { data: property, error: insertError } = await (supabase as any)
