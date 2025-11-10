@@ -42,29 +42,127 @@ export default function HowItWorksPage() {
         </div>
       </nav>
 
-      {/* Hero Section - Modern Design */}
-      <section className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-br from-black/80 via-black/70 to-primary/30">
-        {/* Background decorative elements */}
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]" />
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl" />
+      {/* Hero Section - Premium Design */}
+      <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        {/* Animated gradient orbs */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-[10%] w-[500px] h-[500px] bg-primary/30 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-20 right-[15%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[130px] animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
+
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:50px_50px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,black,transparent)]" />
+
+        {/* Radial gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-radial from-transparent via-slate-950/50 to-slate-950" />
+
+        {/* Spotlight effect */}
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent" />
+
+        {/* Noise texture */}
+        <div className="absolute inset-0 opacity-20 mix-blend-overlay bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]" />
 
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <div className="max-w-4xl mx-auto text-center text-white">
-              <div className="inline-flex items-center justify-center px-4 py-2 bg-white/10 backdrop-blur rounded-full mb-6">
-                <Sparkles className="h-4 w-4 text-primary mr-2" />
-                <span className="text-sm font-medium">Simple & Transparent Process</span>
+            <div className="max-w-5xl mx-auto text-center">
+              {/* Premium badge */}
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-white/10 to-white/5 backdrop-blur-xl rounded-full border border-white/10 shadow-2xl mb-8 group hover:scale-105 transition-transform duration-300">
+                <div className="relative">
+                  <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+                  <div className="absolute inset-0 bg-primary/20 rounded-full blur-md" />
+                </div>
+                <span className="text-sm font-semibold text-white tracking-wide">Simple & Transparent Process</span>
+                <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-                How DealDirect Works
+
+              {/* Main headline with gradient */}
+              <h1 className="relative mb-8">
+                <span className="block text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black mb-4 bg-gradient-to-b from-white via-white to-white/70 bg-clip-text text-transparent leading-tight tracking-tight">
+                  How DealDirect
+                </span>
+                <span className="block text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent leading-tight tracking-tight">
+                  Works
+                </span>
+                {/* Glow effect behind text */}
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent blur-3xl -z-10" />
               </h1>
-              <p className="text-lg md:text-xl text-white/80 max-w-2xl mx-auto">
-                Four simple steps to save thousands on your property transaction. No agent commissions, no hidden fees.
+
+              {/* Subheadline */}
+              <p className="text-xl md:text-2xl lg:text-3xl text-white/70 max-w-3xl mx-auto mb-12 leading-relaxed font-light">
+                Four simple steps to save{" "}
+                <span className="text-primary font-semibold relative inline-block">
+                  thousands
+                  <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 100 8" preserveAspectRatio="none">
+                    <path d="M0,7 Q50,0 100,7" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
+                  </svg>
+                </span>
+                {" "}on your property transaction
               </p>
+
+              {/* Value props */}
+              <div className="flex flex-wrap items-center justify-center gap-6 md:gap-8">
+                <div className="flex items-center gap-2 text-white/60">
+                  <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                  <span className="text-sm md:text-base font-medium">No Agent Commissions</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/60">
+                  <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                  <span className="text-sm md:text-base font-medium">No Hidden Fees</span>
+                </div>
+                <div className="flex items-center gap-2 text-white/60">
+                  <div className="w-1.5 h-1.5 bg-primary rounded-full" />
+                  <span className="text-sm md:text-base font-medium">100% Transparent</span>
+                </div>
+              </div>
+
+              {/* Scroll indicator */}
+              <div className="mt-16 md:mt-20 animate-bounce">
+                <div className="inline-flex flex-col items-center gap-2 text-white/40">
+                  <span className="text-xs font-medium tracking-wider uppercase">Scroll to explore</span>
+                  <ArrowRight className="h-5 w-5 rotate-90" />
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+
+          {/* Floating elements */}
+          <FadeIn delay={0.3}>
+            <div className="absolute top-1/4 left-[5%] hidden lg:block">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl group-hover:bg-primary/30 transition-colors" />
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl">
+                  <Home className="h-8 w-8 text-primary" />
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.4}>
+            <div className="absolute bottom-1/4 right-[8%] hidden lg:block">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl group-hover:bg-primary/30 transition-colors" />
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl">
+                  <DollarSign className="h-8 w-8 text-green-400" />
+                </div>
+              </div>
+            </div>
+          </FadeIn>
+
+          <FadeIn delay={0.5}>
+            <div className="absolute top-1/3 right-[15%] hidden xl:block">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl group-hover:bg-primary/30 transition-colors" />
+                <div className="relative bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl">
+                  <Shield className="h-8 w-8 text-primary" />
+                </div>
+              </div>
             </div>
           </FadeIn>
         </div>
+
+        {/* Bottom gradient fade */}
+        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent" />
       </section>
 
       {/* Quick Steps Overview - Like Landing Page */}
