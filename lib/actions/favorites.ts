@@ -17,7 +17,7 @@ export async function toggleFavorite(propertyId: string) {
     .select('id')
     .eq('user_id', user.id)
     .eq('property_id', propertyId)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     // Remove favorite
@@ -97,7 +97,7 @@ export async function checkIfFavorited(propertyId: string) {
     .select('id')
     .eq('user_id', user.id)
     .eq('property_id', propertyId)
-    .single()
+    .maybeSingle()
 
   return { favorited: !!data }
 }
