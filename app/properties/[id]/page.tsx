@@ -28,9 +28,9 @@ export async function generateMetadata({
   const supabase = await createClient()
   const { id } = await params
 
-  const { data: property } = await supabase
+  const { data: property } = await (supabase as any)
     .from('properties')
-    .select('*, country:countries(name, currency)')
+    .select('*, property_images(url), country:countries(name, currency)')
     .eq('id', id)
     .single()
 
