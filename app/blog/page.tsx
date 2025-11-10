@@ -21,13 +21,13 @@ export default async function BlogPage({
   const supabase = await createClient()
 
   // Get categories
-  const { data: categories } = await supabase
+  const { data: categories } = await (supabase as any)
     .from('blog_categories')
     .select('*')
     .order('name')
 
   // Get blog posts
-  let query = supabase
+  let query = (supabase as any)
     .from('blog_posts')
     .select(`
       *,
