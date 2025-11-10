@@ -115,7 +115,7 @@ export async function redeemFeaturedListing(propertyId: string, days: number) {
     }
 
     // Call the database function to handle redemption
-    const { data, error } = await supabase.rpc('redeem_featured_listing', {
+    const { data, error } = await (supabase as any).rpc('redeem_featured_listing', {
       user_id_param: user.id,
       property_id_param: propertyId,
       days,
