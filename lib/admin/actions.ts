@@ -358,8 +358,8 @@ export async function featureProperty(propertyId: string, featuredUntil?: string
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
-  const { error } = await supabase
-    .from('properties')
+  const { error } = await (supabase
+    .from('properties') as any)
     .update({
       is_featured: true,
       featured_until: featuredUntil,
@@ -387,8 +387,8 @@ export async function unfeatureProperty(propertyId: string) {
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
-  const { error } = await supabase
-    .from('properties')
+  const { error } = await (supabase
+    .from('properties') as any)
     .update({
       is_featured: false,
       featured_until: null,
