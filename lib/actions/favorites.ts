@@ -19,8 +19,6 @@ export async function toggleFavorite(propertyId: string) {
     .eq('property_id', propertyId)
     .maybeSingle()
 
-  type FavoriteData = { id: string } | null
-
   if (existing) {
     // Remove favorite
     const { error } = await supabase
