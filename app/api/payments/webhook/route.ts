@@ -48,15 +48,14 @@ export async function POST(request: Request) {
       featuredUntil.setDate(featuredUntil.getDate() + days)
 
       // Update property to be featured
-      const updateData: any = {
-        featured: true,
-        featured_until: featuredUntil.toISOString(),
-        premium: plan?.includes('premium') || false,
-      }
-
+      // @ts-ignore - Supabase type inference issue with dynamic updates
       const { error: updateError } = await supabase
         .from('properties')
-        .update(updateData)
+        .update({
+          featured: true,
+          featured_until: featuredUntil.toISOString(),
+          premium: plan?.includes('premium') || false,
+        })
         .eq('id', propertyId)
 
       if (updateError) {
