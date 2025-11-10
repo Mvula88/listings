@@ -98,11 +98,11 @@ export async function requireAdmin(request: NextRequest) {
   }
 
   // Update last activity
-  await supabase
-    .from('admin_profiles')
+  await (supabase
+    .from('admin_profiles') as any)
     .update({
       last_login_at: new Date().toISOString(),
-      last_login_ip: request.ip || request.headers.get('x-forwarded-for'),
+      last_login_ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
     })
     .eq('id', admin.id)
 
