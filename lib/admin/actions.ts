@@ -90,8 +90,8 @@ export async function suspendUser(
   if (suspensionError) throw suspensionError
 
   // Update profile
-  const { error: updateError } = await supabase
-    .from('profiles')
+  const { error: updateError } = await (supabase
+    .from('profiles') as any)
     .update({
       is_suspended: true,
       suspended_until: expiresAt,
@@ -134,8 +134,8 @@ export async function unsuspendUser(userId: string) {
     .eq('is_active', true)
 
   // Update profile
-  const { error } = await supabase
-    .from('profiles')
+  const { error } = await (supabase
+    .from('profiles') as any)
     .update({
       is_suspended: false,
       suspended_until: null,
@@ -261,8 +261,8 @@ export async function approveProperty(propertyId: string, notes?: string) {
     .eq('id', propertyId)
     .single()
 
-  const { error } = await supabase
-    .from('properties')
+  const { error } = await (supabase
+    .from('properties') as any)
     .update({
       moderation_status: 'approved',
       status: 'active',
@@ -314,8 +314,8 @@ export async function rejectProperty(propertyId: string, reason: string) {
     .eq('id', propertyId)
     .single()
 
-  const { error } = await supabase
-    .from('properties')
+  const { error } = await (supabase
+    .from('properties') as any)
     .update({
       moderation_status: 'rejected',
       status: 'draft',
