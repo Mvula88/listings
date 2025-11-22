@@ -114,8 +114,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
       if (error) throw error
 
       // Update inquiry status
-      await supabase
-        .from('inquiries')
+      await (supabase
+        .from('inquiries') as any)
         .update({ status: 'proceeded_to_transaction' })
         .eq('id', existingInquiry.id)
 
