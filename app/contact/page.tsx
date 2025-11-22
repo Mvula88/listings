@@ -14,7 +14,7 @@ export default function ContactPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
@@ -37,7 +37,7 @@ export default function ContactPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
             <p className="text-lg text-muted-foreground">
-              We're here to help with any questions about buying, selling, or using DealDirect
+              We're here to help with any questions about buying, selling, or using PropLinka
             </p>
           </div>
         </div>
@@ -55,8 +55,8 @@ export default function ContactPage() {
                   <p className="text-sm text-muted-foreground mb-4">
                     Get help via email within 24 hours
                   </p>
-                  <a href="mailto:support@dealdirect.com" className="text-primary hover:underline">
-                    support@dealdirect.com
+                  <a href="mailto:support@proplinka.com" className="text-primary hover:underline">
+                    support@proplinka.com
                   </a>
                 </CardContent>
               </Card>
@@ -163,7 +163,7 @@ export default function ContactPage() {
                   <p>South Africa</p>
                   <p className="pt-2">
                     <strong>Phone:</strong> +27 21 555 0123<br />
-                    <strong>Email:</strong> za@dealdirect.com
+                    <strong>Email:</strong> za@proplinka.com
                   </p>
                 </CardContent>
               </Card>
@@ -178,7 +178,7 @@ export default function ContactPage() {
                   <p>Namibia</p>
                   <p className="pt-2">
                     <strong>Phone:</strong> +264 61 555 0123<br />
-                    <strong>Email:</strong> na@dealdirect.com
+                    <strong>Email:</strong> na@proplinka.com
                   </p>
                 </CardContent>
               </Card>
@@ -205,7 +205,7 @@ export default function ContactPage() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 DealDirect. All rights reserved.
+          © 2024 PropLinka. All rights reserved.
         </div>
       </footer>
     </div>

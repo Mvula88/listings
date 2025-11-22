@@ -34,7 +34,7 @@ export const PropertyApprovedEmail = ({
                   </p>
 
                   <p style={{ fontSize: '16px', color: '#333333', lineHeight: '1.6' }}>
-                    Great news! Your property listing has been approved and is now live on DealDirect.
+                    Great news! Your property listing has been approved and is now live on PropLinka.
                   </p>
 
                   {propertyImage && (
@@ -82,7 +82,7 @@ export const PropertyApprovedEmail = ({
 
                   <p style={{ fontSize: '14px', color: '#666666', marginBottom: 0 }}>
                     Best regards,<br />
-                    The DealDirect Team
+                    The PropLinka Team
                   </p>
                 </td>
               </tr>
@@ -91,7 +91,7 @@ export const PropertyApprovedEmail = ({
               <tr>
                 <td style={{ backgroundColor: '#f9fafb', padding: '20px', textAlign: 'center' }}>
                   <p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>
-                    © 2024 DealDirect. All rights reserved.
+                    © 2024 PropLinka. All rights reserved.
                   </p>
                 </td>
               </tr>

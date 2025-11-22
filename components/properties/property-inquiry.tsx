@@ -42,8 +42,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
     setLoading(true)
     try {
       // Create inquiry
-      const { data: inquiry, error } = await (supabase
-        .from('inquiries') as any)
+      const { data: inquiry, error } = await supabase
+        .from('inquiries')
         .insert({
           property_id: property.id,
           buyer_id: user.id,
@@ -57,8 +57,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
       if (error) throw error
 
       // Create conversation
-      const { data: conversation } = await (supabase
-        .from('conversations') as any)
+      const { data: conversation } = await supabase
+        .from('conversations')
         .insert({
           inquiry_id: inquiry.id,
           property_id: property.id,
@@ -98,8 +98,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
     setLoading(true)
     try {
       // Create transaction
-      const { data: transaction, error } = await (supabase
-        .from('transactions') as any)
+      const { data: transaction, error } = await supabase
+        .from('transactions')
         .insert({
           inquiry_id: existingInquiry.id,
           property_id: property.id,
@@ -114,8 +114,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
       if (error) throw error
 
       // Update inquiry status
-      await (supabase
-        .from('inquiries') as any)
+      await supabase
+        .from('inquiries')
         .update({ status: 'proceeded_to_transaction' })
         .eq('id', existingInquiry.id)
 
@@ -212,7 +212,7 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
                         </span>
                       </div>
                       <p className="text-xs text-muted-foreground mt-3 border-t pt-2">
-                        * Platform fee collected by lawyer at closing, replaces agent commission. Lawyer fees (~R15K-R40K) apply to both traditional and DealDirect models.
+                        * Platform fee collected by lawyer at closing, replaces agent commission. Lawyer fees (~R15K-R40K) apply to both traditional and PropLinka models.
                       </p>
                     </div>
                     
@@ -315,7 +315,7 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
           </div>
 
           <p className="text-xs text-center text-muted-foreground">
-            By contacting the seller, you agree to DealDirect's terms of service
+            By contacting the seller, you agree to PropLinka's terms of service
           </p>
         </div>
       </CardContent>

@@ -13,11 +13,17 @@ export async function getUserRewards() {
     }
 
     // Get user's rewards
-    const { data: rewards, error } = await (supabase
-      .from('referral_rewards') as any)
+    const { data: rewards, error } = await supabase
+      .from('referral_rewards')
       .select('*')
       .eq('user_id', user.id)
-      .single()
+      .single<{
+        points: number
+        lifetime_points: number
+        tier: string
+        free_featured_listings: number
+        [key: string]: any
+      }>()
 
     if (error && error.code !== 'PGRST116') { // PGRST116 = no rows returned
       throw error
@@ -25,8 +31,8 @@ export async function getUserRewards() {
 
     // If no rewards record exists, create one
     if (!rewards) {
-      const { data: newRewards, error: createError } = await (supabase
-        .from('referral_rewards') as any)
+      const { data: newRewards, error: createError } = await supabase
+        .from('referral_rewards')
         .insert({
           user_id: user.id,
           points: 0,
@@ -35,7 +41,13 @@ export async function getUserRewards() {
           free_featured_listings: 0,
         })
         .select()
-        .single()
+        .single<{
+          points: number
+          lifetime_points: number
+          tier: string
+          free_featured_listings: number
+          [key: string]: any
+        }>()
 
       if (createError) throw createError
 
@@ -58,8 +70,8 @@ export async function getRewardTransactions(limit = 20) {
       return { success: false, error: 'Not authenticated', transactions: [] }
     }
 
-    const { data: transactions, error } = await (supabase
-      .from('referral_transactions') as any)
+    const { data: transactions, error } = await supabase
+      .from('referral_transactions')
       .select(`
         *,
         related_user:profiles!related_user_id(full_name),
@@ -115,7 +127,7 @@ export async function redeemFeaturedListing(propertyId: string, days: number) {
     }
 
     // Call the database function to handle redemption
-    const { data, error } = await (supabase as any).rpc('redeem_featured_listing', {
+    const { data, error } = await supabase.rpc('redeem_featured_listing', {
       user_id_param: user.id,
       property_id_param: propertyId,
       days,
@@ -145,8 +157,8 @@ export async function getLeaderboard(limit = 10) {
   try {
     const supabase = await createClient()
 
-    const { data: leaderboard, error } = await (supabase
-      .from('referral_rewards') as any)
+    const { data: leaderboard, error } = await supabase
+      .from('referral_rewards')
       .select(`
         user_id,
         lifetime_points,

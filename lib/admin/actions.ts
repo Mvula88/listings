@@ -77,8 +77,8 @@ export async function suspendUser(
     .single()
 
   // Create suspension record
-  const { error: suspensionError } = await (supabase
-    .from('user_suspensions') as any)
+  const { error: suspensionError } = await supabase
+    .from('user_suspensions')
     .insert({
       user_id: userId,
       suspended_by: admin.id,
@@ -90,8 +90,8 @@ export async function suspendUser(
   if (suspensionError) throw suspensionError
 
   // Update profile
-  const { error: updateError } = await (supabase
-    .from('profiles') as any)
+  const { error: updateError } = await supabase
+    .from('profiles')
     .update({
       is_suspended: true,
       suspended_until: expiresAt,
@@ -123,8 +123,8 @@ export async function unsuspendUser(userId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Deactivate suspension records
-  await (supabase
-    .from('user_suspensions') as any)
+  await supabase
+    .from('user_suspensions')
     .update({
       is_active: false,
       lifted_at: new Date().toISOString(),
@@ -134,8 +134,8 @@ export async function unsuspendUser(userId: string) {
     .eq('is_active', true)
 
   // Update profile
-  const { error } = await (supabase
-    .from('profiles') as any)
+  const { error } = await supabase
+    .from('profiles')
     .update({
       is_suspended: false,
       suspended_until: null,
@@ -255,14 +255,14 @@ export async function approveProperty(propertyId: string, notes?: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Get property and seller details before updating
-  const { data: property } = await (supabase
-    .from('properties') as any)
+  const { data: property } = await supabase
+    .from('properties')
     .select('*, seller:profiles!seller_id(full_name, email), property_images(url)')
     .eq('id', propertyId)
     .single()
 
-  const { error } = await (supabase
-    .from('properties') as any)
+  const { error } = await supabase
+    .from('properties')
     .update({
       moderation_status: 'approved',
       status: 'active',
@@ -308,14 +308,14 @@ export async function rejectProperty(propertyId: string, reason: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Get property and seller details before updating
-  const { data: property } = await (supabase
-    .from('properties') as any)
+  const { data: property } = await supabase
+    .from('properties')
     .select('*, seller:profiles!seller_id(full_name, email)')
     .eq('id', propertyId)
     .single()
 
-  const { error } = await (supabase
-    .from('properties') as any)
+  const { error } = await supabase
+    .from('properties')
     .update({
       moderation_status: 'rejected',
       status: 'draft',
@@ -359,7 +359,7 @@ export async function featureProperty(propertyId: string, featuredUntil?: string
   if (!admin) throw new Error('Not authenticated')
 
   const { error } = await (supabase
-    .from('properties') as any)
+    .from('properties'))
     .update({
       is_featured: true,
       featured_until: featuredUntil,
@@ -388,7 +388,7 @@ export async function unfeatureProperty(propertyId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   const { error } = await (supabase
-    .from('properties') as any)
+    .from('properties'))
     .update({
       is_featured: false,
       featured_until: null,
@@ -501,7 +501,7 @@ export async function verifyLawyer(lawyerId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   const { error } = await (supabase
-    .from('lawyers') as any)
+    .from('lawyers'))
     .update({ verified: true })
     .eq('id', lawyerId)
 
@@ -537,7 +537,7 @@ export async function unverifyLawyer(lawyerId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   const { error } = await (supabase
-    .from('lawyers') as any)
+    .from('lawyers'))
     .update({ verified: false })
     .eq('id', lawyerId)
 
@@ -628,7 +628,7 @@ export async function cancelTransaction(transactionId: string, reason: string) {
     .single()
 
   const { error } = await (supabase
-    .from('transactions') as any)
+    .from('transactions'))
     .update({
       status: 'cancelled',
       updated_at: new Date().toISOString(),
@@ -655,7 +655,17 @@ export async function cancelTransaction(transactionId: string, reason: string) {
 // ANALYTICS & STATS
 // ============================================================================
 
-export async function getPlatformStats() {
+export async function getPlatformStats(): Promise<{
+  total_revenue?: number
+  conversion_rate?: number
+  new_users_month?: number
+  total_users?: number
+  total_properties?: number
+  active_listings?: number
+  pending_verifications?: number
+  total_transactions?: number
+  [key: string]: any
+} | null> {
   const supabase = await createClient()
 
   const { data, error } = await supabase
@@ -796,7 +806,7 @@ export async function reviewContentFlag(
   if (!admin) throw new Error('Not authenticated')
 
   const { error } = await (supabase
-    .from('content_flags') as any)
+    .from('content_flags'))
     .update({
       status,
       reviewed_by: admin.id,
@@ -905,7 +915,7 @@ export async function updatePlatformSetting(key: string, value: any) {
   if (!admin) throw new Error('Not authenticated')
 
   const { error } = await (supabase
-    .from('platform_settings') as any)
+    .from('platform_settings'))
     .update({
       value,
       updated_by: admin.id,

@@ -17,7 +17,7 @@ export default async function DashboardPage() {
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single() as any
+    .single<{ full_name: string; [key: string]: any }>()
 
   // Get user-specific stats
   const { data: properties } = await supabase
@@ -34,9 +34,10 @@ export default async function DashboardPage() {
     .from('transactions')
     .select('id, status')
     .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
+    .returns<Array<{ id: string; status: string }>>()
 
-  const activeTransactions = (transactions as any)?.filter((t: any) => t.status !== 'completed').length || 0
-  const completedTransactions = (transactions as any)?.filter((t: any) => t.status === 'completed').length || 0
+  const activeTransactions = transactions?.filter((t) => t.status !== 'completed').length || 0
+  const completedTransactions = transactions?.filter((t) => t.status === 'completed').length || 0
 
   return (
     <div className="space-y-8">
@@ -47,7 +48,7 @@ export default async function DashboardPage() {
             Welcome back, {profile?.full_name || 'User'}! 👋
           </h1>
           <p className="text-muted-foreground text-lg">
-            Here's an overview of your DealDirect activity
+            Here's an overview of your PropLinka activity
           </p>
         </div>
       </FadeIn>
@@ -246,7 +247,7 @@ export default async function DashboardPage() {
           <CardHeader>
             <CardTitle className="text-2xl">Recent Activity</CardTitle>
             <CardDescription>
-              Your latest interactions on DealDirect
+              Your latest interactions on PropLinka
             </CardDescription>
           </CardHeader>
           <CardContent>

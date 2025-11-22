@@ -11,7 +11,7 @@ export default function AboutPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
@@ -32,7 +32,7 @@ export default function AboutPage() {
       <section className="bg-gradient-to-b from-primary/10 to-background py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">About DealDirect</h1>
+            <h1 className="text-4xl font-bold mb-4">About PropLinka</h1>
             <p className="text-lg text-muted-foreground">
               Revolutionizing real estate transactions in Africa by eliminating unnecessary middleman fees
             </p>
@@ -48,8 +48,8 @@ export default function AboutPage() {
               <div>
                 <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
                 <p className="text-muted-foreground mb-4">
-                  We believe buying or selling property shouldn't cost you tens of thousands in commission fees. 
-                  DealDirect was founded to democratize real estate transactions by connecting buyers and sellers directly.
+                  We believe buying or selling property shouldn't cost you tens of thousands in commission fees.
+                  PropLinka was founded to democratize real estate transactions by linking buyers and sellers directly.
                 </p>
                 <p className="text-muted-foreground mb-4">
                   By eliminating the traditional 5-7% agent commission and replacing it with a simple R2,000 success fee, 
@@ -139,8 +139,8 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold mb-8">Our Story</h2>
             <div className="space-y-4 text-muted-foreground">
               <p>
-                DealDirect was born from frustration. Our founder was selling their family home and was shocked 
-                to learn they would have to pay over R100,000 in agent commissions - money that could have gone 
+                PropLinka was born from frustration. Our founder was selling their family home and was shocked
+                to learn they would have to pay over R100,000 in agent commissions - money that could have gone
                 toward their children's education.
               </p>
               <p>
@@ -153,7 +153,7 @@ export default function AboutPage() {
                 directly, handle their own negotiations, and save tens of thousands in the process?
               </p>
               <p>
-                Today, DealDirect is that platform. We've helped thousands of families across South Africa and 
+                Today, PropLinka is that platform. We've helped thousands of families across South Africa and
                 Namibia save millions in unnecessary commissions. And we're just getting started.
               </p>
             </div>
@@ -222,7 +222,7 @@ export default function AboutPage() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 DealDirect. All rights reserved.
+          © 2024 PropLinka. All rights reserved.
         </div>
       </footer>
     </div>

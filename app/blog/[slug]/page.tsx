@@ -42,7 +42,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: post.meta_title || `${post.title} | DealDirect Blog`,
+    title: post.meta_title || `${post.title} | PropLinka Blog`,
     description: post.meta_description || post.excerpt,
     keywords: post.meta_keywords?.join(', '),
     openGraph: {
@@ -101,14 +101,14 @@ export default async function BlogPostPage({
   }
 
   // Get category
-  const { data: category } = await (supabase as any)
+  const { data: category } = await supabase
     .from('blog_categories')
     .select('*')
     .eq('slug', (post as any).category)
-    .single()
+    .single<{ color: string; [key: string]: any }>()
 
   // Get related posts
-  const { data: relatedPosts } = await (supabase as any)
+  const { data: relatedPosts } = await supabase
     .from('blog_posts')
     .select('id, title, slug, excerpt, cover_image, published_at')
     .eq('status', 'published')
@@ -117,8 +117,8 @@ export default async function BlogPostPage({
     .limit(3)
 
   // Increment views
-  await (supabase as any)
-    .from('blog_posts')
+  await (supabase
+    .from('blog_posts') as any)
     .update({ views: (post.views || 0) + 1 })
     .eq('id', post.id)
 
@@ -133,11 +133,11 @@ export default async function BlogPostPage({
     dateModified: post.updated_at,
     author: {
       '@type': 'Person',
-      name: post.author?.full_name || 'DealDirect Team',
+      name: post.author?.full_name || 'PropLinka Team',
     },
     publisher: {
       '@type': 'Organization',
-      name: 'DealDirect',
+      name: 'PropLinka',
     },
   }
 
@@ -213,7 +213,7 @@ export default async function BlogPostPage({
                 />
               )}
               <span className="font-medium">
-                {post.author?.full_name || 'DealDirect Team'}
+                {post.author?.full_name || 'PropLinka Team'}
               </span>
             </div>
             <div className="flex items-center gap-1">

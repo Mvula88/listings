@@ -38,7 +38,7 @@ export default async function NewPropertyPage() {
                 </Button>
               </Link>
               <Link href="/" className="text-2xl font-bold text-primary transition-transform hover:scale-105">
-                DealDirect
+                PropLinka
               </Link>
             </div>
           </div>
@@ -50,7 +50,7 @@ export default async function NewPropertyPage() {
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl font-bold mb-2">List Your Property</h1>
             <p className="text-muted-foreground text-lg">
-              Fill in the details below to list your property on DealDirect - it's free!
+              Fill in the details below to list your property on PropLinka - it's free!
             </p>
           </div>
         </FadeIn>

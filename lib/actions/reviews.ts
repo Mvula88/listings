@@ -18,7 +18,7 @@ export async function submitReview(data: {
     }
 
     // Check if user already reviewed this property
-    const { data: existingReview } = await (supabase as any)
+    const { data: existingReview } = await supabase
       .from('property_reviews')
       .select('id')
       .eq('property_id', data.propertyId)
@@ -30,7 +30,7 @@ export async function submitReview(data: {
     }
 
     // Check if user has a transaction with this property (for verified purchase badge)
-    const { data: transaction } = await (supabase as any)
+    const { data: transaction } = await supabase
       .from('transactions')
       .select('id')
       .eq('property_id', data.propertyId)
@@ -39,7 +39,7 @@ export async function submitReview(data: {
       .single()
 
     // Submit review
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from('property_reviews')
       .insert({
         property_id: data.propertyId,
@@ -67,7 +67,7 @@ export async function getPropertyReviews(propertyId: string) {
   try {
     const supabase = await createClient()
 
-    const { data: reviews, error } = await (supabase as any)
+    const { data: reviews, error } = await supabase
       .from('property_reviews')
       .select(`
         *,
@@ -102,7 +102,7 @@ export async function checkUserReview(propertyId: string) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return { hasReviewed: false }
 
-    const { data: review } = await (supabase as any)
+    const { data: review } = await supabase
       .from('property_reviews')
       .select('id, rating, title, review, status')
       .eq('property_id', propertyId)
@@ -126,7 +126,7 @@ export async function markReviewHelpful(reviewId: string, helpful: boolean) {
 
     if (helpful) {
       // Add helpful mark
-      const { error } = await (supabase as any)
+      const { error } = await supabase
         .from('review_helpfulness')
         .insert({ review_id: reviewId, user_id: user.id })
 
@@ -135,7 +135,7 @@ export async function markReviewHelpful(reviewId: string, helpful: boolean) {
       }
     } else {
       // Remove helpful mark
-      await (supabase as any)
+      await supabase
         .from('review_helpfulness')
         .delete()
         .eq('review_id', reviewId)
@@ -158,7 +158,7 @@ export async function deleteReview(reviewId: string) {
       return { success: false, error: 'You must be logged in' }
     }
 
-    const { error } = await (supabase as any)
+    const { error } = await supabase
       .from('property_reviews')
       .delete()
       .eq('id', reviewId)

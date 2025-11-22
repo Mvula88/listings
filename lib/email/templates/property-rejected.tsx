@@ -32,7 +32,7 @@ export const PropertyRejectedEmail = ({
                   </p>
 
                   <p style={{ fontSize: '16px', color: '#333333', lineHeight: '1.6' }}>
-                    Thank you for listing your property on DealDirect. After review, we need some updates to your listing before it can go live:
+                    Thank you for listing your property on PropLinka. After review, we need some updates to your listing before it can go live:
                   </p>
 
                   <div style={{ backgroundColor: '#fef2f2', border: '2px solid #fecaca', padding: '20px', borderRadius: '8px', marginBottom: '20px' }}>
@@ -78,7 +78,7 @@ export const PropertyRejectedEmail = ({
 
                   <p style={{ fontSize: '14px', color: '#666666', marginBottom: 0 }}>
                     Best regards,<br />
-                    The DealDirect Team
+                    The PropLinka Team
                   </p>
                 </td>
               </tr>
@@ -87,7 +87,7 @@ export const PropertyRejectedEmail = ({
               <tr>
                 <td style={{ backgroundColor: '#f9fafb', padding: '20px', textAlign: 'center' }}>
                   <p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>
-                    © 2024 DealDirect. All rights reserved.
+                    © 2024 PropLinka. All rights reserved.
                   </p>
                 </td>
               </tr>

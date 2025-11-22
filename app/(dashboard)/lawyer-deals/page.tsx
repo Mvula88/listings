@@ -17,30 +17,30 @@ export default async function LawyerDealsPage() {
     redirect('/login')
   }
 
-  const { data: profile } = await (supabase
-    .from('profiles') as any)
+  const { data: profile } = await supabase
+    .from('profiles')
     .select('user_type')
     .eq('id', user.id)
-    .single()
+    .single<{ user_type: string }>()
 
   if (profile?.user_type !== 'lawyer') {
     redirect('/dashboard')
   }
 
   // Get lawyer record
-  const { data: lawyer } = await (supabase
-    .from('lawyers') as any)
+  const { data: lawyer } = await supabase
+    .from('lawyers')
     .select('*')
     .eq('profile_id', user.id)
-    .single()
+    .single<{ id: string; [key: string]: any }>()
 
   if (!lawyer) {
     redirect('/lawyers/onboarding')
   }
 
   // Get all transactions where this lawyer is involved
-  const { data: transactions } = await (supabase
-    .from('transactions') as any)
+  const { data: transactions } = await supabase
+    .from('transactions')
     .select(`
       *,
       property:properties (

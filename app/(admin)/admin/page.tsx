@@ -19,11 +19,25 @@ import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { getPlatformStats } from '@/lib/admin/actions'
 
+interface RecentUser {
+  id: string
+  full_name: string | null
+  email: string
+  created_at: string
+}
+
+interface RecentProperty {
+  id: string
+  title: string
+  created_at: string
+  status: string
+}
+
 export default async function AdminDashboard() {
   const supabase = await createClient()
 
   // Get platform stats
-  const stats = await getPlatformStats() as any
+  const stats = await getPlatformStats()
 
   // Get pending items that need attention
   const { data: pendingProperties } = await supabase
@@ -51,13 +65,15 @@ export default async function AdminDashboard() {
     .from('profiles')
     .select('id, full_name, email, created_at')
     .order('created_at', { ascending: false })
-    .limit(5) as any
+    .limit(5)
+    .returns<RecentUser[]>()
 
   const { data: recentProperties } = await supabase
     .from('properties')
     .select('id, title, created_at, status')
     .order('created_at', { ascending: false })
-    .limit(5) as any
+    .limit(5)
+    .returns<RecentProperty[]>()
 
   return (
     <div className="space-y-8">

@@ -20,11 +20,11 @@ export default async function PaymentCancelledPage({
   }
 
   // Get property details
-  const { data: property } = await (supabase as any)
+  const { data: property } = await supabase
     .from('properties')
     .select('*')
     .eq('id', id)
-    .single()
+    .single<{ seller_id: string; [key: string]: any }>()
 
   if (!property || property.seller_id !== user.id) {
     notFound()

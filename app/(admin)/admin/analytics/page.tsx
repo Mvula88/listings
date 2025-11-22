@@ -10,7 +10,7 @@ async function AnalyticsPageContent() {
   const [analyticsData, stats] = await Promise.all([
     getAnalyticsData(),
     getPlatformStats(),
-  ]) as any
+  ])
 
   return (
     <div className="space-y-6">

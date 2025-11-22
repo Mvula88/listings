@@ -6,7 +6,7 @@ import { Heart } from 'lucide-react'
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Saved Properties | DealDirect',
+  title: 'Saved Properties | PropLinka',
   description: 'View your saved and favorite properties',
 }
 
@@ -33,7 +33,7 @@ export default async function FavoritesPage() {
       )
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false }) as any
+    .order('created_at', { ascending: false })
 
   const properties = favorites?.map((f: any) => f.property).filter(Boolean) || []
 

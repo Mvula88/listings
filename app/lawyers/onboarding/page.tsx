@@ -211,7 +211,7 @@ export default function LawyerOnboardingPage() {
             
             <Alert>
               <AlertDescription>
-                DealDirect promotes transparent, flat-fee pricing. Your fees will be clearly displayed to clients before they select you.
+                PropLinka promotes transparent, flat-fee pricing. Your fees will be clearly displayed to clients before they select you.
               </AlertDescription>
             </Alert>
           </div>
@@ -281,7 +281,7 @@ export default function LawyerOnboardingPage() {
             <div className="space-y-2">
               <Label>Payment Method for Referral Fees</Label>
               <p className="text-sm text-muted-foreground mb-2">
-                DealDirect charges a R750 referral fee per client. Choose how you'd like to receive payments:
+                PropLinka charges a R750 referral fee per client. Choose how you'd like to receive payments:
               </p>
               <div className="space-y-2">
                 <label className="flex items-start space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-muted/50">
@@ -327,7 +327,7 @@ export default function LawyerOnboardingPage() {
                 onCheckedChange={(checked) => setFormData({...formData, agreedToTerms: checked as boolean})}
               />
               <Label htmlFor="terms" className="text-sm leading-relaxed">
-                I agree to DealDirect's terms of service for conveyancers, including the R750 referral fee per successful client match
+                I agree to PropLinka's terms of service for conveyancers, including the R750 referral fee per successful client match
               </Label>
             </div>
             
@@ -345,7 +345,7 @@ export default function LawyerOnboardingPage() {
     <div className="min-h-screen bg-gradient-to-b from-primary/5 to-background">
       <div className="container max-w-2xl mx-auto px-4 py-12">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-2">Join DealDirect as a Conveyancer</h1>
+          <h1 className="text-3xl font-bold mb-2">Join PropLinka as a Conveyancer</h1>
           <p className="text-muted-foreground">
             Connect with clients directly and grow your practice
           </p>
@@ -416,7 +416,7 @@ export default function LawyerOnboardingPage() {
         </Card>
 
         <div className="mt-8 text-center">
-          <h3 className="font-semibold mb-4">Why Join DealDirect?</h3>
+          <h3 className="font-semibold mb-4">Why Join PropLinka?</h3>
           <div className="grid md:grid-cols-3 gap-4 text-sm">
             <div className="flex flex-col items-center">
               <Users className="h-8 w-8 text-primary mb-2" />

@@ -96,14 +96,14 @@ export function LawyerReviewForm({
 
       if (existingReview) {
         // Update existing review
-        const result: any = await (supabase as any)
-          .from('lawyer_reviews')
+        const result = await (supabase
+          .from('lawyer_reviews') as any)
           .update(reviewData)
           .eq('id', existingReview.id)
         error = result.error
       } else {
         // Create new review
-        const result: any = await (supabase as any).from('lawyer_reviews').insert(reviewData)
+        const result = await (supabase.from('lawyer_reviews') as any).insert(reviewData)
         error = result.error
       }
 

@@ -19,8 +19,8 @@ interface SEOConfig {
   noIndex?: boolean
 }
 
-const SITE_NAME = 'DealDirect'
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://dealdirect.com'
+const SITE_NAME = 'PropLinka'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://proplinka.com'
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`
 
 /**
@@ -75,8 +75,8 @@ export function generateMetadata(config: SEOConfig): Metadata {
       title: fullTitle,
       description,
       images: [image],
-      creator: '@dealdirect',
-      site: '@dealdirect',
+      creator: '@proplinka',
+      site: '@proplinka',
     },
   }
 }
@@ -106,7 +106,7 @@ export function generatePropertyMetadata(property: {
       property.province || '',
       'commission-free',
       'real estate',
-      'dealdirect',
+      'proplinka',
     ].filter(Boolean),
     image,
     url: `/properties/${property.title.toLowerCase().replace(/\s+/g, '-')}`,
@@ -192,14 +192,14 @@ export function generateOrganizationStructuredData() {
     logo: `${SITE_URL}/logo.png`,
     description: 'Commission-free real estate platform connecting buyers and sellers directly',
     sameAs: [
-      'https://twitter.com/dealdirect',
-      'https://facebook.com/dealdirect',
-      'https://linkedin.com/company/dealdirect',
+      'https://twitter.com/proplinka',
+      'https://facebook.com/proplinka',
+      'https://linkedin.com/company/proplinka',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
-      email: 'support@dealdirect.com',
+      email: 'support@proplinka.com',
     },
   }
 }

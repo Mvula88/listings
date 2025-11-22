@@ -10,7 +10,7 @@ import { getUserRewards } from '@/lib/actions/rewards'
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Referral Program | DealDirect',
+  title: 'Referral Program | PropLinka',
   description: 'Refer friends and earn rewards',
 }
 
@@ -28,17 +28,17 @@ export default async function ReferralsPage() {
     .from('profiles')
     .select('*, referred_by_profile:profiles!referred_by(full_name, email)')
     .eq('id', user.id)
-    .single() as any
+    .single<{ referral_code: string; referred_by?: string; [key: string]: any }>()
 
   // Get referrals made by this user
   const { data: referrals, count: referralCount } = await supabase
     .from('profiles')
     .select('id, full_name, email, user_type, created_at', { count: 'exact' })
     .eq('referred_by', user.id)
-    .order('created_at', { ascending: false }) as any
+    .order('created_at', { ascending: false })
 
   // Get rewards data
-  const { rewards } = await getUserRewards() as any
+  const { rewards } = await getUserRewards()
 
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
   const referralLink = `${baseUrl}/register?ref=${profile?.referral_code}`

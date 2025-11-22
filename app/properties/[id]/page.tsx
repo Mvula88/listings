@@ -28,11 +28,20 @@ export async function generateMetadata({
   const supabase = await createClient()
   const { id } = await params
 
-  const { data: property } = await (supabase as any)
+  const { data: property } = await supabase
     .from('properties')
     .select('*, property_images(url), country:countries(name, currency)')
     .eq('id', id)
-    .single()
+    .single<{
+      title: string
+      description?: string | null
+      property_type: string
+      city: string
+      province: string
+      property_images?: Array<{ url: string }>
+      country?: { name: string; currency: string }
+      [key: string]: any
+    }>()
 
   if (!property) {
     return {
@@ -43,7 +52,7 @@ export async function generateMetadata({
   const mainImage = property.property_images?.[0]?.url
 
   return {
-    title: `${property.title} | DealDirect`,
+    title: `${property.title} | PropLinka`,
     description: property.description?.slice(0, 160) || `${property.property_type} for sale in ${property.city}`,
     keywords: `${property.property_type}, ${property.city}, ${property.province}, ${property.country?.name}, property for sale, real estate`,
     openGraph: {
@@ -70,8 +79,8 @@ export default async function PropertyDetailPage({
   const { id } = await params
 
   // Get property details - only show active properties
-  const { data: property } = await (supabase
-    .from('properties') as any)
+  const { data: property } = await supabase
+    .from('properties')
     .select(`
       *,
       property_images (
@@ -96,7 +105,7 @@ export default async function PropertyDetailPage({
     `)
     .eq('id', id)
     .eq('status', 'active')
-    .single()
+    .single<{ id: string; seller_id: string; [key: string]: any }>()
 
   if (!property) {
     notFound()
@@ -108,8 +117,8 @@ export default async function PropertyDetailPage({
   // Check if user has already inquired
   let existingInquiry = null
   if (user) {
-    const { data } = await (supabase
-      .from('inquiries') as any)
+    const { data } = await supabase
+      .from('inquiries')
       .select('*')
       .eq('property_id', property.id)
       .eq('buyer_id', user.id)
@@ -125,7 +134,7 @@ export default async function PropertyDetailPage({
   const { reviews } = await getPropertyReviews(property.id)
 
   // Check if user has already reviewed
-  const { hasReviewed, review: userReview } = user ? await checkUserReview(property.id) : { hasReviewed: false, review: null }
+  const { hasReviewed, review: userReview } = user ? await checkUserReview(property.id) as { hasReviewed: boolean; review: { status: string; title: string; [key: string]: any } | null } : { hasReviewed: false, review: null }
 
   // Calculate rating distribution
   const ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
@@ -134,8 +143,8 @@ export default async function PropertyDetailPage({
   })
 
   // Get similar properties - only show active AND approved
-  const { data: similarProperties } = await (supabase
-    .from('properties') as any)
+  const { data: similarProperties } = await supabase
+    .from('properties')
     .select(`
       *,
       property_images (
@@ -246,7 +255,7 @@ export default async function PropertyDetailPage({
                 </Button>
               </Link>
               <Link href="/" className="text-xl font-bold text-primary">
-                DealDirect
+                PropLinka
               </Link>
             </div>
             <div className="flex items-center gap-2">
@@ -327,8 +336,8 @@ export default async function PropertyDetailPage({
           {/* Right Column - Contact & Seller Info */}
           <div className="space-y-6">
             {/* Inquiry Card */}
-            <PropertyInquiry 
-              property={property}
+            <PropertyInquiry
+              property={property as any}
               user={user}
               existingInquiry={existingInquiry}
             />
@@ -352,9 +361,9 @@ export default async function PropertyDetailPage({
                   </div>
                 </div>
 
-                {/* DealDirect Platform Fee */}
+                {/* PropLinka Platform Fee */}
                 <div className="bg-white rounded p-3 space-y-2">
-                  <div className="font-medium text-green-800 mb-2">DealDirect Platform Fee:</div>
+                  <div className="font-medium text-green-800 mb-2">PropLinka Platform Fee:</div>
                   <div className="flex justify-between text-gray-700">
                     <span className="text-lg font-semibold text-green-700">Platform fee:</span>
                     <span className="text-lg font-semibold text-green-700">{formatted.platformFee}</span>
@@ -370,7 +379,7 @@ export default async function PropertyDetailPage({
                     </span>
                   </div>
                   <p className="text-xs text-gray-600 mt-2">
-                    * Platform fee collected by lawyer at closing, replaces agent commission. Lawyer fees (~R15K-R40K) are the same in both traditional and DealDirect models.
+                    * Platform fee collected by lawyer at closing, replaces agent commission. Lawyer fees (~R15K-R40K) are the same in both traditional and PropLinka models.
                   </p>
                 </div>
               </div>

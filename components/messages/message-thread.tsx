@@ -27,8 +27,8 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
 
   useEffect(() => {
     async function loadMessages() {
-      const { data } = await (supabase
-        .from('messages') as any)
+      const { data } = await supabase
+        .from('messages')
         .select('*')
         .eq('conversation_id', conversation.id)
         .order('created_at', { ascending: true })

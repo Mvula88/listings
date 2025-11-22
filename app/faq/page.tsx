@@ -14,15 +14,15 @@ export default function FAQPage() {
       category: "General",
       questions: [
         {
-          q: "What is DealDirect?",
-          a: "DealDirect is a commission-free real estate platform that connects buyers and sellers directly. Instead of paying 5-7% agent commissions, you pay only R2,000 when your transaction completes."
+          q: "What is PropLinka?",
+          a: "PropLinka is a commission-free real estate platform that connects buyers and sellers directly. Instead of paying 5-7% agent commissions, you pay only R2,000 when your transaction completes."
         },
         {
-          q: "Which countries does DealDirect operate in?",
+          q: "Which countries does PropLinka operate in?",
           a: "We currently operate in South Africa and Namibia. We're planning to expand to other African countries soon."
         },
         {
-          q: "Is DealDirect really free to use?",
+          q: "Is PropLinka really free to use?",
           a: "Yes! It's completely free to browse properties, list properties, and communicate with other users. You only pay a R2,000 success fee when your transaction completes."
         }
       ]
@@ -65,7 +65,7 @@ export default function FAQPage() {
         },
         {
           q: "What if I already have an agent?",
-          a: "Check your agreement with your agent. If you're not under an exclusive mandate, you can list on DealDirect as well."
+          a: "Check your agreement with your agent. If you're not under an exclusive mandate, you can list on PropLinka as well."
         },
         {
           q: "How do I handle offers and negotiations?",
@@ -90,7 +90,7 @@ export default function FAQPage() {
         },
         {
           q: "How is payment handled?",
-          a: "Property payments are handled by the conveyancing attorney through trust accounts, exactly as with traditional sales. DealDirect never handles property funds."
+          a: "Property payments are handled by the conveyancing attorney through trust accounts, exactly as with traditional sales. PropLinka never handles property funds."
         }
       ]
     },
@@ -103,7 +103,7 @@ export default function FAQPage() {
         },
         {
           q: "Are there any other fees?",
-          a: "No hidden fees from DealDirect. You'll still pay normal conveyancing fees to your chosen lawyer and any government transfer duties."
+          a: "No hidden fees from PropLinka. You'll still pay normal conveyancing fees to your chosen lawyer and any government transfer duties."
         },
         {
           q: "How do I pay the success fee?",
@@ -124,7 +124,7 @@ export default function FAQPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
@@ -147,7 +147,7 @@ export default function FAQPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
             <p className="text-lg text-muted-foreground">
-              Everything you need to know about buying and selling on DealDirect
+              Everything you need to know about buying and selling on PropLinka
             </p>
           </div>
         </div>
@@ -208,7 +208,7 @@ export default function FAQPage() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 DealDirect. All rights reserved.
+          © 2024 PropLinka. All rights reserved.
         </div>
       </footer>
     </div>

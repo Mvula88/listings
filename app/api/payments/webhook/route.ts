@@ -49,16 +49,15 @@ export async function POST(request: Request) {
       featuredUntil.setDate(featuredUntil.getDate() + days)
 
       // Update property to be featured
-      const updateResult = await (supabase as any)
-        .from('properties')
-        .update({
-          featured: true,
-          featured_until: featuredUntil.toISOString(),
-          premium: plan?.includes('premium') || false,
-        })
-        .eq('id', propertyId)
+      const updateData: TablesUpdate<'properties'> = {
+        featured: true,
+        featured_until: featuredUntil.toISOString(),
+        premium: plan?.includes('premium') || false,
+      }
 
-      const { error: updateError } = updateResult
+      const { error: updateError } = await (supabase.from('properties') as any)
+        .update(updateData)
+        .eq('id', propertyId)
 
       if (updateError) {
         console.error('Error updating property:', updateError)
@@ -69,7 +68,7 @@ export async function POST(request: Request) {
       }
 
       // Create payment record
-      await (supabase as any).from('payments').insert({
+      await (supabase.from('payments') as any).insert({
         user_id: userId,
         property_id: propertyId,
         type: 'premium_listing',

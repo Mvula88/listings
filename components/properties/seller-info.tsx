@@ -43,12 +43,12 @@ export function SellerInfo({ seller }: SellerInfoProps) {
           <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
             <Shield className="h-4 w-4 text-primary" />
             <p className="text-sm">
-              Identity verified by DealDirect
+              Identity verified by PropLinka
             </p>
           </div>
-          
+
           <div className="text-sm text-muted-foreground">
-            <p>All communication happens through DealDirect's secure platform.</p>
+            <p>All communication happens through PropLinka's secure platform.</p>
           </div>
         </div>
       </CardContent>

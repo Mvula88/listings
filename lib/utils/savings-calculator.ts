@@ -1,5 +1,5 @@
 // Savings Calculator Utility
-// Calculates how much users save using DealDirect vs traditional agents
+// Calculates how much users save using PropLinka vs traditional agents
 
 export interface SavingsCalculation {
   propertyPrice: number

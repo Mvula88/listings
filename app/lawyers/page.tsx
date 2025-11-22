@@ -26,7 +26,7 @@ export default async function LawyersPage() {
     .eq('verified', true)
     .eq('available', true)
     .order('rating', { ascending: false })
-    .limit(20) as any
+    .limit(20)
 
   return (
     <div className="min-h-screen">
@@ -35,7 +35,7 @@ export default async function LawyersPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
@@ -171,7 +171,7 @@ export default async function LawyersPage() {
       <section className="py-12 bg-muted/50">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-center">Why Use DealDirect Lawyers?</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">Why Use PropLinka Lawyers?</h2>
             <div className="grid md:grid-cols-3 gap-6">
               <div className="text-center">
                 <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -208,7 +208,7 @@ export default async function LawyersPage() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 DealDirect. All rights reserved.
+          © 2024 PropLinka. All rights reserved.
         </div>
       </footer>
     </div>

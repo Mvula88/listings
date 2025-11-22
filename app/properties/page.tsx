@@ -20,8 +20,8 @@ export default async function ManagePropertiesPage() {
   }
 
   // Get user's properties
-  const { data: properties } = await (supabase
-    .from('properties') as any)
+  const { data: properties } = await supabase
+    .from('properties')
     .select(`
       *,
       property_images (
@@ -49,7 +49,7 @@ export default async function ManagePropertiesPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary transition-transform hover:scale-105">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-4">
               <Link href="/dashboard">

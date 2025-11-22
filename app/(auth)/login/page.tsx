@@ -47,7 +47,7 @@ export default function LoginPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
           <CardDescription className="text-center">
-            Sign in to your DealDirect account
+            Sign in to your PropLinka account
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>

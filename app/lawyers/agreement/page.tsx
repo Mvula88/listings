@@ -12,7 +12,7 @@ export default function LawyerAgreementPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/lawyers" className="text-sm font-medium hover:text-primary">
@@ -32,7 +32,7 @@ export default function LawyerAgreementPage() {
           <FileText className="h-16 w-16 text-primary mx-auto mb-4" />
           <h1 className="text-4xl font-bold mb-4">Lawyer Partnership Agreement</h1>
           <p className="text-lg text-muted-foreground">
-            Review the terms of partnership with DealDirect
+            Review the terms of partnership with PropLinka
           </p>
         </div>
 
@@ -55,19 +55,19 @@ export default function LawyerAgreementPage() {
         {/* Agreement Content */}
         <Card>
           <CardContent className="prose prose-sm max-w-none p-8">
-            <h2 className="text-2xl font-bold mb-6">DealDirect Lawyer Partnership Agreement</h2>
+            <h2 className="text-2xl font-bold mb-6">PropLinka Lawyer Partnership Agreement</h2>
 
             <p className="text-sm text-muted-foreground mb-8">
               <strong>Effective Date:</strong> Upon acceptance<br />
-              <strong>Between:</strong> DealDirect (Pty) Ltd ("DealDirect") and the Lawyer/Conveyancing Firm ("Partner")
+              <strong>Between:</strong> PropLinka (Pty) Ltd ("PropLinka") and the Lawyer/Conveyancing Firm ("Partner")
             </p>
 
             <section className="mb-8">
               <h3 className="text-xl font-semibold mb-4">1. Purpose</h3>
               <p>
-                This Agreement establishes a partnership between DealDirect and the Partner to provide conveyancing
-                services to buyers and sellers using the DealDirect platform. The Partner will receive pre-qualified
-                client leads at no cost and will collect platform fees on behalf of DealDirect as part of the
+                This Agreement establishes a partnership between PropLinka and the Partner to provide conveyancing
+                services to buyers and sellers using the PropLinka platform. The Partner will receive pre-qualified
+                client leads at no cost and will collect platform fees on behalf of PropLinka as part of the
                 settlement process.
               </p>
             </section>
@@ -105,14 +105,14 @@ export default function LawyerAgreementPage() {
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <p>
                     <strong>Fee Collection:</strong> Partner shall include the applicable platform fee in all
-                    settlement statements for transactions originating from DealDirect and collect this fee from
+                    settlement statements for transactions originating from PropLinka and collect this fee from
                     clients at closing.
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <p>
-                    <strong>Fee Remittance:</strong> Partner shall remit all collected platform fees to DealDirect
+                    <strong>Fee Remittance:</strong> Partner shall remit all collected platform fees to PropLinka
                     within 30 days of transaction closing via bank transfer to the designated account.
                   </p>
                 </div>
@@ -120,7 +120,7 @@ export default function LawyerAgreementPage() {
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <p>
                     <strong>Deal Reporting:</strong> Partner shall promptly report all deal closures through the
-                    DealDirect platform, including settlement reference numbers and confirmation of fee collection.
+                    PropLinka platform, including settlement reference numbers and confirmation of fee collection.
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
@@ -142,26 +142,26 @@ export default function LawyerAgreementPage() {
             </section>
 
             <section className="mb-8">
-              <h3 className="text-xl font-semibold mb-4">4. DealDirect Obligations</h3>
+              <h3 className="text-xl font-semibold mb-4">4. PropLinka Obligations</h3>
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <p>
-                    <strong>Lead Generation:</strong> DealDirect shall provide Partner with qualified buyer and
+                    <strong>Lead Generation:</strong> PropLinka shall provide Partner with qualified buyer and
                     seller leads at no cost to the Partner.
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <p>
-                    <strong>Platform Access:</strong> DealDirect shall provide Partner with access to the deal
+                    <strong>Platform Access:</strong> PropLinka shall provide Partner with access to the deal
                     management dashboard and all necessary tools to manage transactions.
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
                   <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                   <p>
-                    <strong>Support:</strong> DealDirect shall provide reasonable technical and customer support to
+                    <strong>Support:</strong> PropLinka shall provide reasonable technical and customer support to
                     assist Partner with platform use and transaction management.
                   </p>
                 </div>
@@ -172,13 +172,13 @@ export default function LawyerAgreementPage() {
               <h3 className="text-xl font-semibold mb-4">5. Exclusivity and Non-Circumvention</h3>
               <p className="mb-3">
                 <strong>5.1 Lead Exclusivity:</strong> Partner acknowledges that all leads generated through
-                DealDirect are the exclusive property of DealDirect. Partner agrees not to solicit clients directly
-                outside the DealDirect platform for similar services.
+                PropLinka are the exclusive property of PropLinka. Partner agrees not to solicit clients directly
+                outside the PropLinka platform for similar services.
               </p>
               <p>
                 <strong>5.2 Non-Circumvention:</strong> Partner shall not attempt to circumvent the platform fee
-                collection or engage in transactions with DealDirect clients outside the platform without written
-                consent from DealDirect.
+                collection or engage in transactions with PropLinka clients outside the platform without written
+                consent from PropLinka.
               </p>
             </section>
 
@@ -186,7 +186,7 @@ export default function LawyerAgreementPage() {
               <h3 className="text-xl font-semibold mb-4">6. Territory and Duration</h3>
               <p className="mb-3">
                 <strong>6.1 Territory:</strong> Partner shall be assigned a specific geographic territory as agreed
-                upon during onboarding. DealDirect reserves the right to add additional partners in the same
+                upon during onboarding. PropLinka reserves the right to add additional partners in the same
                 territory as demand grows.
               </p>
               <p className="mb-3">
@@ -202,7 +202,7 @@ export default function LawyerAgreementPage() {
             <section className="mb-8">
               <h3 className="text-xl font-semibold mb-4">7. Audit Rights</h3>
               <p>
-                DealDirect reserves the right to audit Partner's records related to DealDirect transactions upon
+                PropLinka reserves the right to audit Partner's records related to PropLinka transactions upon
                 reasonable notice to verify accurate fee collection and remittance. Partner shall cooperate fully
                 with such audits and provide requested documentation within 10 business days.
               </p>
@@ -220,7 +220,7 @@ export default function LawyerAgreementPage() {
               </p>
               <p>
                 <strong>8.3 Termination:</strong> Failure to cure default within the cure period shall entitle
-                DealDirect to immediately terminate this Agreement and pursue all available legal remedies.
+                PropLinka to immediately terminate this Agreement and pursue all available legal remedies.
               </p>
             </section>
 
@@ -231,10 +231,10 @@ export default function LawyerAgreementPage() {
                 termination, Partner shall:
               </p>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Complete all pending transactions originated through DealDirect</li>
+                <li>Complete all pending transactions originated through PropLinka</li>
                 <li>Remit all outstanding platform fees within 30 days</li>
                 <li>Submit final reconciliation report</li>
-                <li>Return or destroy all confidential DealDirect materials</li>
+                <li>Return or destroy all confidential PropLinka materials</li>
               </ul>
             </section>
 
@@ -242,7 +242,7 @@ export default function LawyerAgreementPage() {
               <h3 className="text-xl font-semibold mb-4">10. Confidentiality</h3>
               <p>
                 Partner agrees to maintain the confidentiality of all proprietary information, client data, and
-                business practices disclosed by DealDirect and shall not disclose such information to third parties
+                business practices disclosed by PropLinka and shall not disclose such information to third parties
                 without prior written consent.
               </p>
             </section>
@@ -250,7 +250,7 @@ export default function LawyerAgreementPage() {
             <section className="mb-8">
               <h3 className="text-xl font-semibold mb-4">11. Independent Contractor</h3>
               <p>
-                Partner is an independent contractor and not an employee, agent, or joint venturer of DealDirect.
+                Partner is an independent contractor and not an employee, agent, or joint venturer of PropLinka.
                 Partner is solely responsible for all taxes, insurance, and professional licensing requirements.
               </p>
             </section>
@@ -279,7 +279,7 @@ export default function LawyerAgreementPage() {
                 conditions of this Agreement.
               </p>
               <p className="text-xs text-muted-foreground">
-                For questions about this agreement, please contact: legal@dealdirect.co.za
+                For questions about this agreement, please contact: legal@proplinka.co.za
               </p>
             </div>
           </CardContent>

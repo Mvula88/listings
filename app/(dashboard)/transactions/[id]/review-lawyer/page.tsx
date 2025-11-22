@@ -25,7 +25,7 @@ export default async function ReviewLawyerPage({ params }: PageProps) {
   }
 
   // Get transaction details with lawyer info
-  const { data: transaction, error } = await (supabase
+  const { data: transaction, error } = await supabase
     .from('transactions')
     .select(
       `
@@ -38,7 +38,12 @@ export default async function ReviewLawyerPage({ params }: PageProps) {
     `
     )
     .eq('id', transactionId)
-    .single() as any)
+    .single<{
+      buyer_id: string
+      seller_id: string
+      status: string
+      [key: string]: any
+    }>()
 
   if (error || !transaction) {
     redirect('/dashboard/transactions')

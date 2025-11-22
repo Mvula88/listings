@@ -23,11 +23,11 @@ export default async function PaymentSuccessPage({
   }
 
   // Get property details
-  const { data: property } = await (supabase as any)
+  const { data: property } = await supabase
     .from('properties')
     .select('*, country:countries(currency, currency_symbol)')
     .eq('id', resolvedParams.id)
-    .single()
+    .single<{ seller_id: string; title: string; [key: string]: any }>()
 
   if (!property || property.seller_id !== user.id) {
     notFound()

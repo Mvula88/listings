@@ -1,15 +1,15 @@
-# DealDirect - Commission-Free Real Estate Marketplace
+# PropLinka - Direct Property Connections Platform
 
-> Transform how properties are bought and sold in Namibia and South Africa. No agent commissions, direct connections, massive savings.
+> Linking buyers and sellers directly in Namibia and South Africa. Zero agent commissions, direct connections, massive savings.
 
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-Powered-green)](https://supabase.com/)
 [![License](https://img.shields.io/badge/License-Proprietary-red)](./LICENSE)
 
-## 🎯 What is DealDirect?
+## 🎯 What is PropLinka?
 
-DealDirect is a revolutionary property marketplace that eliminates traditional real estate agent commissions by connecting buyers, sellers, and conveyancers (lawyers) directly. Users save 50-90% compared to traditional agent fees.
+PropLinka is a revolutionary property marketplace that eliminates traditional real estate agent commissions by linking buyers, sellers, and conveyancers (lawyers) directly. Users save 50-90% compared to traditional agent fees.
 
 ### Key Features
 
@@ -35,8 +35,8 @@ DealDirect is a revolutionary property marketplace that eliminates traditional r
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/dealdirect.git
-   cd dealdirect
+   git clone https://github.com/yourusername/proplinka.git
+   cd proplinka
    ```
 
 2. **Install dependencies**
@@ -75,7 +75,7 @@ DealDirect is a revolutionary property marketplace that eliminates traditional r
 ## 📁 Project Structure
 
 ```
-dealdirect/
+proplinka/
 ├── app/                      # Next.js App Router pages
 │   ├── (auth)/              # Authentication pages
 │   ├── (dashboard)/         # Protected dashboard pages
@@ -273,7 +273,7 @@ This project is proprietary and confidential. Unauthorized copying, distribution
 
 ## 🆘 Support
 
-- **Email:** support@dealdirect.com
+- **Email:** support@proplinka.com
 - **Documentation:** See `PLATFORM_ENHANCEMENTS.md`
 - **Issues:** Use GitHub issues for bug reports
 
@@ -316,7 +316,7 @@ This project is proprietary and confidential. Unauthorized copying, distribution
 
 - **Product Owner:** Ismael
 - **Development:** Claude AI Assistant
-- **Support:** support@dealdirect.com
+- **Support:** support@proplinka.com
 
 ---
 

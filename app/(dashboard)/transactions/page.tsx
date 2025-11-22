@@ -41,7 +41,7 @@ export default async function TransactionsPage() {
       )
     `)
     .or(`buyer_id.eq.${user.id},seller_id.eq.${user.id}`)
-    .order('created_at', { ascending: false }) as any
+    .order('created_at', { ascending: false })
 
   const getStatusBadge = (status: string) => {
     switch (status) {

@@ -71,8 +71,8 @@ export async function POST(
           .getPublicUrl(fileName)
 
         // Create database record
-        const { data: imageRecord, error: dbError } = await (supabase as any)
-          .from('property_images')
+        const { data: imageRecord, error: dbError } = await (supabase
+          .from('property_images') as any)
           .insert({
             property_id: propertyId,
             url: publicUrl,
@@ -151,7 +151,7 @@ export async function DELETE(
       .eq('id', imageId)
       .single() as { data: { url: string; property: { seller_id: string } } | null; error: any }
 
-    if (!image || (image.property as any)?.seller_id !== user.id) {
+    if (!image || image.property?.seller_id !== user.id) {
       return NextResponse.json(
         { error: 'Image not found or access denied' },
         { status: 403 }

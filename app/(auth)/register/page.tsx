@@ -98,7 +98,7 @@ export default function RegisterPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl text-center">Create an account</CardTitle>
           <CardDescription className="text-center">
-            Join DealDirect and save thousands on real estate
+            Join PropLinka and save thousands on real estate
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleRegister}>
@@ -223,7 +223,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="bg-muted p-3 rounded-lg">
-              <h4 className="font-medium mb-2 text-sm">Why join DealDirect?</h4>
+              <h4 className="font-medium mb-2 text-sm">Why join PropLinka?</h4>
               <ul className="space-y-1 text-xs">
                 <li className="flex items-start gap-1">
                   <Check className="h-3 w-3 text-primary mt-0.5" />

@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card'
 import { X, Cookie, Settings } from 'lucide-react'
 import Link from 'next/link'
 
-const COOKIE_CONSENT_KEY = 'dealdirect_cookie_consent'
+const COOKIE_CONSENT_KEY = 'proplinka_cookie_consent'
 
 export type CookiePreferences = {
   necessary: boolean // Always true

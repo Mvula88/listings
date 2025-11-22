@@ -1,13 +1,13 @@
-// Email Templates for DealDirect Platform
+// Email Templates for PropLinka Platform
 // All transactional and marketing email templates
 
 import type { Property, Profile, Transaction, Inquiry } from '@/lib/types'
 import { formatPrice } from '@/lib/utils/format'
 
-const PLATFORM_NAME = 'DealDirect'
-const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://dealdirect.com'
+const PLATFORM_NAME = 'PropLinka'
+const PLATFORM_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://proplinka.com'
 // const PLATFORM_LOGO = `${PLATFORM_URL}/logo.png`
-const FROM_EMAIL = 'support@dealdirect.com'
+const FROM_EMAIL = 'support@proplinka.com'
 
 // Base email layout
 function emailLayout(content: string): string {
@@ -91,7 +91,7 @@ export function newInquiryEmail(
 
     <div style="background-color: #f4f4f5; padding: 20px; border-radius: 6px; margin: 20px 0;">
       <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #18181b;">${property.title}</h3>
-      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(property.price, (property as any).currency || 'ZAR')}</p>
+      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(property.price, property.currency || 'ZAR')}</p>
       <p style="margin: 0; font-size: 14px; color: #71717a;">${property.city}, ${property.province}</p>
     </div>
 
@@ -136,7 +136,7 @@ export function inquiryResponseEmail(
 
     <div style="background-color: #f4f4f5; padding: 20px; border-radius: 6px; margin: 20px 0;">
       <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #18181b;">${property.title}</h3>
-      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(property.price, (property as any).currency || 'ZAR')}</p>
+      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(property.price, property.currency || 'ZAR')}</p>
     </div>
 
     <div style="background-color: #dbeafe; border-left: 4px solid #0ea5e9; padding: 16px; margin: 20px 0;">
@@ -175,7 +175,7 @@ export function transactionInitiatedEmail(
 
     <div style="background-color: #f4f4f5; padding: 20px; border-radius: 6px; margin: 20px 0;">
       <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #18181b;">${property.title}</h3>
-      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(transaction.agreed_price || property.price, (property as any).currency || 'ZAR')}</p>
+      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(transaction.agreed_price || property.price, property.currency || 'ZAR')}</p>
       <p style="margin: 0; font-size: 14px; color: #71717a;">Transaction ID: ${transaction.id.slice(0, 8)}</p>
     </div>
 
@@ -250,7 +250,7 @@ export function newPropertyMatchEmail(
       (p) => `
       <div style="background-color: #f4f4f5; padding: 20px; border-radius: 6px; margin: 16px 0;">
         <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #18181b;">${p.title}</h3>
-        <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(p.price, (p as any).currency || 'ZAR')}</p>
+        <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(p.price, p.currency || 'ZAR')}</p>
         <p style="margin: 0 0 12px 0; font-size: 14px; color: #71717a;">${p.bedrooms} bed • ${p.bathrooms} bath • ${p.square_meters}m² • ${p.city}</p>
         <a href="${PLATFORM_URL}/properties/${p.id}" style="color: #0ea5e9; text-decoration: none; font-weight: 600;">View Property →</a>
       </div>
@@ -307,14 +307,14 @@ export function dealAssignedToLawyerEmail(
 
     <div style="background-color: #f4f4f5; padding: 20px; border-radius: 6px; margin: 20px 0;">
       <h3 style="margin: 0 0 12px 0; font-size: 18px; color: #18181b;">${property.title}</h3>
-      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(transaction.agreed_price || property.price, (property as any).currency || 'ZAR')}</p>
+      <p style="margin: 0 0 8px 0; font-size: 16px; color: #0ea5e9; font-weight: 600;">${formatPrice(transaction.agreed_price || property.price, property.currency || 'ZAR')}</p>
       <p style="margin: 0 0 8px 0; font-size: 14px; color: #71717a;">Transaction ID: ${transaction.id.slice(0, 8)}</p>
-      <p style="margin: 0; font-size: 14px; color: #71717a;">Platform Fee: ${formatPrice(transaction.platform_fee_amount || 0, (property as any).currency || 'ZAR')}</p>
+      <p style="margin: 0; font-size: 14px; color: #71717a;">Platform Fee: ${formatPrice(transaction.platform_fee_amount || 0, property.currency || 'ZAR')}</p>
     </div>
 
     <div style="background-color: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; margin: 20px 0;">
       <p style="margin: 0; font-weight: 600; color: #92400e;">⚠️ Important Reminder</p>
-      <p style="margin: 8px 0 0 0; color: #78350f; font-size: 14px;">Please collect the platform fee at closing and remit to DealDirect within 30 days.</p>
+      <p style="margin: 8px 0 0 0; color: #78350f; font-size: 14px;">Please collect the platform fee at closing and remit to PropLinka within 30 days.</p>
     </div>
 
     ${button('View Deal Details', `${PLATFORM_URL}/dashboard/lawyer-deals/${transaction.id}`)}

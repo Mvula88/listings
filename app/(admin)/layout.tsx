@@ -23,7 +23,12 @@ export default async function AdminLayout({
     .select('*')
     .eq('id', user.id)
     .eq('is_active', true)
-    .single()
+    .single<{
+      id: string
+      role: string
+      is_active: boolean
+      [key: string]: any
+    }>()
 
   if (adminError || !adminProfile) {
     console.error('Admin check failed:', adminError)
@@ -39,7 +44,7 @@ export default async function AdminLayout({
 
   // Attach profile to adminProfile for components
   const adminWithProfile = {
-    ...(adminProfile as any),
+    ...adminProfile,
     profile: profile
   }
 

@@ -101,7 +101,7 @@ export default async function BrowsePropertiesPage({
     query = query.eq('country_id', params.country)
   }
 
-  const { data: properties } = await query as any
+  const { data: properties } = await query
 
   // Get countries for filter
   const { data: countries } = await supabase
@@ -115,7 +115,7 @@ export default async function BrowsePropertiesPage({
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary transition-transform hover:scale-105">
-              DealDirect
+              PropLinka
             </Link>
             <div className="hidden md:flex items-center gap-4">
               <Link href="/list">

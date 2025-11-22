@@ -123,12 +123,12 @@ export function PropertyDetails({ property }: PropertyDetailsProps) {
         </p>
       </div>
 
-      {/* Why DealDirect */}
+      {/* Why PropLinka */}
       <Card className="bg-primary/5 border-primary/20">
         <CardContent className="p-6">
           <h3 className="font-semibold mb-4 flex items-center gap-2">
             <CheckCircle className="h-5 w-5 text-primary" />
-            Why buy through DealDirect?
+            Why buy through PropLinka?
           </h3>
           <ul className="space-y-2 text-sm">
             <li className="flex items-start gap-2">

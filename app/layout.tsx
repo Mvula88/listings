@@ -8,20 +8,20 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "DealDirect - Commission-Free Real Estate",
-  description: "Buy and sell properties directly without agent commissions. Save thousands with DealDirect.",
+  title: "PropLinka - Direct Property Connections",
+  description: "Linking buyers and sellers directly without agent commissions. Save thousands with PropLinka.",
   keywords: "real estate, property, buy, sell, commission-free, no agent fees, direct sale, Namibia, South Africa",
-  authors: [{ name: "DealDirect" }],
+  authors: [{ name: "PropLinka" }],
   openGraph: {
-    title: "DealDirect - Commission-Free Real Estate",
-    description: "Buy and sell properties directly without agent commissions. Save thousands with DealDirect.",
+    title: "PropLinka - Direct Property Connections",
+    description: "Linking buyers and sellers directly without agent commissions. Save thousands with PropLinka.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "DealDirect - Commission-Free Real Estate",
-    description: "Buy and sell properties directly without agent commissions. Save thousands with DealDirect.",
+    title: "PropLinka - Direct Property Connections",
+    description: "Linking buyers and sellers directly without agent commissions. Save thousands with PropLinka.",
   },
 };
 

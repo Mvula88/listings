@@ -8,12 +8,27 @@ import { SavingsCalculator } from "@/components/calculator/savings-calculator"
 import { calculateSavings, formatSavingsDisplay } from "@/lib/utils/savings-calculator"
 import { FadeIn } from "@/components/ui/fade-in"
 
+interface MockProperty {
+  id: string
+  title: string
+  city: string
+  province: string
+  price: number
+  currency: string
+  images: Array<{ id: string; url: string; alt_text: string; order_index: number }>
+  bedrooms: number
+  bathrooms: number
+  square_meters: number
+  property_type: string
+  country: { name: string; currency_symbol: string; code?: string }
+}
+
 export default async function HomePage() {
   // Fetch real featured properties from Supabase
   const featuredListings = await getFeaturedProperties(8)
 
   // Fallback to mock data if no properties in database
-  const displayListings = featuredListings.length > 0 ? featuredListings : [
+  const mockListings: MockProperty[] = [
     {
       id: '1',
       title: "Modern Family Home in Windhoek",
@@ -26,7 +41,7 @@ export default async function HomePage() {
       bathrooms: 3,
       square_meters: 280,
       property_type: "house",
-      country: { name: "Namibia", currency_symbol: "N$" }
+      country: { name: "Namibia", currency_symbol: "N$", code: 'NA' }
     },
     {
       id: '2',
@@ -40,9 +55,11 @@ export default async function HomePage() {
       bathrooms: 2,
       square_meters: 180,
       property_type: "apartment",
-      country: { name: "South Africa", currency_symbol: "R" }
+      country: { name: "South Africa", currency_symbol: "R", code: 'ZA' }
     }
-  ] as any[]
+  ]
+
+  const displayListings = featuredListings.length > 0 ? featuredListings : mockListings
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -51,7 +68,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary transition-transform hover:scale-105">
-              DealDirect
+              PropLinka
             </Link>
             <div className="hidden md:flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary transition-colors">
@@ -328,7 +345,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">How DealDirect Works</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">How PropLinka Works</h2>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
                 Four simple steps to save thousands on your property transaction
               </p>
@@ -508,7 +525,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Why Choose DealDirect - Modern Design */}
+      {/* Why Choose PropLinka - Modern Design */}
       <section className="py-24 relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
@@ -517,7 +534,7 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Why Choose DealDirect?</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Why Choose PropLinka?</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 The smarter way to buy and sell property
               </p>
@@ -623,7 +640,7 @@ export default async function HomePage() {
 
               {/* Subheadline */}
               <p className="text-xl md:text-2xl mb-12 opacity-95 max-w-3xl mx-auto font-light">
-                Join thousands who are buying and selling smarter with DealDirect
+                Join thousands who are buying and selling smarter with PropLinka
               </p>
             </div>
           </FadeIn>
@@ -677,9 +694,9 @@ export default async function HomePage() {
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
-              <h3 className="font-bold mb-4">DealDirect</h3>
+              <h3 className="font-bold mb-4">PropLinka</h3>
               <p className="text-sm text-muted-foreground">
-                Commission-free real estate transactions in Namibia and South Africa.
+                Linking buyers and sellers directly in Namibia and South Africa.
               </p>
             </div>
             <div>
@@ -708,7 +725,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div className="mt-8 pt-8 border-t text-center text-sm text-muted-foreground">
-            © 2024 DealDirect. All rights reserved.
+            © 2025 PropLinka. All rights reserved.
           </div>
         </div>
       </footer>

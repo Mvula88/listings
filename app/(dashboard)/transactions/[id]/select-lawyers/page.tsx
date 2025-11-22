@@ -49,7 +49,11 @@ export default async function SelectLawyersPage(props: {
       )
     `)
     .eq('id', id)
-    .single() as any
+    .single<{
+      buyer_id: string
+      seller_id: string
+      [key: string]: any
+    }>()
 
   if (!transaction) {
     notFound()

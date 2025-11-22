@@ -5,8 +5,8 @@ import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | DealDirect',
-  description: 'Privacy Policy for DealDirect - Commission-free real estate marketplace',
+  title: 'Privacy Policy | PropLinka',
+  description: 'Privacy Policy for PropLinka - Commission-free real estate marketplace',
 }
 
 export default function PrivacyPolicyPage() {
@@ -30,10 +30,10 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2>1. Introduction</h2>
             <p>
-              Welcome to DealDirect ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.
+              Welcome to PropLinka ("we," "our," or "us"). We are committed to protecting your personal information and your right to privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our platform.
             </p>
             <p>
-              If you have any questions or concerns about this Privacy Policy or our practices regarding your personal information, please contact us at privacy@dealdirect.com.
+              If you have any questions or concerns about this Privacy Policy or our practices regarding your personal information, please contact us at privacy@proplinka.com.
             </p>
           </section>
 
@@ -177,7 +177,7 @@ export default function PrivacyPolicyPage() {
               <li><strong>Opt-out:</strong> Unsubscribe from marketing communications</li>
             </ul>
             <p>
-              To exercise these rights, please contact us at privacy@dealdirect.com.
+              To exercise these rights, please contact us at privacy@proplinka.com.
             </p>
           </section>
 
@@ -242,9 +242,9 @@ export default function PrivacyPolicyPage() {
               If you have any questions about this Privacy Policy, please contact us:
             </p>
             <ul>
-              <li>Email: privacy@dealdirect.com</li>
-              <li>Email: support@dealdirect.com</li>
-              <li>Website: https://dealdirect.com/contact</li>
+              <li>Email: privacy@proplinka.com</li>
+              <li>Email: support@proplinka.com</li>
+              <li>Website: https://proplinka.com/contact</li>
             </ul>
           </section>
 

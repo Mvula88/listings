@@ -284,7 +284,7 @@ export default function LawyerDealDetailPage({ params }: { params: Promise<{ id:
               <h4 className="font-semibold text-blue-900 mb-2">Important Reminders:</h4>
               <ul className="text-sm text-blue-800 space-y-1">
                 <li>• Ensure the platform fee is included in your settlement statement</li>
-                <li>• Platform fees must be remitted to DealDirect within 30 days</li>
+                <li>• Platform fees must be remitted to PropLinka within 30 days</li>
                 <li>• Keep proof of fee collection for reconciliation</li>
               </ul>
             </div>

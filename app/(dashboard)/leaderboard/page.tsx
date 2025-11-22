@@ -6,8 +6,8 @@ import Image from 'next/image'
 import { getLeaderboard } from '@/lib/actions/rewards'
 
 export const metadata = {
-  title: 'Referral Leaderboard | DealDirect',
-  description: 'Top referrers on DealDirect',
+  title: 'Referral Leaderboard | PropLinka',
+  description: 'Top referrers on PropLinka',
 }
 
 function getTierColor(tier: string) {
@@ -33,16 +33,19 @@ export default async function LeaderboardPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   // Get leaderboard
-  const { leaderboard } = await getLeaderboard(50) as any
+  const { leaderboard } = await getLeaderboard(50) as { leaderboard: any[] }
 
   // Get current user's rank if logged in
-  let userRank = null
+  let userRank: any = null
   if (user) {
     const userIndex = leaderboard.findIndex((entry: any) => entry.user_id === user.id)
     if (userIndex !== -1) {
-      userRank = {
-        rank: userIndex + 1,
-        ...(leaderboard[userIndex] as any),
+      const userEntry = leaderboard[userIndex] as Record<string, any>
+      if (userEntry) {
+        userRank = {
+          rank: userIndex + 1,
+          ...userEntry,
+        }
       }
     }
   }

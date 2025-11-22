@@ -27,7 +27,7 @@ export function SavingsCalculator() {
       <CardHeader>
         <CardTitle>Commission Savings Calculator</CardTitle>
         <CardDescription>
-          See how much you can save using DealDirect vs traditional agents
+          See how much you can save using PropLinka vs traditional agents
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -85,11 +85,11 @@ export function SavingsCalculator() {
                 </div>
               </div>
               
-              {/* DealDirect Fee */}
+              {/* PropLinka Fee */}
               <div className="space-y-3">
                 <h3 className="font-medium text-primary flex items-center gap-2">
                   <CheckCircle className="h-4 w-4" />
-                  DealDirect Platform Fee
+                  PropLinka Platform Fee
                 </h3>
                 <div className="space-y-2">
                   <div className="flex justify-between font-semibold text-primary pt-2">
@@ -97,7 +97,7 @@ export function SavingsCalculator() {
                     <span className="text-2xl">{formatted.platformFee}</span>
                   </div>
                   <p className="text-xs text-muted-foreground pt-2 border-t">
-                    * Collected by lawyer at closing. Lawyer fees (~R15K-R40K) are the same in both traditional and DealDirect models.
+                    * Collected by lawyer at closing. Lawyer fees (~R15K-R40K) are the same in both traditional and PropLinka models.
                   </p>
                 </div>
               </div>

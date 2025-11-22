@@ -19,7 +19,7 @@ import Link from 'next/link'
 import { getUserRewards, getRewardTransactions, getRewardRedemptions, getTierInfo, getNextTierInfo } from '@/lib/actions/rewards'
 
 export const metadata = {
-  title: 'Rewards | DealDirect',
+  title: 'Rewards | PropLinka',
   description: 'Your referral rewards and points',
 }
 
@@ -52,9 +52,9 @@ export default async function RewardsPage() {
   }
 
   // Get rewards data
-  const { rewards } = await getUserRewards() as any
-  const { transactions } = await getRewardTransactions() as any
-  const { redemptions } = await getRewardRedemptions() as any
+  const { rewards } = await getUserRewards()
+  const { transactions } = await getRewardTransactions()
+  const { redemptions } = await getRewardRedemptions()
 
   if (!rewards) {
     return (

@@ -20,7 +20,7 @@ export default async function DashboardLayout({
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single() as any
+    .single<{ user_type: string; [key: string]: any }>()
 
   return (
     <div className="min-h-screen bg-background">
@@ -28,7 +28,7 @@ export default async function DashboardLayout({
       <header className="border-b">
         <div className="flex h-16 items-center px-4 gap-4">
           <a href="/" className="text-xl font-bold text-primary">
-            DealDirect
+            PropLinka
           </a>
           <div className="ml-auto flex items-center space-x-4">
             <UserMenu user={user} profile={profile} />

@@ -105,7 +105,7 @@ export const InquiryReceivedEmail = ({
 
                   <p style={{ fontSize: '14px', color: '#666666', marginBottom: 0 }}>
                     Best regards,<br />
-                    The DealDirect Team
+                    The PropLinka Team
                   </p>
                 </td>
               </tr>
@@ -114,7 +114,7 @@ export const InquiryReceivedEmail = ({
               <tr>
                 <td style={{ backgroundColor: '#f9fafb', padding: '20px', textAlign: 'center' }}>
                   <p style={{ fontSize: '12px', color: '#9ca3af', margin: 0 }}>
-                    © 2024 DealDirect. All rights reserved.
+                    © 2024 PropLinka. All rights reserved.
                   </p>
                 </td>
               </tr>

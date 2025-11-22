@@ -12,7 +12,7 @@ export default function PricingPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
@@ -227,7 +227,7 @@ export default function PricingPage() {
                   <thead>
                     <tr className="border-b">
                       <th className="text-left p-4">Feature</th>
-                      <th className="text-center p-4">DealDirect</th>
+                      <th className="text-center p-4">PropLinka</th>
                       <th className="text-center p-4">Traditional Agents</th>
                     </tr>
                   </thead>
@@ -372,7 +372,7 @@ export default function PricingPage() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 DealDirect. All rights reserved.
+          © 2024 PropLinka. All rights reserved.
         </div>
       </footer>
     </div>

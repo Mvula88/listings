@@ -7,7 +7,7 @@ import Image from 'next/image'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Blog | DealDirect - Real Estate Tips & Insights',
+  title: 'Blog | PropLinka - Real Estate Tips & Insights',
   description: 'Expert advice on buying, selling, and investing in real estate. Market insights, legal tips, and success stories.',
   keywords: 'real estate blog, property tips, buying guide, selling tips, market insights',
 }
@@ -21,13 +21,14 @@ export default async function BlogPage({
   const supabase = await createClient()
 
   // Get categories
-  const { data: categories } = await (supabase as any)
+  const { data: categories } = await supabase
     .from('blog_categories')
     .select('*')
     .order('name')
+    .returns<Array<{ color: string; [key: string]: any }>>()
 
   // Get blog posts
-  let query = (supabase as any)
+  let query = supabase
     .from('blog_posts')
     .select(`
       *,
@@ -50,7 +51,7 @@ export default async function BlogPage({
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              DealDirect Blog
+              PropLinka Blog
             </h1>
             <p className="text-xl text-muted-foreground">
               Expert insights, tips, and stories from the world of commission-free real estate
@@ -157,7 +158,7 @@ export default async function BlogPage({
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">
                               <div className="flex items-center gap-1">
                                 <User className="h-4 w-4" />
-                                <span>{post.author?.full_name || 'DealDirect Team'}</span>
+                                <span>{post.author?.full_name || 'PropLinka Team'}</span>
                               </div>
                               <div className="flex items-center gap-1">
                                 <Calendar className="h-4 w-4" />

@@ -9,7 +9,7 @@ export default function TermsPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link href="/" className="text-2xl font-bold text-primary">
-              DealDirect
+              PropLinka
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
@@ -41,12 +41,12 @@ export default function TermsPage() {
                 
                 <h3 className="text-xl font-semibold mb-3">1. Acceptance of Terms</h3>
                 <p className="text-muted-foreground mb-4">
-                  By accessing and using DealDirect, you accept and agree to be bound by the terms and provision of this agreement.
+                  By accessing and using PropLinka, you accept and agree to be bound by the terms and provision of this agreement.
                 </p>
 
                 <h3 className="text-xl font-semibold mb-3">2. Use of Service</h3>
                 <p className="text-muted-foreground mb-4">
-                  DealDirect provides a platform for buyers and sellers to connect directly for real estate transactions. 
+                  PropLinka provides a platform for buyers and sellers to connect directly for real estate transactions.
                   Users must provide accurate information and use the service in compliance with all applicable laws.
                 </p>
 
@@ -58,19 +58,19 @@ export default function TermsPage() {
 
                 <h3 className="text-xl font-semibold mb-3">4. Fees and Payments</h3>
                 <p className="text-muted-foreground mb-4">
-                  DealDirect charges a success fee of R1,000 for buyers and R1,000 for sellers upon successful completion 
+                  PropLinka charges a success fee of R1,000 for buyers and R1,000 for sellers upon successful completion
                   of a property transaction. This fee is non-refundable once the transaction is complete.
                 </p>
 
                 <h3 className="text-xl font-semibold mb-3">5. Property Listings</h3>
                 <p className="text-muted-foreground mb-4">
-                  Users listing properties must ensure all information is accurate and they have the legal right to sell 
-                  the property. DealDirect does not verify property ownership or listing accuracy.
+                  Users listing properties must ensure all information is accurate and they have the legal right to sell
+                  the property. PropLinka does not verify property ownership or listing accuracy.
                 </p>
 
                 <h3 className="text-xl font-semibold mb-3">6. Limitation of Liability</h3>
                 <p className="text-muted-foreground mb-4">
-                  DealDirect is not responsible for the accuracy of listings, the outcome of transactions, or any disputes 
+                  PropLinka is not responsible for the accuracy of listings, the outcome of transactions, or any disputes
                   between users. We provide the platform but are not party to the transactions.
                 </p>
               </section>
@@ -136,7 +136,7 @@ export default function TermsPage() {
                   If you have any questions about these Terms of Service or Privacy Policy, please contact us:
                 </p>
                 <ul className="text-muted-foreground space-y-2">
-                  <li>Email: legal@dealdirect.com</li>
+                  <li>Email: legal@proplinka.com</li>
                   <li>Phone: +27 21 555 0123</li>
                   <li>Address: 123 Main Road, Sea Point, Cape Town, 8005, South Africa</li>
                 </ul>
@@ -144,7 +144,7 @@ export default function TermsPage() {
 
               <section className="border-t pt-8 mt-12">
                 <p className="text-sm text-muted-foreground">
-                  By using DealDirect, you acknowledge that you have read and understood these Terms of Service 
+                  By using PropLinka, you acknowledge that you have read and understood these Terms of Service
                   and Privacy Policy and agree to be bound by them.
                 </p>
               </section>
@@ -156,7 +156,7 @@ export default function TermsPage() {
       {/* Footer */}
       <footer className="border-t py-8 mt-16">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 DealDirect. All rights reserved.
+          © 2024 PropLinka. All rights reserved.
         </div>
       </footer>
     </div>
