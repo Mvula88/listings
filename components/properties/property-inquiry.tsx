@@ -42,8 +42,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
     setLoading(true)
     try {
       // Create inquiry
-      const { data: inquiry, error } = await supabase
-        .from('inquiries')
+      const { data: inquiry, error } = await (supabase
+        .from('inquiries') as any)
         .insert([{
           property_id: property.id,
           buyer_id: user.id,
@@ -57,8 +57,8 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
       if (error) throw error
 
       // Create conversation
-      const { data: conversation } = await supabase
-        .from('conversations')
+      const { data: conversation } = await (supabase
+        .from('conversations') as any)
         .insert([{
           inquiry_id: inquiry.id,
           property_id: property.id,
