@@ -98,16 +98,16 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
     setLoading(true)
     try {
       // Create transaction
-      const { data: transaction, error } = await supabase
-        .from('transactions')
-        .insert({
+      const { data: transaction, error } = await (supabase
+        .from('transactions') as any)
+        .insert([{
           inquiry_id: existingInquiry.id,
           property_id: property.id,
           buyer_id: user.id,
           seller_id: property.seller_id,
           agreed_price: property.price,
           status: 'initiated'
-        })
+        }])
         .select()
         .single()
 
