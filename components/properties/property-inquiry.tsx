@@ -44,13 +44,13 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
       // Create inquiry
       const { data: inquiry, error } = await supabase
         .from('inquiries')
-        .insert({
+        .insert([{
           property_id: property.id,
           buyer_id: user.id,
           seller_id: property.seller_id,
           message,
           status: 'new'
-        })
+        }])
         .select()
         .single()
 
@@ -59,12 +59,12 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
       // Create conversation
       const { data: conversation } = await supabase
         .from('conversations')
-        .insert({
+        .insert([{
           inquiry_id: inquiry.id,
           property_id: property.id,
           participants: [user.id, property.seller_id],
           status: 'active'
-        })
+        }])
         .select()
         .single()
 
