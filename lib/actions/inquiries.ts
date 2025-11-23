@@ -239,8 +239,8 @@ export async function markInquiryAsRead(inquiryId: string, userId: string) {
     }
   }
 
-  const { error } = await supabase
-    .from('inquiries')
+  const { error } = await (supabase
+    .from('inquiries') as any)
     .update({ status: 'read', read_at: new Date().toISOString() })
     .eq('id', inquiryId)
 
