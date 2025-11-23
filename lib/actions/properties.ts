@@ -9,7 +9,7 @@ const propertySchema = z.object({
   property_type: z.enum(['house', 'apartment', 'townhouse', 'land', 'commercial', 'industrial']),
   listing_type: z.enum(['sale', 'rent']),
   price: z.number().positive('Price must be positive'),
-  currency: z.enum(['ZAR', 'NAD'], { errorMap: () => ({ message: 'Currency must be ZAR or NAD' }) }),
+  currency: z.enum(['ZAR', 'NAD']).refine((val) => ['ZAR', 'NAD'].includes(val), { message: 'Currency must be ZAR or NAD' }),
   bedrooms: z.number().min(0, 'Bedrooms cannot be negative'),
   bathrooms: z.number().min(0, 'Bathrooms cannot be negative'),
   area: z.number().positive('Area must be positive'),
