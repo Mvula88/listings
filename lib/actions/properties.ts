@@ -56,7 +56,13 @@ export async function createProperty(data: PropertyData): Promise<CreateProperty
       .from('profiles')
       .select('id, user_type')
       .eq('id', user.id)
-      .single()
+      .single() as {
+        data: {
+          id: string
+          user_type: string
+        } | null
+        error: any
+      }
 
     if (profileError || !profile) {
       return {
