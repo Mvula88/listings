@@ -224,7 +224,13 @@ export async function markInquiryAsRead(inquiryId: string, userId: string) {
     .from('inquiries')
     .select('id, property:properties(owner_id)')
     .eq('id', inquiryId)
-    .single()
+    .single() as {
+      data: {
+        id: string
+        property: { owner_id: string } | null
+      } | null
+      error: any
+    }
 
   if (!inquiry || inquiry.property?.owner_id !== userId) {
     return {
