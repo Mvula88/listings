@@ -166,8 +166,8 @@ export async function updateProperty(propertyId: string, data: Partial<PropertyD
     }
 
     // Update property
-    const { error: updateError } = await supabase
-      .from('properties')
+    const { error: updateError } = await (supabase
+      .from('properties') as any)
       .update({
         ...data,
         updated_at: new Date().toISOString(),
@@ -225,8 +225,8 @@ export async function deleteProperty(propertyId: string) {
     }
 
     // Soft delete by setting status to deleted
-    const { error: deleteError } = await supabase
-      .from('properties')
+    const { error: deleteError } = await (supabase
+      .from('properties') as any)
       .update({
         status: 'deleted',
         updated_at: new Date().toISOString(),
