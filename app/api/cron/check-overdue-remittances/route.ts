@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import type { Database } from '@/lib/types/database'
 
 export const dynamic = 'force-dynamic'
 
@@ -80,14 +81,15 @@ export async function GET(request: Request) {
 
       if (daysOverdue >= 60 && !lawyer.suspended_for_non_payment) {
         // Suspend lawyer account
+        const updateData: Database['public']['Tables']['lawyers']['Update'] = {
+          suspended_for_non_payment: true,
+          suspension_date: new Date().toISOString(),
+          remittance_status: 'suspended',
+          available: false
+        }
         await supabase
           .from('lawyers')
-          .update({
-            suspended_for_non_payment: true,
-            suspension_date: new Date().toISOString(),
-            remittance_status: 'suspended',
-            available: false
-          } as any)
+          .update(updateData)
           .eq('id', transaction.lawyer_id)
 
         action = 'suspended'
@@ -96,9 +98,12 @@ export async function GET(request: Request) {
         console.log(`Suspended lawyer ${lawyer.firm_name} (${daysOverdue} days overdue)`)
       } else if (daysOverdue >= 45) {
         if (lawyer.remittance_status !== 'overdue') {
+          const updateData: Database['public']['Tables']['lawyers']['Update'] = {
+            remittance_status: 'overdue'
+          }
           await supabase
             .from('lawyers')
-            .update({ remittance_status: 'overdue' } as any)
+            .update(updateData)
             .eq('id', transaction.lawyer_id)
 
           newStatus = 'overdue'
@@ -106,9 +111,12 @@ export async function GET(request: Request) {
         action = 'overdue_status'
       } else if (daysOverdue >= 15) {
         if (lawyer.remittance_status !== 'warning' && lawyer.remittance_status !== 'overdue') {
+          const updateData: Database['public']['Tables']['lawyers']['Update'] = {
+            remittance_status: 'warning'
+          }
           await supabase
             .from('lawyers')
-            .update({ remittance_status: 'warning' } as any)
+            .update(updateData)
             .eq('id', transaction.lawyer_id)
 
           newStatus = 'warning'
@@ -124,9 +132,12 @@ export async function GET(request: Request) {
         console.log(`Would send ${action} email to ${profile.email} (${daysOverdue} days overdue)`)
 
         // Update reminder timestamp
+        const transactionUpdate: Database['public']['Tables']['transactions']['Update'] = {
+          remittance_reminder_sent_at: new Date().toISOString()
+        }
         await supabase
           .from('transactions')
-          .update({ remittance_reminder_sent_at: new Date().toISOString() } as any)
+          .update(transactionUpdate)
           .eq('id', transaction.transaction_id)
       }
 
