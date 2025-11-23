@@ -151,7 +151,12 @@ export async function updateProperty(propertyId: string, data: Partial<PropertyD
       .from('properties')
       .select('owner_id')
       .eq('id', propertyId)
-      .single()
+      .single() as {
+        data: {
+          owner_id: string
+        } | null
+        error: any
+      }
 
     if (!property || property.owner_id !== user.id) {
       return {
@@ -205,7 +210,12 @@ export async function deleteProperty(propertyId: string) {
       .from('properties')
       .select('owner_id')
       .eq('id', propertyId)
-      .single()
+      .single() as {
+        data: {
+          owner_id: string
+        } | null
+        error: any
+      }
 
     if (!property || property.owner_id !== user.id) {
       return {
