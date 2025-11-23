@@ -15,7 +15,14 @@ export async function GET(request: Request) {
 
     // Call the database function to mark overdue remittances
     const { data: overdueTransactions, error } = await supabase
-      .rpc('mark_overdue_remittances')
+      .rpc('mark_overdue_remittances') as {
+        data: Array<{
+          transaction_id: string
+          lawyer_id: string
+          days_overdue: number
+        }> | null
+        error: any
+      }
 
     if (error) {
       console.error('Error marking overdue remittances:', error)
