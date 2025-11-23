@@ -90,8 +90,8 @@ export async function suspendUser(
   if (suspensionError) throw suspensionError
 
   // Update profile
-  const { error: updateError } = await supabase
-    .from('profiles')
+  const { error: updateError } = await (supabase
+    .from('profiles') as any)
     .update({
       is_suspended: true,
       suspended_until: expiresAt,
