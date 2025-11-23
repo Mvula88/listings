@@ -31,8 +31,8 @@ export async function getUserRewards() {
 
     // If no rewards record exists, create one
     if (!rewards) {
-      const { data: newRewards, error: createError } = await supabase
-        .from('referral_rewards')
+      const { data: newRewards, error: createError } = await (supabase
+        .from('referral_rewards') as any)
         .insert({
           user_id: user.id,
           points: 0,
