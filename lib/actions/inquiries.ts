@@ -139,7 +139,7 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
     console.error('Submit inquiry error:', error)
 
     if (error instanceof z.ZodError) {
-      const firstError = error.errors?.[0]
+      const firstError = error.issues?.[0]
       if (firstError) {
         return {
           success: false,
