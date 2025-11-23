@@ -148,7 +148,7 @@ export async function GET(request: Request) {
 
     if (lawyers) {
       for (const lawyer of lawyers) {
-        await supabase.rpc('update_lawyer_outstanding_fees', { lawyer_uuid: lawyer.id })
+        await (supabase as any).rpc('update_lawyer_outstanding_fees', { lawyer_uuid: lawyer.id })
       }
     }
 
