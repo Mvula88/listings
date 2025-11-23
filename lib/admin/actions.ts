@@ -259,7 +259,16 @@ export async function approveProperty(propertyId: string, notes?: string) {
     .from('properties')
     .select('*, seller:profiles!seller_id(full_name, email), property_images(url)')
     .eq('id', propertyId)
-    .single()
+    .single() as {
+      data: {
+        id: string
+        title: string
+        seller: { full_name: string; email: string } | null
+        property_images: Array<{ url: string }> | null
+        [key: string]: any
+      } | null
+      error: any
+    }
 
   const { error } = await (supabase
     .from('properties') as any)
@@ -312,7 +321,15 @@ export async function rejectProperty(propertyId: string, reason: string) {
     .from('properties')
     .select('*, seller:profiles!seller_id(full_name, email)')
     .eq('id', propertyId)
-    .single()
+    .single() as {
+      data: {
+        id: string
+        title: string
+        seller: { full_name: string; email: string } | null
+        [key: string]: any
+      } | null
+      error: any
+    }
 
   const { error } = await (supabase
     .from('properties') as any)
