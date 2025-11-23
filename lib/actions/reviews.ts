@@ -39,8 +39,8 @@ export async function submitReview(data: {
       .single()
 
     // Submit review
-    const { error } = await supabase
-      .from('property_reviews')
+    const { error } = await (supabase
+      .from('property_reviews') as any)
       .insert({
         property_id: data.propertyId,
         user_id: user.id,
