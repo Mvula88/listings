@@ -87,7 +87,7 @@ export async function GET(request: Request) {
             suspension_date: new Date().toISOString(),
             remittance_status: 'suspended',
             available: false
-          })
+          } as any)
           .eq('id', transaction.lawyer_id)
 
         action = 'suspended'
@@ -98,7 +98,7 @@ export async function GET(request: Request) {
         if (lawyer.remittance_status !== 'overdue') {
           await supabase
             .from('lawyers')
-            .update({ remittance_status: 'overdue' })
+            .update({ remittance_status: 'overdue' } as any)
             .eq('id', transaction.lawyer_id)
 
           newStatus = 'overdue'
@@ -108,7 +108,7 @@ export async function GET(request: Request) {
         if (lawyer.remittance_status !== 'warning' && lawyer.remittance_status !== 'overdue') {
           await supabase
             .from('lawyers')
-            .update({ remittance_status: 'warning' })
+            .update({ remittance_status: 'warning' } as any)
             .eq('id', transaction.lawyer_id)
 
           newStatus = 'warning'
@@ -126,7 +126,7 @@ export async function GET(request: Request) {
         // Update reminder timestamp
         await supabase
           .from('transactions')
-          .update({ remittance_reminder_sent_at: new Date().toISOString() })
+          .update({ remittance_reminder_sent_at: new Date().toISOString() } as any)
           .eq('id', transaction.transaction_id)
       }
 
