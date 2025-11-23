@@ -89,11 +89,16 @@ export default async function LawyerDealsPage() {
     .filter((t: any) => t.fee_collected)
     .reduce((sum: number, t: any) => sum + (parseFloat(String(t.platform_fee_amount)) || 0), 0)
 
+  const totalCommissionEarned = closedDeals
+    .filter((t: any) => t.fee_collected)
+    .reduce((sum: number, t: any) => sum + (parseFloat(String(t.lawyer_commission_amount)) || 0), 0)
+
   const totalFeesRemitted = closedDeals
     .filter((t: any) => t.fee_remitted)
-    .reduce((sum: number, t: any) => sum + (parseFloat(String(t.platform_fee_amount)) || 0), 0)
+    .reduce((sum: number, t: any) => sum + (parseFloat(String(t.platform_fee_amount)) - parseFloat(String(t.lawyer_commission_amount || 0))), 0)
 
-  const outstandingBalance = totalPlatformFeesCollected - totalFeesRemitted
+  const netAmountDue = totalPlatformFeesCollected - totalCommissionEarned
+  const outstandingBalance = netAmountDue - totalFeesRemitted
 
   return (
     <div className="space-y-8">
@@ -106,7 +111,7 @@ export default async function LawyerDealsPage() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid gap-4 md:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Active Deals</CardTitle>
@@ -115,7 +120,7 @@ export default async function LawyerDealsPage() {
           <CardContent>
             <div className="text-2xl font-bold">{activeDeals.length}</div>
             <p className="text-xs text-muted-foreground">
-              In progress transactions
+              In progress
             </p>
           </CardContent>
         </Card>
@@ -128,7 +133,7 @@ export default async function LawyerDealsPage() {
           <CardContent>
             <div className="text-2xl font-bold">{closedDeals.length}</div>
             <p className="text-xs text-muted-foreground">
-              Successfully completed
+              Completed
             </p>
           </CardContent>
         </Card>
@@ -141,14 +146,27 @@ export default async function LawyerDealsPage() {
           <CardContent>
             <div className="text-2xl font-bold">R{totalPlatformFeesCollected.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-              Total platform fees
+              Gross platform fees
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-primary/50 bg-primary/5">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Your Commission</CardTitle>
+            <DollarSign className="h-4 w-4 text-primary" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-primary">R{totalCommissionEarned.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">
+              10% earned (keep this!)
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Outstanding</CardTitle>
+            <CardTitle className="text-sm font-medium">To Remit</CardTitle>
             <FileText className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -156,7 +174,7 @@ export default async function LawyerDealsPage() {
               R{outstandingBalance.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
-              {pendingFeeRemittance.length} deals pending remittance
+              {pendingFeeRemittance.length} pending (90%)
             </p>
           </CardContent>
         </Card>

@@ -42,8 +42,8 @@ export default function LawyerRegistrationPage() {
                   <div>
                     <h3 className="font-semibold mb-1">Extra Income Stream</h3>
                     <p className="text-sm text-muted-foreground">
-                      Earn 10-25% commission on platform fees for every transaction you close.
-                      Average R772K - R2.57M extra per year.
+                      Earn 10% commission on platform fees for every transaction you close.
+                      Keep R750-R4,500 per deal (average R90K extra per year for 10 deals).
                     </p>
                   </div>
                 </div>

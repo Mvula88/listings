@@ -501,11 +501,11 @@ export default function HowItWorksPage() {
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold mb-3">Complete Your Transaction & Save</h3>
                   <p className="text-muted-foreground mb-6 text-lg">
-                    Once the sale is complete, pay only R2,000 success fee. That's it! No hidden costs or percentage commissions.
+                    Once the sale is complete, sellers pay only a tiered platform fee (collected by lawyer at closing). Buyers pay ZERO platform fees!
                   </p>
                   <Card className="bg-gradient-to-br from-primary/10 via-primary/5 to-background border-primary/30">
                     <CardContent className="p-8">
-                      <h4 className="font-bold mb-6 text-xl text-center">Cost Comparison</h4>
+                      <h4 className="font-bold mb-6 text-xl text-center">Cost Comparison (R2M Property)</h4>
                       <div className="space-y-4">
                         <div className="flex justify-between items-center pb-4 border-b">
                           <div>
@@ -516,17 +516,17 @@ export default function HowItWorksPage() {
                         </div>
                         <div className="flex justify-between items-center pb-4 border-b">
                           <div>
-                            <p className="font-medium">PropLinka Success Fee</p>
-                            <p className="text-sm text-muted-foreground">Flat rate, no percentages</p>
+                            <p className="font-medium">PropLinka Platform Fee</p>
+                            <p className="text-sm text-muted-foreground">Tiered fee - seller only</p>
                           </div>
-                          <span className="text-2xl font-bold text-primary">R2,000</span>
+                          <span className="text-2xl font-bold text-primary">R10,000</span>
                         </div>
                         <div className="bg-primary/20 rounded-lg p-4 flex justify-between items-center">
                           <div>
                             <p className="font-bold text-lg">Total Savings</p>
-                            <p className="text-sm text-muted-foreground">That's 98.3% less in fees!</p>
+                            <p className="text-sm text-muted-foreground">That's 92% less in fees!</p>
                           </div>
-                          <span className="text-3xl font-bold text-primary">R118,000</span>
+                          <span className="text-3xl font-bold text-primary">R110,000</span>
                         </div>
                       </div>
                     </CardContent>

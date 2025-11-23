@@ -279,47 +279,55 @@ export default function LawyerOnboardingPage() {
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Payment Method for Referral Fees</Label>
+              <Label>Commission Payment Method</Label>
               <p className="text-sm text-muted-foreground mb-2">
-                PropLinka charges a R750 referral fee per client. Choose how you'd like to receive payments:
+                PropLinka pays you a 10% commission on every platform fee collected. Choose how you'd like to receive your commission:
               </p>
+              <div className="bg-primary/10 rounded-lg p-4 mb-4">
+                <p className="text-sm font-semibold mb-2">How It Works:</p>
+                <ul className="text-sm text-muted-foreground space-y-1">
+                  <li>• You collect the full platform fee from the seller at closing</li>
+                  <li>• You keep 10% as your commission (e.g., R750 from R7,500 fee)</li>
+                  <li>• You remit the remaining 90% to PropLinka within 30 days</li>
+                </ul>
+              </div>
               <div className="space-y-2">
                 <label className="flex items-start space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-muted/50">
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="invoice"
-                    checked={formData.paymentMethod === 'invoice'}
+                    value="deduct_before_remittance"
+                    checked={formData.paymentMethod === 'deduct_before_remittance'}
                     onChange={(e) => setFormData({...formData, paymentMethod: e.target.value})}
                     className="mt-1"
                   />
                   <div>
-                    <p className="font-medium">Monthly Invoice</p>
+                    <p className="font-medium">Deduct from Remittance (Recommended)</p>
                     <p className="text-sm text-muted-foreground">
-                      Receive a monthly invoice for all referral fees
+                      Keep your 10% commission and remit only the net 90% to PropLinka
                     </p>
                   </div>
                 </label>
-                
+
                 <label className="flex items-start space-x-2 p-4 border rounded-lg cursor-pointer hover:bg-muted/50">
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="stripe_connect"
-                    checked={formData.paymentMethod === 'stripe_connect'}
+                    value="monthly_invoice"
+                    checked={formData.paymentMethod === 'monthly_invoice'}
                     onChange={(e) => setFormData({...formData, paymentMethod: e.target.value})}
                     className="mt-1"
                   />
                   <div>
-                    <p className="font-medium">Stripe Connect (Recommended)</p>
+                    <p className="font-medium">Monthly Commission Invoice</p>
                     <p className="text-sm text-muted-foreground">
-                      Automatic deposits directly to your bank account
+                      Remit full amount, receive monthly invoice for accumulated commission
                     </p>
                   </div>
                 </label>
               </div>
             </div>
-            
+
             <div className="flex items-start space-x-2">
               <Checkbox
                 id="terms"
@@ -327,7 +335,7 @@ export default function LawyerOnboardingPage() {
                 onCheckedChange={(checked) => setFormData({...formData, agreedToTerms: checked as boolean})}
               />
               <Label htmlFor="terms" className="text-sm leading-relaxed">
-                I agree to PropLinka's terms of service for conveyancers, including the R750 referral fee per successful client match
+                I agree to PropLinka's terms of service for conveyancers, including earning a 10% commission on platform fees and remitting the net 90% within 30 days of closing
               </Label>
             </div>
             

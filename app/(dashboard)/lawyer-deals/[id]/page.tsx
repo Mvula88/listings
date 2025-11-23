@@ -155,11 +155,25 @@ export default function LawyerDealDetailPage({ params }: { params: Promise<{ id:
                     R{parseFloat(transaction.property?.price || 0).toLocaleString()}
                   </p>
                 </div>
-                <div>
-                  <span className="text-muted-foreground">Platform Fee:</span>
-                  <p className="font-medium text-primary">
+                <div className="col-span-2">
+                  <span className="text-muted-foreground">Platform Fee (Gross):</span>
+                  <p className="font-medium text-lg">
                     R{parseFloat(transaction.platform_fee_amount || 0).toLocaleString()}
                   </p>
+                  <div className="mt-2 space-y-1 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Your Commission (10%):</span>
+                      <span className="font-medium text-primary">
+                        R{parseFloat(transaction.lawyer_commission_amount || 0).toLocaleString()}
+                      </span>
+                    </div>
+                    <div className="flex justify-between border-t pt-1">
+                      <span className="text-muted-foreground font-semibold">Net to Remit (90%):</span>
+                      <span className="font-bold">
+                        R{(parseFloat(transaction.platform_fee_amount || 0) - parseFloat(transaction.lawyer_commission_amount || 0)).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -263,9 +277,11 @@ export default function LawyerDealDetailPage({ params }: { params: Promise<{ id:
                   setFormData({ ...formData, feeCollected: checked as boolean })
                 }
               />
-              <Label htmlFor="feeCollected" className="text-sm font-normal">
-                I confirm that the platform fee of R{parseFloat(transaction.platform_fee_amount || 0).toLocaleString()}
-                {' '}has been collected from the client and included in the settlement statement
+              <Label htmlFor="feeCollected" className="text-sm font-normal leading-relaxed">
+                I confirm that the gross platform fee of R{parseFloat(transaction.platform_fee_amount || 0).toLocaleString()}
+                {' '}was collected from the seller. I will remit R{(parseFloat(transaction.platform_fee_amount || 0) - parseFloat(transaction.lawyer_commission_amount || 0)).toLocaleString()}
+                {' '}(90%) to PropLinka within 30 days, retaining R{parseFloat(transaction.lawyer_commission_amount || 0).toLocaleString()}
+                {' '}(10%) as my commission.
               </Label>
             </div>
 
@@ -283,9 +299,11 @@ export default function LawyerDealDetailPage({ params }: { params: Promise<{ id:
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <h4 className="font-semibold text-blue-900 mb-2">Important Reminders:</h4>
               <ul className="text-sm text-blue-800 space-y-1">
-                <li>• Ensure the platform fee is included in your settlement statement</li>
-                <li>• Platform fees must be remitted to PropLinka within 30 days</li>
+                <li>• The gross platform fee is R{parseFloat(transaction.platform_fee_amount || 0).toLocaleString()}</li>
+                <li>• You earn a 10% commission (R{parseFloat(transaction.lawyer_commission_amount || 0).toLocaleString()})</li>
+                <li>• You must remit the net amount (90%) = R{(parseFloat(transaction.platform_fee_amount || 0) - parseFloat(transaction.lawyer_commission_amount || 0)).toLocaleString()} to PropLinka within 30 days</li>
                 <li>• Keep proof of fee collection for reconciliation</li>
+                <li>• Late remittances may result in account restrictions</li>
               </ul>
             </div>
 

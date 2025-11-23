@@ -278,6 +278,11 @@ export interface Database {
           reviews_count: number
           verified: boolean
           available: boolean
+          remittance_status: string
+          suspended_for_non_payment: boolean
+          suspension_date: string | null
+          last_remittance_date: string | null
+          total_outstanding_fees: number
           created_at: string
           updated_at: string
         }
@@ -298,6 +303,11 @@ export interface Database {
           reviews_count?: number
           verified?: boolean
           available?: boolean
+          remittance_status?: string
+          suspended_for_non_payment?: boolean
+          suspension_date?: string | null
+          last_remittance_date?: string | null
+          total_outstanding_fees?: number
           created_at?: string
           updated_at?: string
         }
@@ -318,6 +328,11 @@ export interface Database {
           reviews_count?: number
           verified?: boolean
           available?: boolean
+          remittance_status?: string
+          suspended_for_non_payment?: boolean
+          suspension_date?: string | null
+          last_remittance_date?: string | null
+          total_outstanding_fees?: number
           created_at?: string
           updated_at?: string
         }
@@ -333,6 +348,9 @@ export interface Database {
           seller_lawyer_id: string | null
           agreed_price: number | null
           platform_fee_amount: number | null
+          lawyer_commission_amount: number | null
+          lawyer_commission_paid: boolean
+          lawyer_commission_paid_at: string | null
           status: TransactionStatus
           deal_closed_at: string | null
           deal_closed_by: string | null
@@ -340,6 +358,9 @@ export interface Database {
           fee_collected: boolean
           fee_remitted: boolean
           fee_remitted_at: string | null
+          remittance_due_date: string | null
+          remittance_overdue: boolean
+          remittance_reminder_sent_at: string | null
           created_at: string
           updated_at: string
           completed_at: string | null
@@ -354,6 +375,9 @@ export interface Database {
           seller_lawyer_id?: string | null
           agreed_price?: number | null
           platform_fee_amount?: number | null
+          lawyer_commission_amount?: number | null
+          lawyer_commission_paid?: boolean
+          lawyer_commission_paid_at?: string | null
           status?: TransactionStatus
           deal_closed_at?: string | null
           deal_closed_by?: string | null
@@ -361,6 +385,9 @@ export interface Database {
           fee_collected?: boolean
           fee_remitted?: boolean
           fee_remitted_at?: string | null
+          remittance_due_date?: string | null
+          remittance_overdue?: boolean
+          remittance_reminder_sent_at?: string | null
           created_at?: string
           updated_at?: string
           completed_at?: string | null
@@ -375,6 +402,9 @@ export interface Database {
           seller_lawyer_id?: string | null
           agreed_price?: number | null
           platform_fee_amount?: number | null
+          lawyer_commission_amount?: number | null
+          lawyer_commission_paid?: boolean
+          lawyer_commission_paid_at?: string | null
           status?: TransactionStatus
           deal_closed_at?: string | null
           deal_closed_by?: string | null
@@ -382,6 +412,9 @@ export interface Database {
           fee_collected?: boolean
           fee_remitted?: boolean
           fee_remitted_at?: string | null
+          remittance_due_date?: string | null
+          remittance_overdue?: boolean
+          remittance_reminder_sent_at?: string | null
           created_at?: string
           updated_at?: string
           completed_at?: string | null
@@ -393,6 +426,8 @@ export interface Database {
           transaction_id: string
           lawyer_id: string
           platform_fee_amount: number
+          lawyer_commission_amount: number | null
+          net_remittance_amount: number | null
           remittance_date: string
           remittance_reference: string | null
           proof_of_payment_url: string | null
@@ -408,6 +443,8 @@ export interface Database {
           transaction_id: string
           lawyer_id: string
           platform_fee_amount: number
+          lawyer_commission_amount?: number | null
+          net_remittance_amount?: number | null
           remittance_date: string
           remittance_reference?: string | null
           proof_of_payment_url?: string | null
@@ -423,6 +460,8 @@ export interface Database {
           transaction_id?: string
           lawyer_id?: string
           platform_fee_amount?: number
+          lawyer_commission_amount?: number | null
+          net_remittance_amount?: number | null
           remittance_date?: string
           remittance_reference?: string | null
           proof_of_payment_url?: string | null
@@ -443,6 +482,7 @@ export interface Database {
           total_deals_closed: number
           total_fees_collected: number
           total_fees_remitted: number
+          total_commission_earned: number
           outstanding_balance: number
           report_submitted_at: string | null
           verified: boolean
@@ -460,6 +500,7 @@ export interface Database {
           total_deals_closed?: number
           total_fees_collected?: number
           total_fees_remitted?: number
+          total_commission_earned?: number
           outstanding_balance?: number
           report_submitted_at?: string | null
           verified?: boolean
@@ -477,6 +518,7 @@ export interface Database {
           total_deals_closed?: number
           total_fees_collected?: number
           total_fees_remitted?: number
+          total_commission_earned?: number
           outstanding_balance?: number
           report_submitted_at?: string | null
           verified?: boolean

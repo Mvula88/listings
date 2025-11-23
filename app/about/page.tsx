@@ -52,8 +52,8 @@ export default function AboutPage() {
                   PropLinka was founded to democratize real estate transactions by linking buyers and sellers directly.
                 </p>
                 <p className="text-muted-foreground mb-4">
-                  By eliminating the traditional 5-7% agent commission and replacing it with a simple R2,000 success fee, 
-                  we're helping thousands of families save money on the biggest transactions of their lives.
+                  By eliminating the traditional 5-7% agent commission and replacing it with a tiered platform fee (R4,500-R45,000 for sellers only),
+                  we're helping thousands of families save 85-90% on the biggest transactions of their lives.
                 </p>
                 <p className="text-muted-foreground">
                   Starting in South Africa and Namibia, we're on a mission to make property transactions more affordable 
@@ -92,7 +92,7 @@ export default function AboutPage() {
                   <Target className="h-10 w-10 text-primary mb-4" />
                   <h3 className="text-xl font-semibold mb-2">Transparency</h3>
                   <p className="text-muted-foreground">
-                    No hidden fees, no fine print. Our R2,000 success fee is all you pay. 
+                    No hidden fees, no fine print. Our tiered platform fee (paid by sellers only at closing) saves you 85-90% vs agent commissions.
                     Every cost is clearly communicated upfront.
                   </p>
                 </CardContent>

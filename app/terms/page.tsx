@@ -58,9 +58,24 @@ export default function TermsPage() {
 
                 <h3 className="text-xl font-semibold mb-3">4. Fees and Payments</h3>
                 <p className="text-muted-foreground mb-4">
-                  PropLinka charges a success fee of R1,000 for buyers and R1,000 for sellers upon successful completion
-                  of a property transaction. This fee is non-refundable once the transaction is complete.
+                  PropLinka charges a <strong>tiered platform fee to sellers only</strong> upon successful completion
+                  of a property transaction. The fee ranges from R4,500 to R45,000 based on the property value.
+                  Buyers pay <strong>ZERO platform fees</strong>. The platform fee is collected by the conveyancing
+                  attorney at closing and remitted to PropLinka within 30 days. This fee is non-refundable once the
+                  transaction is complete.
                 </p>
+                <div className="bg-muted/50 rounded-lg p-4 mb-4">
+                  <p className="text-sm font-semibold mb-2">Platform Fee Structure (Seller Only):</p>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    <li>• Properties under R500K: <strong>R4,500</strong></li>
+                    <li>• Properties R500K-R1M: <strong>R7,500</strong></li>
+                    <li>• Properties R1M-R1.5M: <strong>R9,500</strong></li>
+                    <li>• Properties R1.5M-R2.5M: <strong>R12,500</strong></li>
+                    <li>• Properties R2.5M-R5M: <strong>R18,000</strong></li>
+                    <li>• Properties R5M-R10M: <strong>R30,000</strong></li>
+                    <li>• Properties R10M+: <strong>R45,000</strong></li>
+                  </ul>
+                </div>
 
                 <h3 className="text-xl font-semibold mb-3">5. Property Listings</h3>
                 <p className="text-muted-foreground mb-4">

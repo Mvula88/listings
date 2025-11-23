@@ -15,7 +15,7 @@ export default function FAQPage() {
       questions: [
         {
           q: "What is PropLinka?",
-          a: "PropLinka is a commission-free real estate platform that connects buyers and sellers directly. Instead of paying 5-7% agent commissions, you pay only R2,000 when your transaction completes."
+          a: "PropLinka is a direct real estate platform that connects buyers and sellers without agent commissions. Sellers pay a tiered platform fee (R4,500-R45,000 based on property value) only when the transaction completes successfully. Buyers pay ZERO platform fees."
         },
         {
           q: "Which countries does PropLinka operate in?",
@@ -23,7 +23,7 @@ export default function FAQPage() {
         },
         {
           q: "Is PropLinka really free to use?",
-          a: "Yes! It's completely free to browse properties, list properties, and communicate with other users. You only pay a R2,000 success fee when your transaction completes."
+          a: "For buyers: Absolutely FREE - no platform fees ever! For sellers: FREE to list and market your property. You only pay a tiered platform fee when your property successfully sells (R4,500-R45,000 based on property value - still 80-90% less than traditional agent commissions)."
         }
       ]
     },
@@ -43,8 +43,8 @@ export default function FAQPage() {
           a: "Yes, property transfers require legal documentation. You can choose from our verified conveyancing lawyers who offer transparent flat-rate pricing."
         },
         {
-          q: "When do I pay the R1,000 buyer fee?",
-          a: "You only pay when the property transfer is registered and the transaction is complete. No upfront payments required."
+          q: "Do buyers pay any fees to PropLinka?",
+          a: "No! Buyers pay ZERO platform fees. You only pay the standard conveyancing fees to your lawyer (same as traditional property purchases). PropLinka's platform fee is paid by the seller only."
         }
       ]
     },
@@ -98,20 +98,28 @@ export default function FAQPage() {
       category: "Fees & Payments",
       questions: [
         {
-          q: "What exactly is the R2,000 fee?",
-          a: "It's R1,000 for the buyer and R1,000 for the seller, paid only when the transaction successfully completes. This covers platform usage and support."
+          q: "What fees do sellers pay?",
+          a: "Sellers pay a tiered platform fee based on property value: R4,500 (under R500K), R7,500 (R500K-R1M), R9,500 (R1M-R1.5M), R12,500 (R1.5M-R2.5M), R18,000 (R2.5M-R5M), R30,000 (R5M-R10M), or R45,000 (R10M+). This is paid ONLY when the transaction successfully completes."
+        },
+        {
+          q: "Do buyers pay any platform fees?",
+          a: "No! Buyers pay ZERO platform fees to PropLinka. You only pay standard conveyancing fees to your lawyer (same as traditional purchases)."
         },
         {
           q: "Are there any other fees?",
-          a: "No hidden fees from PropLinka. You'll still pay normal conveyancing fees to your chosen lawyer and any government transfer duties."
+          a: "No hidden fees from PropLinka. Both parties pay normal conveyancing fees to their chosen lawyer and any government transfer duties (same as traditional sales)."
         },
         {
-          q: "How do I pay the success fee?",
-          a: "The fee is collected when the property transfer is registered. Payment details are provided during the transaction process."
+          q: "How is the platform fee collected?",
+          a: "The platform fee is included in the settlement statement and collected by your conveyancing attorney at closing. The attorney then remits it to PropLinka within 30 days."
         },
         {
           q: "What if the sale falls through?",
-          a: "You pay nothing. The success fee is only charged when the property transfer is successfully registered."
+          a: "You pay nothing. The platform fee is only charged when the property transfer is successfully registered."
+        },
+        {
+          q: "How much do I save compared to traditional agents?",
+          a: "Massive savings! Traditional agent commissions are 5-7% (R50,000-R70,000 on a R1M property). With PropLinka's tiered fee of R7,500, you save R42,500-R62,500 - that's 85-90% less!"
         }
       ]
     }
