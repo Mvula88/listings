@@ -111,14 +111,14 @@ export async function createProperty(data: PropertyData): Promise<CreateProperty
     console.error('Create property error:', error)
 
     if (error instanceof z.ZodError) {
-      const firstError = error.errors?.[0]
+      const firstError = error.issues?.[0]
       if (firstError) {
         return {
           success: false,
           error: firstError.message,
         }
       }
-      // Fallback if errors array is empty or undefined
+      // Fallback if issues array is empty or undefined
       return {
         success: false,
         error: 'Validation failed. Please check your input.',
