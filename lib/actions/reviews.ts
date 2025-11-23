@@ -126,8 +126,8 @@ export async function markReviewHelpful(reviewId: string, helpful: boolean) {
 
     if (helpful) {
       // Add helpful mark
-      const { error } = await supabase
-        .from('review_helpfulness')
+      const { error } = await (supabase
+        .from('review_helpfulness') as any)
         .insert({ review_id: reviewId, user_id: user.id })
 
       if (error && error.code !== '23505') { // Ignore duplicate key error
@@ -135,8 +135,8 @@ export async function markReviewHelpful(reviewId: string, helpful: boolean) {
       }
     } else {
       // Remove helpful mark
-      await supabase
-        .from('review_helpfulness')
+      await (supabase
+        .from('review_helpfulness') as any)
         .delete()
         .eq('review_id', reviewId)
         .eq('user_id', user.id)
