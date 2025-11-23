@@ -38,8 +38,8 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
     }
 
     // 2. Verify property exists
-    const { data: property, error: propertyError } = await supabase
-      .from('properties')
+    const { data: property, error: propertyError } = await (supabase
+      .from('properties') as any)
       .select('id, owner_id, title')
       .eq('id', validatedData.property_id)
       .single()
@@ -63,8 +63,8 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
     const oneDayAgo = new Date()
     oneDayAgo.setDate(oneDayAgo.getDate() - 1)
 
-    const { data: recentInquiry } = await supabase
-      .from('inquiries')
+    const { data: recentInquiry } = await (supabase
+      .from('inquiries') as any)
       .select('id')
       .eq('property_id', validatedData.property_id)
       .eq('buyer_id', user.id)
@@ -79,16 +79,16 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
     }
 
     // 5. Create inquiry
-    const { data: inquiry, error: inquiryError } = await supabase
-      .from('inquiries')
-      .insert({
+    const { data: inquiry, error: inquiryError } = await (supabase
+      .from('inquiries') as any)
+      .insert([{
         property_id: validatedData.property_id,
         buyer_id: user.id,
         message: validatedData.message,
         phone_number: validatedData.phone_number,
         preferred_contact: validatedData.preferred_contact,
         status: 'pending',
-      })
+      }])
       .select('id')
       .single()
 
@@ -101,8 +101,8 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
     }
 
     // 6. Get owner details for email notification
-    const { data: owner } = await supabase
-      .from('profiles')
+    const { data: owner } = await (supabase
+      .from('profiles') as any)
       .select('email, full_name')
       .eq('id', property.owner_id)
       .single()
@@ -162,8 +162,8 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
 export async function getInquiriesForBuyer(userId: string) {
   const supabase = await createClient()
 
-  const { data, error } = await supabase
-    .from('inquiries')
+  const { data, error } = await (supabase
+    .from('inquiries') as any)
     .select(`
       *,
       property:properties(
@@ -189,8 +189,8 @@ export async function getInquiriesForBuyer(userId: string) {
 export async function getInquiriesForSeller(userId: string) {
   const supabase = await createClient()
 
-  const { data, error } = await supabase
-    .from('inquiries')
+  const { data, error } = await (supabase
+    .from('inquiries') as any)
     .select(`
       *,
       buyer:profiles!inquiries_buyer_id_fkey(
