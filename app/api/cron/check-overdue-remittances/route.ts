@@ -41,7 +41,15 @@ export async function GET(request: Request) {
         .from('lawyers')
         .select('profile_id, firm_name, remittance_status, suspended_for_non_payment')
         .eq('id', transaction.lawyer_id)
-        .single()
+        .single() as {
+          data: {
+            profile_id: string
+            firm_name: string
+            remittance_status: string
+            suspended_for_non_payment: boolean
+          } | null
+          error: any
+        }
 
       if (lawyerError || !lawyer) {
         console.error(`Lawyer not found for transaction ${transaction.transaction_id}`)
@@ -53,7 +61,13 @@ export async function GET(request: Request) {
         .from('profiles')
         .select('email, full_name')
         .eq('id', lawyer.profile_id)
-        .single()
+        .single() as {
+          data: {
+            email: string
+            full_name: string
+          } | null
+          error: any
+        }
 
       if (profileError || !profile) {
         console.error(`Profile not found for lawyer ${transaction.lawyer_id}`)
