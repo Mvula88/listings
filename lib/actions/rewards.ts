@@ -41,13 +41,16 @@ export async function getUserRewards() {
           free_featured_listings: 0,
         })
         .select()
-        .single<{
-          points: number
-          lifetime_points: number
-          tier: string
-          free_featured_listings: number
-          [key: string]: any
-        }>()
+        .single() as {
+          data: {
+            points: number
+            lifetime_points: number
+            tier: string
+            free_featured_listings: number
+            [key: string]: any
+          } | null
+          error: any
+        }
 
       if (createError) throw createError
 
