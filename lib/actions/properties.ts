@@ -79,8 +79,8 @@ export async function createProperty(data: PropertyData): Promise<CreateProperty
     }
 
     // 3. Create property listing
-    const { data: property, error: propertyError } = await supabase
-      .from('properties')
+    const { data: property, error: propertyError } = await (supabase
+      .from('properties') as any)
       .insert({
         ...validatedData,
         owner_id: user.id,
