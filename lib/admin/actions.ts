@@ -77,8 +77,8 @@ export async function suspendUser(
     .single()
 
   // Create suspension record
-  const { error: suspensionError } = await supabase
-    .from('user_suspensions')
+  const { error: suspensionError } = await (supabase
+    .from('user_suspensions') as any)
     .insert({
       user_id: userId,
       suspended_by: admin.id,
