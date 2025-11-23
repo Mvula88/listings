@@ -144,7 +144,10 @@ export async function GET(request: Request) {
     // Update lawyer outstanding fees
     const { data: lawyers } = await supabase
       .from('lawyers')
-      .select('id')
+      .select('id') as {
+        data: Array<{ id: string }> | null
+        error: any
+      }
 
     if (lawyers) {
       for (const lawyer of lawyers) {
