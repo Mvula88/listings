@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Home, Users, DollarSign, Shield, MapPin, Bed, Bath, Square, TrendingDown } from "lucide-react"
+import { ArrowRight, Home, Users, DollarSign, Shield, MapPin, Bed, Bath, Square, TrendingDown, Search } from "lucide-react"
 import { getFeaturedProperties, formatPropertyPrice } from "@/lib/data/properties"
 import { SavingsCalculator } from "@/components/calculator/savings-calculator"
 import { calculateSavings, formatSavingsDisplay } from "@/lib/utils/savings-calculator"
@@ -88,133 +88,141 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Enhanced Hero Section - Clear & Compact */}
-      <section className="relative py-16 md:py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        {/* Background System */}
+      {/* Hero Section - Find Your Dream Property */}
+      <section className="relative min-h-[600px] md:min-h-[700px] overflow-hidden">
+        {/* Background Image */}
         <div className="absolute inset-0">
-          {/* Base Image Layer */}
-          <div className="absolute inset-0">
-            <Image
-              src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop&q=80"
-              alt="Modern luxury home"
-              fill
-              className="object-cover opacity-25"
-              priority
-            />
-          </div>
-
-          {/* Gradient overlay with bottom fade */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-900/95 to-transparent" />
-
-          {/* Animated orbs */}
-          <div className="absolute inset-0">
-            <div className="absolute top-0 left-[15%] w-[500px] h-[500px] bg-primary/15 rounded-full blur-[120px] animate-pulse" />
-            <div className="absolute top-0 right-[10%] w-[450px] h-[450px] bg-blue-500/10 rounded-full blur-[110px] animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }} />
-          </div>
-
-          {/* Grid pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+          <Image
+            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop&q=80"
+            alt="Modern luxury home"
+            fill
+            className="object-cover"
+            priority
+          />
+          {/* Dark overlay */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/30" />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-5xl mx-auto">
-            {/* Centered content */}
-            <div className="text-center space-y-6 md:space-y-8">
-              {/* Savings Badge */}
-              <FadeIn direction="down" duration={0.6}>
-                <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-emerald-500/20 via-primary/20 to-blue-500/20 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl group hover:scale-105 transition-all duration-300">
-                  <div className="relative flex items-center justify-center">
-                    <div className="absolute inset-0 bg-emerald-400/40 rounded-full blur-md animate-pulse" />
-                    <TrendingDown className="h-5 w-5 text-emerald-400 relative z-10" />
+        <div className="container mx-auto px-4 relative z-10 pt-20 md:pt-32 pb-24">
+          <div className="max-w-4xl mx-auto">
+            {/* Main Headline */}
+            <FadeIn direction="down" duration={0.8}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center mb-8">
+                Find your dream property
+              </h1>
+            </FadeIn>
+
+            {/* Search Bar */}
+            <FadeIn delay={0.2} duration={0.8}>
+              <div className="bg-white rounded-lg shadow-2xl p-4 md:p-6 mb-16">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                  {/* Offer Type */}
+                  <div>
+                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
+                      Offer Type
+                    </label>
+                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
+                      <option>Value</option>
+                      <option>Sale</option>
+                      <option>Rent</option>
+                    </select>
                   </div>
-                  <span className="text-sm md:text-base font-bold bg-gradient-to-r from-emerald-400 via-primary to-blue-400 bg-clip-text text-transparent">
-                    Save 50-70% • No Agent Commissions
-                  </span>
+
+                  {/* Property Type */}
+                  <div>
+                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
+                      Property
+                    </label>
+                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
+                      <option>All</option>
+                      <option>House</option>
+                      <option>Apartment</option>
+                      <option>Land</option>
+                      <option>Commercial</option>
+                    </select>
+                  </div>
+
+                  {/* Localities */}
+                  <div>
+                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
+                      Localities
+                    </label>
+                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
+                      <option>Country, district, ...</option>
+                      <option>Windhoek</option>
+                      <option>Swakopmund</option>
+                      <option>Cape Town</option>
+                      <option>Johannesburg</option>
+                    </select>
+                  </div>
+
+                  {/* Price */}
+                  <div>
+                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
+                      Price
+                    </label>
+                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
+                      <option>If doesn't matter</option>
+                      <option>Under N$500k</option>
+                      <option>N$500k - N$1M</option>
+                      <option>N$1M - N$2M</option>
+                      <option>Above N$2M</option>
+                    </select>
+                  </div>
                 </div>
-              </FadeIn>
 
-              {/* Main Headline - Crystal Clear Value Proposition */}
-              <FadeIn direction="down" duration={0.8} delay={0.1}>
-                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-[1.05] tracking-tight">
-                  <span className="block bg-gradient-to-br from-white via-white to-white/90 bg-clip-text text-transparent">
-                    Africa's First
-                  </span>
-                  <span className="block mt-2 bg-gradient-to-r from-primary via-blue-500 to-primary bg-clip-text text-transparent relative">
-                    Commission-Free
-                  </span>
-                  <span className="block mt-2 bg-gradient-to-br from-white via-white to-white/90 bg-clip-text text-transparent">
-                    Property Marketplace
-                  </span>
-                </h1>
-              </FadeIn>
+                {/* Search Button */}
+                <Link href="/browse">
+                  <Button className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg font-semibold rounded-md shadow-lg flex items-center justify-center gap-2">
+                    <Search className="h-5 w-5" />
+                    Search
+                  </Button>
+                </Link>
+              </div>
+            </FadeIn>
 
-              {/* Clear Description */}
-              <FadeIn delay={0.2} duration={0.8}>
-                <p className="text-lg md:text-xl lg:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed font-light">
-                  Buy and sell properties directly. <span className="text-white font-semibold">No agents</span>, <span className="text-white font-semibold">no commissions</span>, <span className="text-primary font-semibold">just savings</span>.
-                </p>
-                <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto mt-3">
-                  Connect with verified buyers and sellers across Namibia & South Africa
-                </p>
-              </FadeIn>
+            {/* Services for property owners */}
+            <FadeIn delay={0.4} duration={0.8}>
+              <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
+                Services for property owners
+              </h2>
 
-              {/* CTA Buttons */}
-              <FadeIn delay={0.3} duration={0.8}>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-                  <Link href="/browse">
+              {/* Action Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* I want to rent */}
+                <div className="bg-white/95 backdrop-blur-sm rounded-lg p-8 text-center shadow-xl hover:shadow-2xl transition-all hover:scale-105">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">I want to rent</h3>
+                  <Link href="/list?type=rent">
                     <Button
-                      size="lg"
-                      className="w-full sm:w-auto group px-10 py-7 text-lg font-bold shadow-2xl shadow-primary/40 hover:shadow-primary/60 transition-all hover:scale-105 relative overflow-hidden"
+                      className="bg-primary hover:bg-primary/90 text-white px-8 py-3 font-semibold rounded-md"
                     >
-                      <span className="relative z-10 flex items-center gap-2">
-                        Browse Properties
-                        <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                      </span>
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-blue-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
+                      FIND OUT MORE
                     </Button>
                   </Link>
-                  <Link href="/list">
+                </div>
+
+                {/* I want to sell */}
+                <div className="bg-white/95 backdrop-blur-sm rounded-lg p-8 text-center shadow-xl hover:shadow-2xl transition-all hover:scale-105">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">I want to sell</h3>
+                  <Link href="/list?type=sale">
                     <Button
-                      size="lg"
-                      variant="outline"
-                      className="w-full sm:w-auto px-10 py-7 text-lg font-bold bg-white/10 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 transition-all hover:scale-105"
+                      className="bg-primary hover:bg-primary/90 text-white px-8 py-3 font-semibold rounded-md"
                     >
-                      List Your Property Free
+                      FIND OUT MORE
                     </Button>
                   </Link>
                 </div>
-              </FadeIn>
-
-              {/* Key Benefits Row */}
-              <FadeIn delay={0.4} duration={0.8}>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto pt-6">
-                  {[
-                    { label: "Zero Upfront Costs", icon: DollarSign, desc: "Pay only at closing" },
-                    { label: "Verified Lawyers", icon: Shield, desc: "Secure transactions" },
-                    { label: "Direct Deals", icon: Users, desc: "No middlemen" }
-                  ].map((item, i) => (
-                    <div key={i} className="group p-4 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all">
-                      <div className="flex flex-col items-center text-center gap-2">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                          <item.icon className="h-6 w-6 text-primary" />
-                        </div>
-                        <span className="text-sm md:text-base font-bold text-white">{item.label}</span>
-                        <span className="text-xs text-white/60">{item.desc}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </FadeIn>
-            </div>
+              </div>
+            </FadeIn>
           </div>
         </div>
 
-        {/* Enhanced scroll indicator with text */}
+        {/* Scroll indicator */}
         <FadeIn delay={0.6} duration={0.8}>
           <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
-            <span className="text-xs text-white/60 font-medium uppercase tracking-wider">See Properties</span>
-            <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2">
-              <div className="w-1.5 h-3 bg-white/70 rounded-full animate-pulse" />
+            <span className="text-xs text-white/80 font-medium uppercase tracking-wider">Browse Listings</span>
+            <div className="w-6 h-10 border-2 border-white/60 rounded-full flex items-start justify-center p-2">
+              <div className="w-1.5 h-3 bg-white/80 rounded-full animate-pulse" />
             </div>
           </div>
         </FadeIn>
