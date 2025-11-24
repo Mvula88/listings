@@ -27,7 +27,7 @@ export async function trackPropertyView(
     const referrer = typeof document !== 'undefined' ? document.referrer || null : null
 
     // Create view record
-    const { error }: any = await supabase.from('property_views').insert({
+    const { error }: any = await (supabase.from('property_views') as any).insert({
       property_id: propertyId,
       viewer_id: user?.id || null,
       user_agent: userAgent,
