@@ -107,9 +107,12 @@ export default async function HomePage() {
           <div className="max-w-4xl mx-auto">
             {/* Main Headline */}
             <FadeIn direction="down" duration={0.8}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white text-center mb-8">
-                Find your dream property
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white text-center mb-4">
+                Connect directly with property buyers and sellers
               </h1>
+              <p className="text-lg md:text-xl text-white/90 text-center mb-8 max-w-3xl mx-auto">
+                No estate agents. Verified conveyancers. Secure transactions.
+              </p>
             </FadeIn>
 
             {/* Search Bar */}
