@@ -75,7 +75,7 @@ function button(text: string, url: string, color: string = '#0ea5e9'): string {
 export function newInquiryEmail(
   seller: Profile,
   buyer: Profile,
-  property: Property,
+  property: any,
   inquiry: Inquiry
 ) {
   const content = `
@@ -120,7 +120,7 @@ export function newInquiryEmail(
 export function inquiryResponseEmail(
   buyer: Profile,
   seller: Profile,
-  property: Property,
+  property: any,
   responseMessage: string
 ) {
   const content = `
@@ -158,7 +158,7 @@ export function inquiryResponseEmail(
 
 export function transactionInitiatedEmail(
   user: Profile,
-  property: Property,
+  property: any,
   transaction: Transaction,
   userRole: 'buyer' | 'seller'
 ) {
@@ -204,7 +204,7 @@ export function transactionInitiatedEmail(
 export function lawyerSelectedEmail(
   user: Profile,
   lawyer: { firm_name: string; full_name: string },
-  property: Property,
+  property: any,
   selectedBy: 'buyer' | 'seller'
 ) {
   const content = `
@@ -243,7 +243,7 @@ export function lawyerSelectedEmail(
 export function newPropertyMatchEmail(
   user: Profile,
   searchName: string,
-  properties: Property[]
+  properties: any[]
 ) {
   const propertyListHtml = properties
     .map(
@@ -290,7 +290,7 @@ export function newPropertyMatchEmail(
 
 export function dealAssignedToLawyerEmail(
   lawyer: Profile,
-  property: Property,
+  property: any,
   transaction: Transaction,
   role: 'buyer' | 'seller'
 ) {
