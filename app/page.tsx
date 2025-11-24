@@ -88,9 +88,9 @@ export default async function HomePage() {
         </div>
       </nav>
 
-      {/* Compact Hero Section - Airbnb Style */}
-      <section className="relative py-12 md:py-16 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-        {/* Compact Background System */}
+      {/* Enhanced Hero Section - Clear & Compact */}
+      <section className="relative py-16 md:py-20 lg:py-24 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+        {/* Background System */}
         <div className="absolute inset-0">
           {/* Base Image Layer */}
           <div className="absolute inset-0">
@@ -98,135 +98,123 @@ export default async function HomePage() {
               src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop&q=80"
               alt="Modern luxury home"
               fill
-              className="object-cover opacity-30"
+              className="object-cover opacity-25"
               priority
             />
           </div>
 
-          {/* Compact gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-slate-950/90 via-slate-900/90 to-slate-950/90" />
+          {/* Gradient overlay with bottom fade */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/95 via-slate-900/95 to-transparent" />
 
-          {/* Subtle animated orbs */}
+          {/* Animated orbs */}
           <div className="absolute inset-0">
-            <div className="absolute top-0 left-[20%] w-[400px] h-[400px] bg-primary/20 rounded-full blur-[100px] animate-pulse" />
-            <div className="absolute top-0 right-[15%] w-[350px] h-[350px] bg-primary/15 rounded-full blur-[90px] animate-pulse" style={{ animationDelay: '2s', animationDuration: '4s' }} />
+            <div className="absolute top-0 left-[15%] w-[500px] h-[500px] bg-primary/15 rounded-full blur-[120px] animate-pulse" />
+            <div className="absolute top-0 right-[10%] w-[450px] h-[450px] bg-blue-500/10 rounded-full blur-[110px] animate-pulse" style={{ animationDelay: '2s', animationDuration: '5s' }} />
           </div>
 
-          {/* Subtle grid */}
-          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:48px_48px]" />
-
-          {/* Noise texture */}
-          <div className="absolute inset-0 opacity-[0.015] mix-blend-soft-light bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]" />
+          {/* Grid pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-6xl mx-auto">
-            {/* Compact centered content */}
-            <div className="text-center space-y-6">
-              {/* Premium Badge */}
+          <div className="max-w-5xl mx-auto">
+            {/* Centered content */}
+            <div className="text-center space-y-6 md:space-y-8">
+              {/* Savings Badge */}
               <FadeIn direction="down" duration={0.6}>
-                <div className="inline-flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-white/10 via-white/5 to-transparent backdrop-blur-xl rounded-full border border-white/10 shadow-2xl group hover:scale-105 transition-transform duration-300">
-                  <div className="relative">
-                    <div className="absolute inset-0 bg-primary/30 rounded-full blur-lg animate-pulse" />
-                    <TrendingDown className="h-4 w-4 text-primary relative z-10" />
+                <div className="inline-flex items-center gap-3 px-5 py-2.5 bg-gradient-to-r from-emerald-500/20 via-primary/20 to-blue-500/20 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl group hover:scale-105 transition-all duration-300">
+                  <div className="relative flex items-center justify-center">
+                    <div className="absolute inset-0 bg-emerald-400/40 rounded-full blur-md animate-pulse" />
+                    <TrendingDown className="h-5 w-5 text-emerald-400 relative z-10" />
                   </div>
-                  <span className="text-xs md:text-sm font-bold text-white tracking-wide">Save 50-70% on Agent Fees</span>
-                  <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
+                  <span className="text-sm md:text-base font-bold bg-gradient-to-r from-emerald-400 via-primary to-blue-400 bg-clip-text text-transparent">
+                    Save 50-70% • No Agent Commissions
+                  </span>
                 </div>
               </FadeIn>
 
-              {/* Compact Headline */}
+              {/* Main Headline - Crystal Clear Value Proposition */}
               <FadeIn direction="down" duration={0.8} delay={0.1}>
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] tracking-tight">
-                  <span className="block bg-gradient-to-br from-white via-white to-white/80 bg-clip-text text-transparent">
-                    Buy & Sell Properties
+                <h1 className="text-4xl md:text-5xl lg:text-7xl font-black leading-[1.05] tracking-tight">
+                  <span className="block bg-gradient-to-br from-white via-white to-white/90 bg-clip-text text-transparent">
+                    Africa's First
                   </span>
-                  <span className="block mt-1 bg-gradient-to-r from-primary via-primary/90 to-primary/70 bg-clip-text text-transparent relative inline-block">
-                    Without Agents
-                    {/* Decorative underline */}
-                    <svg className="absolute -bottom-2 left-0 w-full h-2 text-primary/40" viewBox="0 0 300 8" preserveAspectRatio="none">
-                      <path d="M0,5 Q75,0 150,5 T300,5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
+                  <span className="block mt-2 bg-gradient-to-r from-primary via-blue-500 to-primary bg-clip-text text-transparent relative">
+                    Commission-Free
+                  </span>
+                  <span className="block mt-2 bg-gradient-to-br from-white via-white to-white/90 bg-clip-text text-transparent">
+                    Property Marketplace
                   </span>
                 </h1>
               </FadeIn>
 
-              {/* Compact Subheadline */}
+              {/* Clear Description */}
               <FadeIn delay={0.2} duration={0.8}>
-                <p className="text-base md:text-lg lg:text-xl text-white/70 max-w-3xl mx-auto leading-relaxed">
-                  Connect directly with buyers and sellers.{" "}
-                  <span className="text-white font-semibold">Save thousands</span> on commissions.{" "}
-                  <span className="text-primary font-semibold">Zero upfront costs.</span>
+                <p className="text-lg md:text-xl lg:text-2xl text-white/80 max-w-3xl mx-auto leading-relaxed font-light">
+                  Buy and sell properties directly. <span className="text-white font-semibold">No agents</span>, <span className="text-white font-semibold">no commissions</span>, <span className="text-primary font-semibold">just savings</span>.
+                </p>
+                <p className="text-base md:text-lg text-white/60 max-w-2xl mx-auto mt-3">
+                  Connect with verified buyers and sellers across Namibia & South Africa
                 </p>
               </FadeIn>
 
-              {/* Compact CTA Buttons */}
+              {/* CTA Buttons */}
               <FadeIn delay={0.3} duration={0.8}>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                   <Link href="/browse">
                     <Button
                       size="lg"
-                      className="w-full sm:w-auto group px-8 py-6 text-base font-bold shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-[1.02] relative overflow-hidden"
+                      className="w-full sm:w-auto group px-10 py-7 text-lg font-bold shadow-2xl shadow-primary/40 hover:shadow-primary/60 transition-all hover:scale-105 relative overflow-hidden"
                     >
-                      <span className="relative z-10 flex items-center">
+                      <span className="relative z-10 flex items-center gap-2">
                         Browse Properties
-                        <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
                       </span>
-                      {/* Button glow effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary/80 to-primary opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-blue-500 to-primary opacity-0 group-hover:opacity-100 transition-opacity blur-xl" />
                     </Button>
                   </Link>
                   <Link href="/list">
                     <Button
                       size="lg"
                       variant="outline"
-                      className="w-full sm:w-auto px-8 py-6 text-base font-bold bg-white/5 backdrop-blur-xl border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/40 transition-all hover:scale-[1.02]"
+                      className="w-full sm:w-auto px-10 py-7 text-lg font-bold bg-white/10 backdrop-blur-xl border-2 border-white/30 text-white hover:bg-white/20 hover:border-white/50 transition-all hover:scale-105"
                     >
-                      List Your Property
+                      List Your Property Free
                     </Button>
                   </Link>
                 </div>
               </FadeIn>
 
-              {/* Compact Trust Indicators */}
+              {/* Key Benefits Row */}
               <FadeIn delay={0.4} duration={0.8}>
-                <div className="flex flex-wrap justify-center gap-4 md:gap-6 pt-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto pt-6">
                   {[
-                    { label: "No Upfront Costs", icon: "💰" },
-                    { label: "Verified Lawyers", icon: "✓" },
-                    { label: "Direct Communication", icon: "💬" }
+                    { label: "Zero Upfront Costs", icon: DollarSign, desc: "Pay only at closing" },
+                    { label: "Verified Lawyers", icon: Shield, desc: "Secure transactions" },
+                    { label: "Direct Deals", icon: Users, desc: "No middlemen" }
                   ].map((item, i) => (
-                    <div key={i} className="flex items-center gap-2 group">
-                      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/5 border border-white/10 backdrop-blur-xl group-hover:bg-white/10 transition-all">
-                        <span className="text-sm">{item.icon}</span>
+                    <div key={i} className="group p-4 rounded-2xl bg-white/5 backdrop-blur-xl border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all">
+                      <div className="flex flex-col items-center text-center gap-2">
+                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <item.icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <span className="text-sm md:text-base font-bold text-white">{item.label}</span>
+                        <span className="text-xs text-white/60">{item.desc}</span>
                       </div>
-                      <span className="text-xs md:text-sm font-medium text-white/80">{item.label}</span>
                     </div>
                   ))}
-                </div>
-              </FadeIn>
-
-              {/* Compact Location Badge */}
-              <FadeIn delay={0.5} duration={0.8}>
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full group hover:bg-white/10 transition-all">
-                  <div className="relative">
-                    <MapPin className="h-4 w-4 text-primary relative z-10" />
-                    <div className="absolute inset-0 bg-primary/20 rounded-full blur-md" />
-                  </div>
-                  <span className="text-xs md:text-sm text-white/90 font-medium">
-                    Serving Namibia & South Africa
-                  </span>
                 </div>
               </FadeIn>
             </div>
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <FadeIn delay={1.1} duration={0.8}>
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
-              <div className="w-1 h-3 bg-white/60 rounded-full animate-pulse" />
+        {/* Enhanced scroll indicator with text */}
+        <FadeIn delay={0.6} duration={0.8}>
+          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce">
+            <span className="text-xs text-white/60 font-medium uppercase tracking-wider">See Properties</span>
+            <div className="w-6 h-10 border-2 border-white/40 rounded-full flex items-start justify-center p-2">
+              <div className="w-1.5 h-3 bg-white/70 rounded-full animate-pulse" />
             </div>
           </div>
         </FadeIn>
