@@ -117,20 +117,8 @@ export default async function HomePage() {
 
             {/* Search Bar */}
             <FadeIn delay={0.2} duration={0.8}>
-              <div className="bg-white rounded-lg shadow-2xl p-4 md:p-6 mb-16">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-                  {/* Offer Type */}
-                  <div>
-                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
-                      Offer Type
-                    </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
-                      <option>Value</option>
-                      <option>Sale</option>
-                      <option>Rent</option>
-                    </select>
-                  </div>
-
+              <div className="bg-white rounded-lg shadow-2xl p-4 md:p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   {/* Property Type */}
                   <div>
                     <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
@@ -158,20 +146,6 @@ export default async function HomePage() {
                       <option>Johannesburg</option>
                     </select>
                   </div>
-
-                  {/* Price */}
-                  <div>
-                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
-                      Price
-                    </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
-                      <option>If doesn't matter</option>
-                      <option>Under N$500k</option>
-                      <option>N$500k - N$1M</option>
-                      <option>N$1M - N$2M</option>
-                      <option>Above N$2M</option>
-                    </select>
-                  </div>
                 </div>
 
                 {/* Search Button */}
@@ -181,40 +155,6 @@ export default async function HomePage() {
                     Search
                   </Button>
                 </Link>
-              </div>
-            </FadeIn>
-
-            {/* Services for property owners */}
-            <FadeIn delay={0.4} duration={0.8}>
-              <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
-                Services for property owners
-              </h2>
-
-              {/* Action Cards */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* I want to rent */}
-                <div className="bg-white/95 backdrop-blur-sm rounded-lg p-8 text-center shadow-xl hover:shadow-2xl transition-all hover:scale-105">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">I want to rent</h3>
-                  <Link href="/list?type=rent">
-                    <Button
-                      className="bg-primary hover:bg-primary/90 text-white px-8 py-3 font-semibold rounded-md"
-                    >
-                      FIND OUT MORE
-                    </Button>
-                  </Link>
-                </div>
-
-                {/* I want to sell */}
-                <div className="bg-white/95 backdrop-blur-sm rounded-lg p-8 text-center shadow-xl hover:shadow-2xl transition-all hover:scale-105">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">I want to sell</h3>
-                  <Link href="/list?type=sale">
-                    <Button
-                      className="bg-primary hover:bg-primary/90 text-white px-8 py-3 font-semibold rounded-md"
-                    >
-                      FIND OUT MORE
-                    </Button>
-                  </Link>
-                </div>
               </div>
             </FadeIn>
           </div>
