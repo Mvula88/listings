@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle, X } from "lucide-react"
@@ -11,8 +12,15 @@ export default function PricingPage() {
       <nav className="border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="text-2xl font-bold text-primary">
-              PropLinka
+            <Link href="/" className="transition-transform hover:scale-105">
+              <Image
+                src="/logo.png"
+                alt="PropLinka"
+                width={180}
+                height={50}
+                className="h-10 w-auto"
+                priority
+              />
             </Link>
             <div className="flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary">
