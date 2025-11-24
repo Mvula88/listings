@@ -67,8 +67,15 @@ export default async function HomePage() {
       <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="text-2xl font-bold text-primary transition-transform hover:scale-105">
-              PropLinka
+            <Link href="/" className="transition-transform hover:scale-105">
+              <Image
+                src="/logo.png"
+                alt="PropLinka"
+                width={180}
+                height={50}
+                className="h-10 w-auto"
+                priority
+              />
             </Link>
             <div className="hidden md:flex items-center gap-6">
               <Link href="/browse" className="text-sm font-medium hover:text-primary transition-colors">
