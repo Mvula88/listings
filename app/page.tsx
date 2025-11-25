@@ -96,7 +96,7 @@ export default async function HomePage() {
       </nav>
 
       {/* Hero Section - Find Your Dream Property */}
-      <section className="relative min-h-[450px] md:min-h-[500px] overflow-hidden">
+      <section className="relative min-h-[350px] md:min-h-[400px] overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
