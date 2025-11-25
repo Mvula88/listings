@@ -96,7 +96,7 @@ export default async function HomePage() {
       </nav>
 
       {/* Hero Section - Find Your Dream Property */}
-      <section className="relative min-h-[350px] md:min-h-[400px] overflow-hidden">
+      <section className="relative min-h-[280px] md:min-h-[320px] overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -110,15 +110,17 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/30" />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10 pt-16 md:pt-20 pb-12">
+        <div className="container mx-auto px-4 relative z-10 pt-12 md:pt-14 pb-8">
           <div className="max-w-4xl mx-auto">
             {/* Main Headline */}
             <FadeIn direction="down" duration={0.8}>
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 backdrop-blur-sm rounded-full border border-emerald-400/30 mb-4">
-                <span className="px-2 py-0.5 bg-emerald-400/20 rounded-full text-emerald-300 text-xs font-semibold uppercase tracking-wider">
-                  No Agents
-                </span>
-                <span className="text-xs text-white/90">Sell your home with lawyers, not middlemen</span>
+              <div className="flex justify-center mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 backdrop-blur-sm rounded-full border border-emerald-400/30">
+                  <span className="px-2 py-0.5 bg-emerald-400/20 rounded-full text-emerald-300 text-xs font-semibold uppercase tracking-wider">
+                    No Agents
+                  </span>
+                  <span className="text-xs text-white/90">Sell your home with lawyers, not middlemen</span>
+                </div>
               </div>
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-3">
                 Sell your home <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">directly</span>.<br />
