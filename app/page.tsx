@@ -145,49 +145,6 @@ export default async function HomePage() {
                 </div>
               </div>
             </FadeIn>
-
-            {/* Search Bar */}
-            <FadeIn delay={0.2} duration={0.8}>
-              <div className="bg-white rounded-lg shadow-2xl p-4 md:p-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  {/* Property Type */}
-                  <div>
-                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
-                      Property
-                    </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
-                      <option>All</option>
-                      <option>House</option>
-                      <option>Apartment</option>
-                      <option>Land</option>
-                      <option>Commercial</option>
-                    </select>
-                  </div>
-
-                  {/* Localities */}
-                  <div>
-                    <label className="block text-xs uppercase text-gray-600 mb-2 font-semibold">
-                      Localities
-                    </label>
-                    <select className="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary text-gray-800">
-                      <option>Country, district, ...</option>
-                      <option>Windhoek</option>
-                      <option>Swakopmund</option>
-                      <option>Cape Town</option>
-                      <option>Johannesburg</option>
-                    </select>
-                  </div>
-                </div>
-
-                {/* Search Button */}
-                <Link href="/browse">
-                  <Button className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg font-semibold rounded-md shadow-lg flex items-center justify-center gap-2">
-                    <Search className="h-5 w-5" />
-                    Search
-                  </Button>
-                </Link>
-              </div>
-            </FadeIn>
           </div>
         </div>
 
