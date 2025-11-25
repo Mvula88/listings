@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowRight, Home, Users, DollarSign, Shield, MapPin, Bed, Bath, Square, TrendingDown, Search } from "lucide-react"
+import { ArrowRight, Home, Users, DollarSign, Shield, MapPin, Bed, Bath, Square, TrendingDown, Search, CheckCircle, FileText, Upload, TrendingUp, HelpCircle } from "lucide-react"
 import { getFeaturedProperties, formatPropertyPrice } from "@/lib/data/properties"
 import { SavingsCalculator } from "@/components/calculator/savings-calculator"
 import { calculateSavings, formatSavingsDisplay } from "@/lib/utils/savings-calculator"
@@ -265,12 +265,12 @@ export default async function HomePage() {
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">How PropLinka Works</h2>
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                Four simple steps to save thousands on your property transaction
+                From listing to transfer, all in one place. We remove agents from the middle and bring lawyers into the centre.
               </p>
             </div>
           </FadeIn>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto">
             <FadeIn delay={0.1}>
               <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full bg-background/50 backdrop-blur overflow-hidden">
                 {/* Step number badge */}
@@ -285,14 +285,14 @@ export default async function HomePage() {
                     </div>
                   </div>
 
-                  <h3 className="font-bold text-xl mb-3 text-center">List or Browse</h3>
+                  <h3 className="font-bold text-xl mb-3 text-center">List your property in minutes</h3>
                   <p className="text-sm text-muted-foreground text-center leading-relaxed">
-                    List your property for free or browse available properties across Namibia and South Africa
+                    Add photos, price, and key details. Choose if you want "lawyer from day one" or only once you have a serious buyer. No long-term lock-in.
                   </p>
                 </CardContent>
 
                 {/* Arrow connector for desktop */}
-                <div className="hidden lg:block absolute top-1/2 -right-8 transform -translate-y-1/2 z-10">
+                <div className="hidden md:block absolute top-1/2 -right-10 transform -translate-y-1/2 z-10">
                   <ArrowRight className="h-6 w-6 text-primary/40" />
                 </div>
               </Card>
@@ -312,14 +312,14 @@ export default async function HomePage() {
                     </div>
                   </div>
 
-                  <h3 className="font-bold text-xl mb-3 text-center">Connect Directly</h3>
+                  <h3 className="font-bold text-xl mb-3 text-center">Connect with direct buyers</h3>
                   <p className="text-sm text-muted-foreground text-center leading-relaxed">
-                    Buyers and sellers communicate directly through our secure messaging platform
+                    Buyers contact you securely through PropLinka. You stay in control of viewings, negotiations and final price — we just make the process safe.
                   </p>
                 </CardContent>
 
                 {/* Arrow connector for desktop */}
-                <div className="hidden lg:block absolute top-1/2 -right-8 transform -translate-y-1/2 z-10">
+                <div className="hidden md:block absolute top-1/2 -right-10 transform -translate-y-1/2 z-10">
                   <ArrowRight className="h-6 w-6 text-primary/40" />
                 </div>
               </Card>
@@ -334,41 +334,14 @@ export default async function HomePage() {
 
                 <CardContent className="p-6 pt-8">
                   <div className="relative mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                      <Shield className="h-8 w-8 text-primary-foreground" />
-                    </div>
-                  </div>
-
-                  <h3 className="font-bold text-xl mb-3 text-center">Choose Conveyancer</h3>
-                  <p className="text-sm text-muted-foreground text-center leading-relaxed">
-                    Select from our network of verified lawyers with transparent flat-rate pricing
-                  </p>
-                </CardContent>
-
-                {/* Arrow connector for desktop */}
-                <div className="hidden lg:block absolute top-1/2 -right-8 transform -translate-y-1/2 z-10">
-                  <ArrowRight className="h-6 w-6 text-primary/40" />
-                </div>
-              </Card>
-            </FadeIn>
-
-            <FadeIn delay={0.4}>
-              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full bg-background/50 backdrop-blur overflow-hidden">
-                {/* Step number badge */}
-                <div className="absolute -top-4 -right-4 w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-                  <span className="text-4xl font-bold text-primary/30">4</span>
-                </div>
-
-                <CardContent className="p-6 pt-8">
-                  <div className="relative mb-6">
                     <div className="w-16 h-16 bg-gradient-to-br from-green-500 via-green-600 to-green-700 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-green-500/25 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                      <DollarSign className="h-8 w-8 text-white" />
+                      <Shield className="h-8 w-8 text-white" />
                     </div>
                   </div>
 
-                  <h3 className="font-bold text-xl mb-3 text-center">Save Thousands</h3>
+                  <h3 className="font-bold text-xl mb-3 text-center">Lawyers close the deal</h3>
                   <p className="text-sm text-muted-foreground text-center leading-relaxed">
-                    Pay a small platform fee at closing and save 50-70% compared to traditional agent commissions
+                    Once you and the buyer agree on a price, a vetted property lawyer steps in: drafting contracts, doing checks, and handling transfer until the property is lodged.
                   </p>
                 </CardContent>
               </Card>
@@ -443,7 +416,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Why Choose PropLinka - Modern Design */}
+      {/* Why PropLinka - Modern Design */}
       <section className="py-24 relative overflow-hidden">
         {/* Background decoration */}
         <div className="absolute inset-0 bg-gradient-to-b from-background via-muted/10 to-background" />
@@ -452,14 +425,18 @@ export default async function HomePage() {
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Why Choose PropLinka?</h2>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">Why PropLinka</h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                The smarter way to buy and sell property
+                Built for owners and property lawyers
+              </p>
+              <p className="text-sm text-muted-foreground max-w-3xl mx-auto mt-2">
+                The platform keeps deals transparent, documents organised, and everyone on the same page.
               </p>
             </div>
           </FadeIn>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* For Home Owners */}
             <FadeIn delay={0.1} className="h-full">
               <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full flex flex-col overflow-hidden bg-gradient-to-br from-background to-primary/5">
                 {/* Decorative corner accent */}
@@ -467,64 +444,154 @@ export default async function HomePage() {
 
                 <CardHeader className="relative z-10">
                   <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                    <DollarSign className="h-8 w-8 text-primary-foreground" />
+                    <Home className="h-8 w-8 text-primary-foreground" />
                   </div>
-                  <CardTitle className="text-2xl mb-2">Transparent Pricing</CardTitle>
+                  <CardTitle className="text-2xl mb-2">For Home Owners</CardTitle>
+                  <p className="text-lg text-muted-foreground font-semibold">Sell without agents. Keep more.</p>
                 </CardHeader>
                 <CardContent className="flex-1 relative z-10">
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    Tiered platform fees based on property value, collected by your lawyer at closing. No upfront costs, no percentage-based commissions.
-                  </p>
-                  <div className="flex items-center text-sm text-primary font-medium">
-                    <span>Learn about pricing</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
+                  <ul className="space-y-3 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span>No estate agent commissions eating your sale price</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Choose your own selling price and negotiate directly</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Clear visibility: offer, documents, and transfer stage in one dashboard</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Fixed legal fees shown before you accept a lawyer</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <span>Support from humans if you get stuck in the process</span>
+                    </li>
+                  </ul>
                 </CardContent>
               </Card>
             </FadeIn>
 
+            {/* For Property Lawyers */}
             <FadeIn delay={0.2} className="h-full">
-              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full flex flex-col overflow-hidden bg-gradient-to-br from-background to-primary/5">
+              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full flex flex-col overflow-hidden bg-gradient-to-br from-background to-emerald-500/5">
                 {/* Decorative corner accent */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-500/10 rounded-bl-full" />
 
                 <CardHeader className="relative z-10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                    <Shield className="h-8 w-8 text-primary-foreground" />
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 via-emerald-600 to-emerald-700 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-emerald-500/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
+                    <Shield className="h-8 w-8 text-white" />
                   </div>
-                  <CardTitle className="text-2xl mb-2">Verified Lawyers</CardTitle>
+                  <CardTitle className="text-2xl mb-2">For Property Lawyers</CardTitle>
+                  <p className="text-lg text-muted-foreground font-semibold">Quality matters, not cold calling.</p>
                 </CardHeader>
                 <CardContent className="flex-1 relative z-10">
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    All conveyancers are verified professionals with transparent flat-rate pricing. Your transaction is in safe hands.
+                  <ul className="space-y-3 text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      <span>Receive pre-qualified, serious property deals from owners</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      <span>Set your own fixed fee packs for different property values</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      <span>Secure document uploads and digital signatures built-in</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      <span>Automatic status updates to keep both parties informed</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <CheckCircle className="h-5 w-5 text-emerald-500 mt-0.5 flex-shrink-0" />
+                      <span>Grow your practice with transparent, digital-first workflows</span>
+                    </li>
+                  </ul>
+                </CardContent>
+              </Card>
+            </FadeIn>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <FadeIn>
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                Get answers to common questions about PropLinka
+              </p>
+            </div>
+          </FadeIn>
+
+          <div className="max-w-3xl mx-auto space-y-4">
+            <FadeIn delay={0.1}>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-xl flex items-start gap-3">
+                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
+                    Do I still need an estate agent?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    No. PropLinka is designed for owners who want to sell directly. You handle viewings and negotiations, while trusted lawyers handle contracts and transfer.
                   </p>
-                  <div className="flex items-center text-sm text-primary font-medium">
-                    <span>Find a lawyer</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
                 </CardContent>
               </Card>
             </FadeIn>
 
-            <FadeIn delay={0.3} className="h-full">
-              <Card className="relative group hover:shadow-2xl transition-all duration-500 border-2 hover:border-primary/50 h-full flex flex-col overflow-hidden bg-gradient-to-br from-background to-primary/5">
-                {/* Decorative corner accent */}
-                <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-bl-full" />
-
-                <CardHeader className="relative z-10">
-                  <div className="w-16 h-16 bg-gradient-to-br from-primary via-primary/90 to-primary/80 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                    <Users className="h-8 w-8 text-primary-foreground" />
-                  </div>
-                  <CardTitle className="text-2xl mb-2">Direct Communication</CardTitle>
+            <FadeIn delay={0.2}>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-xl flex items-start gap-3">
+                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
+                    Is PropLinka a law firm?
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="flex-1 relative z-10">
-                  <p className="text-muted-foreground leading-relaxed mb-4">
-                    Connect directly with buyers and sellers through our secure platform. No middleman delays or miscommunication.
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    No. PropLinka is a platform that connects you to independent property lawyers. Each lawyer is regulated in their own jurisdiction and works with you directly.
                   </p>
-                  <div className="flex items-center text-sm text-primary font-medium">
-                    <span>How it works</span>
-                    <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                  </div>
+                </CardContent>
+              </Card>
+            </FadeIn>
+
+            <FadeIn delay={0.3}>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-xl flex items-start gap-3">
+                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
+                    How do lawyers charge on PropLinka?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    Lawyers set fixed-fee packs (for example, "Sale up to N$1.5m"). You see the fee before you confirm, so there are no surprise bills later.
+                  </p>
+                </CardContent>
+              </Card>
+            </FadeIn>
+
+            <FadeIn delay={0.4}>
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-xl flex items-start gap-3">
+                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
+                    When will the platform be live?
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground leading-relaxed">
+                    We are onboarding the first group of home owners and property lawyers. Join the waitlist now and we'll invite you as soon as your region opens.
+                  </p>
                 </CardContent>
               </Card>
             </FadeIn>
