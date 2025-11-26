@@ -23,7 +23,7 @@ export default async function SettingsPage() {
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .single() as { data: { full_name: string | null; phone: string | null; user_type: string | null } | null }
 
   return (
     <div className="space-y-6 max-w-4xl">
