@@ -178,7 +178,7 @@ export async function DELETE(
       .from('property_images')
       .select('id, url')
       .in('id', imageIds)
-      .eq('property_id', propertyId)
+      .eq('property_id', propertyId) as { data: { id: string; url: string }[] | null; error: any }
 
     if (!images || images.length === 0) {
       return NextResponse.json(
