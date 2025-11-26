@@ -14,20 +14,28 @@ export async function POST(request: Request) {
     } else if (contentType.includes('multipart/form-data') || contentType.includes('application/x-www-form-urlencoded')) {
       // Handle FormData
       const formData = await request.formData()
+
+      // Helper to safely parse numbers
+      const parseNumber = (value: FormDataEntryValue | null, defaultValue: number = 0): number => {
+        if (value === null || value === '') return defaultValue
+        const num = Number(value)
+        return isNaN(num) ? defaultValue : num
+      }
+
       body = {
         title: formData.get('title'),
         description: formData.get('description'),
         property_type: formData.get('property_type'),
         listing_type: formData.get('listing_type') || 'sale',
-        price: Number(formData.get('price')),
+        price: parseNumber(formData.get('price'), 0),
         currency: formData.get('currency') || 'NAD',
-        bedrooms: Number(formData.get('bedrooms')) || 0,
-        bathrooms: Number(formData.get('bathrooms')) || 0,
-        area: Number(formData.get('square_meters')) || 0,
+        bedrooms: parseNumber(formData.get('bedrooms'), 0),
+        bathrooms: parseNumber(formData.get('bathrooms'), 0),
+        area: parseNumber(formData.get('square_meters'), 1),
         address: formData.get('address_line1'),
         city: formData.get('city'),
         province: formData.get('province'),
-        country_id: Number(formData.get('country_id')),
+        country_id: parseNumber(formData.get('country_id'), 0),
         location: `${formData.get('city')}, ${formData.get('province')}`,
         features: [],
       }
