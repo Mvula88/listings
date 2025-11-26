@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         address: formData.get('address_line1'),
         city: formData.get('city'),
         province: formData.get('province'),
-        country_id: parseNumber(formData.get('country_id'), 0),
+        country_id: parseNumber(formData.get('country_id'), 1),
         location: `${formData.get('city')}, ${formData.get('province')}`,
         features: [],
       }
