@@ -1,9 +1,12 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Bed, Bath, Square, MapPin, TrendingDown } from 'lucide-react'
+import { Bed, Bath, Square, MapPin, TrendingDown, Home } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
 import { FavoriteButton } from '@/components/properties/favorite-button'
@@ -15,7 +18,8 @@ interface PropertyCardProps {
 }
 
 export function PropertyCard({ property, initialFavorited = false }: PropertyCardProps) {
-  const mainImage = property.property_images?.[0]?.url || '/placeholder-property.jpg'
+  const [imageError, setImageError] = useState(false)
+  const mainImage = property.property_images?.[0]?.url
   const currency = property.country?.currency || 'ZAR'
   const countryCode = property.country?.code || 'ZA'
 
@@ -27,13 +31,18 @@ export function PropertyCard({ property, initialFavorited = false }: PropertyCar
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       <Link href={`/properties/${property.id}`}>
         <div className="relative h-48 bg-muted">
-          {mainImage && (
+          {mainImage && !imageError ? (
             <Image
               src={mainImage}
               alt={property.title}
               fill
               className="object-cover"
+              onError={() => setImageError(true)}
             />
+          ) : (
+            <div className="flex items-center justify-center h-full bg-gradient-to-br from-muted to-muted/50">
+              <Home className="h-16 w-16 text-muted-foreground/30" />
+            </div>
           )}
           <div className="absolute top-2 right-2">
             <FavoriteButton

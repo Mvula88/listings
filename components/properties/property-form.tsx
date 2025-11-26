@@ -44,7 +44,7 @@ export function PropertyForm({ countries }: PropertyFormProps) {
 
       // Get the created property from response
       const result = await response.json()
-      const propertyId = result.property?.id
+      const propertyId = result.data?.id
 
       // Upload images if any
       if (images.length > 0 && propertyId) {

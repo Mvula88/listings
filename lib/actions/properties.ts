@@ -83,8 +83,8 @@ export async function createProperty(data: PropertyData): Promise<CreateProperty
       .from('properties') as any)
       .insert({
         ...validatedData,
-        owner_id: user.id,
-        status: 'pending', // Requires admin verification
+        seller_id: user.id,
+        status: 'active', // Set to active for now
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
@@ -149,16 +149,16 @@ export async function updateProperty(propertyId: string, data: Partial<PropertyD
     // Verify ownership
     const { data: property } = await supabase
       .from('properties')
-      .select('owner_id')
+      .select('seller_id')
       .eq('id', propertyId)
       .single() as {
         data: {
-          owner_id: string
+          seller_id: string
         } | null
         error: any
       }
 
-    if (!property || property.owner_id !== user.id) {
+    if (!property || property.seller_id !== user.id) {
       return {
         success: false,
         error: 'Unauthorized',
@@ -208,16 +208,16 @@ export async function deleteProperty(propertyId: string) {
     // Verify ownership
     const { data: property } = await supabase
       .from('properties')
-      .select('owner_id')
+      .select('seller_id')
       .eq('id', propertyId)
       .single() as {
         data: {
-          owner_id: string
+          seller_id: string
         } | null
         error: any
       }
 
-    if (!property || property.owner_id !== user.id) {
+    if (!property || property.seller_id !== user.id) {
       return {
         success: false,
         error: 'Unauthorized',
@@ -257,13 +257,14 @@ export async function getPropertiesForUser(userId: string) {
     .from('properties')
     .select(`
       *,
-      images:property_images(
+      property_images(
         id,
-        image_url,
-        display_order
+        url,
+        alt_text,
+        order_index
       )
     `)
-    .eq('owner_id', userId)
+    .eq('seller_id', userId)
     .neq('status', 'deleted')
     .order('created_at', { ascending: false })
 
