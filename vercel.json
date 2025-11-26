@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/check-overdue-remittances",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/expire-featured-listings",
+      "schedule": "0 */6 * * *"
     }
   ]
 }

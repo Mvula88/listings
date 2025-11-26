@@ -3,15 +3,16 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils/cn'
-import { 
-  Home, 
-  Building, 
-  MessageSquare, 
-  FileText, 
+import {
+  Home,
+  Building,
+  MessageSquare,
+  FileText,
   Settings,
   Users,
   Briefcase,
-  PlusCircle
+  PlusCircle,
+  Star
 } from 'lucide-react'
 
 interface NavItem {
@@ -31,6 +32,12 @@ const navItems: NavItem[] = [
     title: 'My Properties',
     href: '/properties',
     icon: Building,
+    userTypes: ['seller']
+  },
+  {
+    title: 'Featured Listings',
+    href: '/featured',
+    icon: Star,
     userTypes: ['seller']
   },
   {

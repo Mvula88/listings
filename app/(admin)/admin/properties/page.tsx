@@ -52,7 +52,7 @@ export default async function PropertiesPage({ searchParams }: PageProps) {
   const { count: featuredCount } = await supabase
     .from('properties')
     .select('id', { count: 'exact', head: true })
-    .eq('is_featured', true)
+    .eq('featured', true)
 
   return (
     <div className="space-y-6">

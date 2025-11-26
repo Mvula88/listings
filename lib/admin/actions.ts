@@ -230,7 +230,7 @@ export async function getProperties(params: {
   }
 
   if (featured !== undefined) {
-    query = query.eq('is_featured', featured)
+    query = query.eq('featured', featured)
   }
 
   const { data, error, count } = await query
@@ -378,7 +378,7 @@ export async function featureProperty(propertyId: string, featuredUntil?: string
   const { error } = await (supabase
     .from('properties') as any)
     .update({
-      is_featured: true,
+      featured: true,
       featured_until: featuredUntil,
     })
     .eq('id', propertyId)
@@ -407,7 +407,7 @@ export async function unfeatureProperty(propertyId: string) {
   const { error } = await (supabase
     .from('properties') as any)
     .update({
-      is_featured: false,
+      featured: false,
       featured_until: null,
     })
     .eq('id', propertyId)

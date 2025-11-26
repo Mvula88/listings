@@ -3,11 +3,12 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Building, Plus, Eye, Edit, Trash2, MapPin } from 'lucide-react'
+import { Building, Plus, Eye, Edit, Trash2, MapPin, Star, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { FadeIn } from '@/components/ui/fade-in'
 import Image from 'next/image'
 import { formatPrice } from '@/lib/utils/format'
+import { FeaturePropertyButton } from '@/components/properties/feature-property-button'
 
 export default async function ManagePropertiesPage() {
   const supabase = await createClient()
@@ -41,6 +42,7 @@ export default async function ManagePropertiesPage() {
   const activeProperties = properties?.filter((p: any) => p.status === 'active') || []
   const draftProperties = properties?.filter((p: any) => p.status === 'draft') || []
   const soldProperties = properties?.filter((p: any) => p.status === 'sold') || []
+  const featuredProperties = activeProperties.filter((p: any) => p.featured && new Date(p.featured_until) > new Date())
 
   return (
     <div className="space-y-6">
@@ -63,7 +65,7 @@ export default async function ManagePropertiesPage() {
 
       {/* Stats */}
       <FadeIn delay={0.1}>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-4">
           <Card className="border-2 hover:shadow-lg transition-all">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Listings</CardTitle>
@@ -72,6 +74,17 @@ export default async function ManagePropertiesPage() {
             <CardContent>
               <div className="text-3xl font-bold">{activeProperties.length}</div>
               <p className="text-xs text-muted-foreground">Currently published</p>
+            </CardContent>
+          </Card>
+
+          <Card className="border-2 hover:shadow-lg transition-all border-yellow-200 bg-yellow-50/50">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Featured Listings</CardTitle>
+              <Star className="h-4 w-4 text-yellow-600 fill-yellow-600" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-3xl font-bold text-yellow-700">{featuredProperties.length}</div>
+              <p className="text-xs text-muted-foreground">Getting premium visibility</p>
             </CardContent>
           </Card>
 
@@ -131,6 +144,12 @@ export default async function ManagePropertiesPage() {
                       <Badge className="absolute top-2 right-2 bg-green-600">
                         Active
                       </Badge>
+                      {property.featured && property.featured_until && new Date(property.featured_until) > new Date() && (
+                        <Badge className="absolute top-2 left-2 bg-yellow-500 text-yellow-950">
+                          <Star className="h-3 w-3 mr-1 fill-current" />
+                          {property.premium ? 'Premium' : 'Featured'}
+                        </Badge>
+                      )}
                     </div>
 
                     {/* Details */}
@@ -151,11 +170,22 @@ export default async function ManagePropertiesPage() {
                         <Badge variant="outline" className="capitalize">
                           {property.property_type}
                         </Badge>
+                        {property.featured && property.featured_until && new Date(property.featured_until) > new Date() && (
+                          <Badge variant="outline" className="text-yellow-600 border-yellow-300 bg-yellow-50">
+                            <Star className="h-3 w-3 mr-1 fill-yellow-500" />
+                            Until {new Date(property.featured_until).toLocaleDateString()}
+                          </Badge>
+                        )}
                       </div>
                     </div>
 
                     {/* Actions */}
                     <div className="flex md:flex-col gap-2 shrink-0">
+                      <FeaturePropertyButton
+                        propertyId={property.id}
+                        currentlyFeatured={property.featured && property.featured_until && new Date(property.featured_until) > new Date()}
+                        featuredUntil={property.featured_until}
+                      />
                       <Link href={`/properties/${property.id}`} className="flex-1 md:flex-initial">
                         <Button variant="outline" className="w-full">
                           <Eye className="h-4 w-4 mr-2" />

@@ -284,7 +284,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                       <div className="text-sm text-muted-foreground truncate">
                         {property.city}, {property.country?.name}
                       </div>
-                      {property.is_featured && (
+                      {property.featured && (
                         <Badge variant="secondary" className="mt-1">
                           <Star className="h-3 w-3 mr-1" />
                           Featured
@@ -371,7 +371,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                           </>
                         )}
                         <DropdownMenuSeparator />
-                        {property.is_featured ? (
+                        {property.featured ? (
                           <DropdownMenuItem
                             onClick={() => handleUnfeature(property.id)}
                             disabled={isLoading}

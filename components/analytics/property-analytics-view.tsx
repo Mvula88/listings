@@ -47,7 +47,7 @@ export function PropertyAnalyticsView({
             <Badge variant={property.status === 'active' ? 'default' : 'secondary'}>
               {property.status}
             </Badge>
-            {property.is_featured && <Badge variant="outline">Featured</Badge>}
+            {property.featured && <Badge variant="outline">Featured</Badge>}
             {property.is_premium && <Badge variant="outline">Premium</Badge>}
             {property.is_verified && <Badge variant="outline">Verified</Badge>}
           </div>
