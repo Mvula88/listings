@@ -2,8 +2,13 @@ import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, Star, ArrowRight } from 'lucide-react'
+import { CheckCircle, Star, ArrowRight, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+import Stripe from 'stripe'
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+  apiVersion: '2025-10-29.clover',
+})
 
 export default async function PaymentSuccessPage({
   params,
@@ -27,10 +32,53 @@ export default async function PaymentSuccessPage({
     .from('properties')
     .select('*, country:countries(currency, currency_symbol)')
     .eq('id', resolvedParams.id)
-    .single<{ seller_id: string; title: string; [key: string]: any }>()
+    .single<{ seller_id: string; title: string; featured: boolean; featured_until: string | null; [key: string]: any }>()
 
   if (!property || property.seller_id !== user.id) {
     notFound()
+  }
+
+  // If property is not featured yet but we have a session_id, verify with Stripe and activate
+  let activationNeeded = false
+  let activationError = false
+
+  if (!property.featured && resolvedSearchParams.session_id) {
+    try {
+      // Verify the checkout session with Stripe
+      const session = await stripe.checkout.sessions.retrieve(resolvedSearchParams.session_id)
+
+      if (session.payment_status === 'paid' && session.metadata?.propertyId === resolvedParams.id) {
+        const days = parseInt(session.metadata?.days || '30')
+        const plan = session.metadata?.plan || ''
+
+        // Calculate featured_until date
+        const featuredUntil = new Date()
+        featuredUntil.setDate(featuredUntil.getDate() + days)
+
+        // Activate the feature
+        const { error: updateError } = await (supabase.from('properties') as any)
+          .update({
+            featured: true,
+            featured_until: featuredUntil.toISOString(),
+            premium: plan.includes('premium'),
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', resolvedParams.id)
+
+        if (updateError) {
+          console.error('Error activating feature:', updateError)
+          activationError = true
+        } else {
+          activationNeeded = true
+          // Update property object for display
+          property.featured = true
+          property.featured_until = featuredUntil.toISOString()
+        }
+      }
+    } catch (error) {
+      console.error('Error verifying Stripe session:', error)
+      activationError = true
+    }
   }
 
   return (
@@ -55,7 +103,24 @@ export default async function PaymentSuccessPage({
                 </span>
                 <Star className="h-5 w-5 text-yellow-600 fill-yellow-600" />
               </div>
+              {property.featured_until && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  Featured until: {new Date(property.featured_until).toLocaleDateString()}
+                </p>
+              )}
             </div>
+
+            {activationError && (
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
+                <AlertCircle className="h-5 w-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div>
+                  <h4 className="font-semibold text-red-900">Activation Issue</h4>
+                  <p className="text-sm text-red-800">
+                    There was an issue activating your featured listing. Please contact support with your session ID.
+                  </p>
+                </div>
+              </div>
+            )}
 
             <div className="space-y-3 text-sm">
               <div className="flex justify-between py-2 border-b">
