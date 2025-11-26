@@ -181,10 +181,12 @@ export default async function ManagePropertiesPage() {
                             View
                           </Button>
                         </Link>
-                        <Button variant="outline" className="flex-1 md:flex-initial">
-                          <Edit className="h-4 w-4 mr-2" />
-                          Edit
-                        </Button>
+                        <Link href={`/properties/${property.id}/edit`} className="flex-1 md:flex-initial">
+                          <Button variant="outline" className="w-full">
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                        </Link>
                         <Button variant="outline" className="flex-1 md:flex-initial text-red-600 hover:text-red-700">
                           <Trash2 className="h-4 w-4 mr-2" />
                           Delete

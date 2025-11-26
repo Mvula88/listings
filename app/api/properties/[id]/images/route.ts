@@ -114,7 +114,7 @@ export async function POST(
   }
 }
 
-// Delete image
+// Delete images (supports single via query param or bulk via body)
 export async function DELETE(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -133,49 +133,81 @@ export async function DELETE(
       )
     }
 
-    // Get image ID from query
-    const url = new URL(request.url)
-    const imageId = url.searchParams.get('imageId')
+    // Verify property ownership
+    const { data: property } = await supabase
+      .from('properties')
+      .select('seller_id')
+      .eq('id', propertyId)
+      .single() as { data: { seller_id: string } | null; error: any }
 
-    if (!imageId) {
+    if (!property || property.seller_id !== user.id) {
       return NextResponse.json(
-        { error: 'Image ID required' },
-        { status: 400 }
-      )
-    }
-
-    // Verify ownership
-    const { data: image } = await supabase
-      .from('property_images')
-      .select('*, property:properties!property_id(seller_id)')
-      .eq('id', imageId)
-      .single() as { data: { url: string; property: { seller_id: string } } | null; error: any }
-
-    if (!image || image.property?.seller_id !== user.id) {
-      return NextResponse.json(
-        { error: 'Image not found or access denied' },
+        { error: 'Property not found or access denied' },
         { status: 403 }
       )
     }
 
-    // Extract file path from URL
-    const urlObj = new URL(image.url)
-    const filePath = urlObj.pathname.split('/').slice(-2).join('/')
+    // Get image IDs - either from query param (single) or body (bulk)
+    let imageIds: string[] = []
 
-    // Delete from storage
-    await supabase.storage
-      .from('property-images')
-      .remove([filePath])
+    const url = new URL(request.url)
+    const singleImageId = url.searchParams.get('imageId')
+
+    if (singleImageId) {
+      imageIds = [singleImageId]
+    } else {
+      try {
+        const body = await request.json()
+        if (body.imageIds && Array.isArray(body.imageIds)) {
+          imageIds = body.imageIds
+        }
+      } catch {
+        // No body provided
+      }
+    }
+
+    if (imageIds.length === 0) {
+      return NextResponse.json(
+        { error: 'Image ID(s) required' },
+        { status: 400 }
+      )
+    }
+
+    // Get images to delete
+    const { data: images } = await supabase
+      .from('property_images')
+      .select('id, url')
+      .in('id', imageIds)
+      .eq('property_id', propertyId)
+
+    if (!images || images.length === 0) {
+      return NextResponse.json(
+        { error: 'Images not found' },
+        { status: 404 }
+      )
+    }
+
+    // Delete from storage (best effort)
+    for (const image of images) {
+      try {
+        const urlObj = new URL(image.url)
+        const filePath = urlObj.pathname.split('/').slice(-2).join('/')
+        await supabase.storage.from('property-images').remove([filePath])
+      } catch (e) {
+        console.error('Storage delete error:', e)
+      }
+    }
 
     // Delete from database
     const { error: dbError } = await supabase
       .from('property_images')
       .delete()
-      .eq('id', imageId)
+      .in('id', imageIds)
+      .eq('property_id', propertyId)
 
     if (dbError) throw dbError
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true, deleted: images.length })
   } catch (error: any) {
     console.error('Error deleting image:', error)
     return NextResponse.json(
