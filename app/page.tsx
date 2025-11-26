@@ -7,6 +7,7 @@ import { getFeaturedProperties, formatPropertyPrice } from "@/lib/data/propertie
 import { calculateSavings, formatSavingsDisplay } from "@/lib/utils/savings-calculator"
 import { FadeIn } from "@/components/ui/fade-in"
 import { SavingsSection } from "@/components/calculator/savings-section"
+import { FAQSection } from "@/components/faq/faq-section"
 
 interface MockProperty {
   id: string
@@ -470,85 +471,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <FadeIn>
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
-              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                Get answers to common questions about PropLinka
-              </p>
-            </div>
-          </FadeIn>
-
-          <div className="max-w-3xl mx-auto space-y-4">
-            <FadeIn delay={0.1}>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl flex items-start gap-3">
-                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
-                    Do I still need an estate agent?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    No. PropLinka is designed for owners who want to sell directly. You handle viewings and negotiations, while trusted lawyers handle contracts and transfer.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-
-            <FadeIn delay={0.2}>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl flex items-start gap-3">
-                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
-                    Is PropLinka a law firm?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    No. PropLinka is a platform that connects you to independent property lawyers. Each lawyer is regulated in their own jurisdiction and works with you directly.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-
-            <FadeIn delay={0.3}>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl flex items-start gap-3">
-                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
-                    How do lawyers charge on PropLinka?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    Lawyers set fixed-fee packs (for example, "Sale up to N$1.5m"). You see the fee before you confirm, so there are no surprise bills later.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-
-            <FadeIn delay={0.4}>
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl flex items-start gap-3">
-                    <HelpCircle className="h-6 w-6 text-primary mt-0.5 flex-shrink-0" />
-                    When will the platform be live?
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground leading-relaxed">
-                    We are onboarding the first group of home owners and property lawyers. Join the waitlist now and we'll invite you as soon as your region opens.
-                  </p>
-                </CardContent>
-              </Card>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
+      {/* FAQ Section with Lottie Animation */}
+      <FAQSection />
 
       {/* Modern CTA Section */}
       <section className="py-24 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white relative overflow-hidden">
