@@ -112,8 +112,8 @@ export function PropertyEditForm({ property, countries }: PropertyEditFormProps)
         toast.success('Property updated successfully!')
       }
 
-      // Redirect to property page
-      router.push(`/properties/${property.id}`)
+      // Redirect to properties management page
+      router.push('/properties')
       router.refresh()
     } catch (error: any) {
       console.error('Error updating property:', error)
