@@ -35,7 +35,7 @@ export default async function EditPropertyPage({ params }: EditPropertyPageProps
       )
     `)
     .eq('id', id)
-    .single()
+    .single() as { data: any; error: any }
 
   if (error || !property) {
     notFound()
