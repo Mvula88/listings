@@ -107,8 +107,10 @@ export default async function HomePage() {
             className="object-cover"
             priority
           />
-          {/* Dark overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/30" />
+          {/* Glass effect overlay */}
+          <div className="absolute inset-0 backdrop-blur-[2px] bg-gradient-to-b from-black/50 via-black/40 to-black/20" />
+          {/* Additional glass shine effect */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10 pt-12 md:pt-14 pb-8">
