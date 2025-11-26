@@ -8,14 +8,13 @@ const propertySchema = z.object({
   description: z.string().min(20, 'Description must be at least 20 characters'),
   property_type: z.enum(['house', 'apartment', 'townhouse', 'land', 'commercial', 'farm']),
   price: z.number().positive('Price must be positive'),
-  bedrooms: z.number().min(0, 'Bedrooms cannot be negative').optional(),
-  bathrooms: z.number().min(0, 'Bathrooms cannot be negative').optional(),
-  square_meters: z.number().min(0, 'Size cannot be negative').optional(),
+  bedrooms: z.number().min(0, 'Bedrooms cannot be negative').nullable().optional(),
+  bathrooms: z.number().min(0, 'Bathrooms cannot be negative').nullable().optional(),
+  square_meters: z.number().min(0, 'Size cannot be negative').nullable().optional(),
   address_line1: z.string().min(5, 'Address is required'),
   city: z.string().min(2, 'City is required'),
-  province: z.string().min(2, 'Province is required').optional(),
+  province: z.string().nullable().optional(),
   country_id: z.string().min(1, 'Country is required'),
-  features: z.array(z.string()).optional(),
 })
 
 type PropertyData = z.infer<typeof propertySchema>

@@ -34,7 +34,6 @@ export async function POST(request: Request) {
         city: formData.get('city'),
         province: formData.get('province') || null,
         country_id: formData.get('country_id') as string,
-        features: [],
       }
     } else {
       body = await request.json()
