@@ -55,12 +55,9 @@ export function PropertyForm({ countries }: PropertyFormProps) {
         toast.success('Property created successfully!')
       }
 
-      // Redirect to property page
-      if (propertyId) {
-        router.push(`/properties/${propertyId}`)
-      } else {
-        router.push('/dashboard')
-      }
+      // Redirect to dashboard/properties management page
+      router.push('/properties')
+      router.refresh()
     } catch (error: any) {
       console.error('Error creating property:', error)
       toast.error(error.message || 'Failed to create property')
