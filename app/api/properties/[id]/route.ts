@@ -70,7 +70,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       .from('properties')
       .select('seller_id')
       .eq('id', id)
-      .single()
+      .single() as { data: { seller_id: string } | null; error: any }
 
     if (!property || property.seller_id !== user.id) {
       return NextResponse.json(
@@ -136,7 +136,7 @@ export async function DELETE(request: Request, { params }: RouteParams) {
       .from('properties')
       .select('seller_id')
       .eq('id', id)
-      .single()
+      .single() as { data: { seller_id: string } | null; error: any }
 
     if (!property || property.seller_id !== user.id) {
       return NextResponse.json(
