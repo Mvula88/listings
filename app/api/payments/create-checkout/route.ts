@@ -6,6 +6,25 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-10-29.clover',
 })
 
+// Map plan IDs to Stripe Price IDs and metadata
+const PLANS: Record<string, { priceId: string; days: number; name: string }> = {
+  featured_7: {
+    priceId: process.env.STRIPE_PRICE_FEATURED_7!,
+    days: 7,
+    name: 'Featured Listing - 7 Days'
+  },
+  featured_30: {
+    priceId: process.env.STRIPE_PRICE_FEATURED_30!,
+    days: 30,
+    name: 'Featured Listing - 30 Days'
+  },
+  premium_30: {
+    priceId: process.env.STRIPE_PRICE_PREMIUM_30!,
+    days: 30,
+    name: 'Premium Listing - 30 Days'
+  }
+}
+
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
@@ -55,26 +74,8 @@ export async function POST(request: Request) {
       )
     }
 
-    // Define pricing plans
-    const plans: Record<string, { price: number; days: number; name: string }> = {
-      featured_7: {
-        price: 4900, // R49 in cents
-        days: 7,
-        name: 'Featured Listing - 7 Days'
-      },
-      featured_30: {
-        price: 14900, // R149 in cents
-        days: 30,
-        name: 'Featured Listing - 30 Days'
-      },
-      premium_30: {
-        price: 29900, // R299 in cents
-        days: 30,
-        name: 'Premium Listing - 30 Days (Featured + Top Placement)'
-      }
-    }
-
-    const selectedPlan = plans[plan]
+    // Get selected plan
+    const selectedPlan = PLANS[plan]
     if (!selectedPlan) {
       return NextResponse.json(
         { error: 'Invalid plan' },
@@ -82,19 +83,21 @@ export async function POST(request: Request) {
       )
     }
 
-    // Create Stripe checkout session
+    // Verify Price ID is configured
+    if (!selectedPlan.priceId || selectedPlan.priceId.includes('xxxxxxxx')) {
+      console.error(`Stripe Price ID not configured for plan: ${plan}`)
+      return NextResponse.json(
+        { error: 'Payment configuration error. Please contact support.' },
+        { status: 500 }
+      )
+    }
+
+    // Create Stripe checkout session using Price ID
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
-          price_data: {
-            currency: 'zar',
-            product_data: {
-              name: selectedPlan.name,
-              description: `Feature "${property.title}" for ${selectedPlan.days} days`,
-            },
-            unit_amount: selectedPlan.price,
-          },
+          price: selectedPlan.priceId,
           quantity: 1,
         },
       ],
@@ -103,6 +106,7 @@ export async function POST(request: Request) {
       cancel_url: `${request.headers.get('origin')}/properties/${propertyId}/payment-cancelled`,
       metadata: {
         propertyId: propertyId,
+        propertyTitle: property.title,
         userId: user.id,
         plan: plan,
         days: selectedPlan.days.toString(),
@@ -111,10 +115,10 @@ export async function POST(request: Request) {
     })
 
     return NextResponse.json({ sessionId: session.id, url: session.url })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating checkout session:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: error.message || 'Internal server error' },
       { status: 500 }
     )
   }
