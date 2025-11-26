@@ -2,7 +2,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Target, Users, Shield, TrendingUp } from "lucide-react"
+import { Eye, Sliders, ShieldCheck, Home, Users, Scale, Briefcase, Globe, Heart, ArrowRight } from "lucide-react"
 
 export default function AboutPage() {
   return (
@@ -37,189 +37,302 @@ export default function AboutPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary/10 to-background py-16">
+      <section className="bg-gradient-to-b from-primary/10 to-background py-20">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">About PropLinka</h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">About Us – Proplinka</h1>
+            <p className="text-xl text-primary font-semibold mb-4">
+              We're not another property platform.
+            </p>
             <p className="text-lg text-muted-foreground">
-              Revolutionizing real estate transactions in Africa by eliminating unnecessary middleman fees
+              Proplinka was built to fix a broken system.
             </p>
           </div>
         </div>
       </section>
 
-      {/* Mission Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl font-bold mb-4">Our Mission</h2>
-                <p className="text-muted-foreground mb-4">
-                  We believe buying or selling property shouldn't cost you tens of thousands in commission fees.
-                  PropLinka was founded to democratize real estate transactions by linking buyers and sellers directly.
-                </p>
-                <p className="text-muted-foreground mb-4">
-                  By eliminating the traditional 5-7% agent commission and replacing it with a tiered platform fee (R4,500-R45,000 for sellers only),
-                  we're helping thousands of families save 85-90% on the biggest transactions of their lives.
-                </p>
-                <p className="text-muted-foreground">
-                  Starting in South Africa and Namibia, we're on a mission to make property transactions more affordable 
-                  and transparent across Africa.
-                </p>
-              </div>
-              <div className="bg-primary/10 rounded-lg p-8">
-                <div className="text-center">
-                  <div className="text-5xl font-bold text-primary mb-2">R10M+</div>
-                  <p className="text-muted-foreground">Saved in commissions</p>
-                </div>
-                <div className="grid grid-cols-2 gap-4 mt-8">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">5,000+</div>
-                    <p className="text-sm text-muted-foreground">Properties Listed</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">2,000+</div>
-                    <p className="text-sm text-muted-foreground">Happy Users</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section className="py-16 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">Our Values</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              <Card>
-                <CardContent className="p-6">
-                  <Target className="h-10 w-10 text-primary mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Transparency</h3>
-                  <p className="text-muted-foreground">
-                    No hidden fees, no fine print. Our tiered platform fee (paid by sellers only at closing) saves you 85-90% vs agent commissions.
-                    Every cost is clearly communicated upfront.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <Users className="h-10 w-10 text-primary mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Direct Connection</h3>
-                  <p className="text-muted-foreground">
-                    We believe in the power of direct communication. No middlemen means 
-                    faster decisions and better deals.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <Shield className="h-10 w-10 text-primary mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Security</h3>
-                  <p className="text-muted-foreground">
-                    All transactions are handled by verified conveyancing attorneys. 
-                    Your money and documents are always secure.
-                  </p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardContent className="p-6">
-                  <TrendingUp className="h-10 w-10 text-primary mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">Empowerment</h3>
-                  <p className="text-muted-foreground">
-                    We empower users to take control of their property transactions 
-                    and keep more money in their pockets.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Story Section */}
+      {/* Problem Statement */}
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-8">Our Story</h2>
-            <div className="space-y-4 text-muted-foreground">
-              <p>
-                PropLinka was born from frustration. Our founder was selling their family home and was shocked
-                to learn they would have to pay over R100,000 in agent commissions - money that could have gone
-                toward their children's education.
-              </p>
-              <p>
-                The agent's role? Listing the property online, showing it to a few people, and facilitating 
-                communication - tasks that could easily be done directly. The legal work was handled by a 
-                conveyancer anyway.
-              </p>
-              <p>
-                That's when the idea struck: What if there was a platform where buyers and sellers could connect 
-                directly, handle their own negotiations, and save tens of thousands in the process?
-              </p>
-              <p>
-                Today, PropLinka is that platform. We've helped thousands of families across South Africa and
-                Namibia save millions in unnecessary commissions. And we're just getting started.
-              </p>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              For too long, property owners have been forced into expensive agent contracts just to sell their own homes —
+              losing control, transparency, and large portions of their equity to commissions they didn't choose.
+            </p>
+            <p className="text-xl font-semibold mt-6 text-foreground">
+              We built Proplinka so owners could sell directly, safely, and legally.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Mission */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
+            <p className="text-lg text-muted-foreground text-center mb-12">
+              Our mission is simple: Give property owners full control of their sale while making the legal process seamless and trustworthy.
+            </p>
+
+            <p className="text-center text-muted-foreground mb-8">
+              We connect three powerful pieces of the property puzzle in one place:
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <Card className="text-center">
+                <CardContent className="p-6">
+                  <Home className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold">Verified Property Owners</h3>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="p-6">
+                  <Users className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold">Serious, Real Buyers</h3>
+                </CardContent>
+              </Card>
+              <Card className="text-center">
+                <CardContent className="p-6">
+                  <Scale className="h-12 w-12 text-primary mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold">Qualified Property Lawyers</h3>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="mt-12 text-center">
+              <p className="text-lg font-medium text-foreground">No middlemen. No pressure. No hidden fees.</p>
+              <p className="text-xl font-bold text-primary mt-2">Just clarity, protection, and control.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-16 bg-muted/50">
+      {/* Why We Exist */}
+      <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-12">Built by Property Experts</h2>
-            <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-              Our team combines decades of experience in real estate, technology, and law to create 
-              a platform that truly serves users' needs.
-            </p>
-            <div className="grid md:grid-cols-3 gap-8 text-center">
-              <div>
-                <div className="w-24 h-24 bg-primary/10 rounded-full mx-auto mb-4" />
-                <h3 className="font-semibold mb-1">Real Estate Professionals</h3>
-                <p className="text-sm text-muted-foreground">
-                  Former agents and brokers who understand the industry inside out
+            <h2 className="text-3xl font-bold mb-8 text-center">Why We Exist</h2>
+
+            <p className="text-lg text-muted-foreground text-center mb-8">We saw the problem firsthand:</p>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-12">
+              <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-6 border border-red-200 dark:border-red-900">
+                <p className="text-muted-foreground">
+                  Owners were <span className="font-semibold text-foreground">afraid to sell alone</span> because of legal risk.
                 </p>
               </div>
-              <div>
-                <div className="w-24 h-24 bg-primary/10 rounded-full mx-auto mb-4" />
-                <h3 className="font-semibold mb-1">Technology Experts</h3>
-                <p className="text-sm text-muted-foreground">
-                  Engineers building secure, user-friendly platforms
+              <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-6 border border-red-200 dark:border-red-900">
+                <p className="text-muted-foreground">
+                  Lawyers were <span className="font-semibold text-foreground">disconnected</span> from real buyers and sellers.
                 </p>
               </div>
-              <div>
-                <div className="w-24 h-24 bg-primary/10 rounded-full mx-auto mb-4" />
-                <h3 className="font-semibold mb-1">Legal Advisors</h3>
-                <p className="text-sm text-muted-foreground">
-                  Ensuring every transaction is legally sound and secure
+              <div className="bg-red-50 dark:bg-red-950/20 rounded-lg p-6 border border-red-200 dark:border-red-900">
+                <p className="text-muted-foreground">
+                  Buyers were <span className="font-semibold text-foreground">stuck behind gatekeeping</span> and unclear processes.
                 </p>
               </div>
             </div>
+
+            <p className="text-lg text-muted-foreground text-center mb-8">So we built a platform where:</p>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-6 border border-green-200 dark:border-green-900 text-center">
+                <p className="font-semibold text-foreground">Owners list freely</p>
+              </div>
+              <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-6 border border-green-200 dark:border-green-900 text-center">
+                <p className="font-semibold text-foreground">Buyers connect directly</p>
+              </div>
+              <div className="bg-green-50 dark:bg-green-950/20 rounded-lg p-6 border border-green-200 dark:border-green-900 text-center">
+                <p className="font-semibold text-foreground">Lawyers protect every deal</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What Makes Us Different */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold mb-8 text-center">What Makes Us Different</h2>
+
+            <div className="bg-background rounded-xl p-8 shadow-lg border mb-8">
+              <p className="text-lg text-muted-foreground mb-4">
+                <span className="font-bold text-foreground">Proplinka is not an estate agency.</span>
+              </p>
+              <p className="text-muted-foreground mb-2">We don't take control of your property.</p>
+              <p className="text-muted-foreground mb-4">We don't lock you into contracts.</p>
+              <p className="text-xl font-semibold text-primary">
+                We are a legal-first property technology platform.
+              </p>
+            </div>
+
+            <p className="text-center text-muted-foreground mb-6">Every deal is designed to be:</p>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <Eye className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="font-medium">Transparent</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <ShieldCheck className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="font-medium">Secure</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <Scale className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="font-medium">Lawyer-backed</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardContent className="p-4 text-center">
+                  <Sliders className="h-8 w-8 text-primary mx-auto mb-2" />
+                  <p className="font-medium">Digitally tracked</p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Values */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-bold text-center mb-4">Our Values</h2>
+            <p className="text-center text-muted-foreground mb-12">At the core of Proplinka are three principles:</p>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="border-2 hover:border-primary/50 transition-colors">
+                <CardContent className="p-6">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <Eye className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Clarity</h3>
+                  <p className="text-muted-foreground">
+                    Everything is visible, structured, and honest
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="border-2 hover:border-primary/50 transition-colors">
+                <CardContent className="p-6">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <Sliders className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Control</h3>
+                  <p className="text-muted-foreground">
+                    Owners stay in charge of their price, timeline, and decision
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="border-2 hover:border-primary/50 transition-colors">
+                <CardContent className="p-6">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                    <ShieldCheck className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="text-xl font-semibold mb-2">Trust</h3>
+                  <p className="text-muted-foreground">
+                    Lawyers handle what matters most: your legal protection
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* For Lawyers */}
+      <section className="py-16 bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950/20 dark:to-emerald-900/20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <Briefcase className="h-16 w-16 text-emerald-600 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold mb-4">For Lawyers</h2>
+            <p className="text-lg text-muted-foreground mb-6">
+              We give property lawyers a better system:
+            </p>
+            <p className="text-lg text-foreground">
+              Rather than chasing clients, you receive real, ready property transactions through a clean,
+              professional platform — so you can focus on what you do best: <span className="font-semibold text-emerald-600">protecting people and closing deals</span>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* For the Future */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <Globe className="h-16 w-16 text-primary mx-auto mb-6" />
+              <h2 className="text-3xl font-bold mb-4">For the Future</h2>
+              <p className="text-lg text-muted-foreground">
+                Proplinka is not just about selling houses. We are building the infrastructure for
+                <span className="font-semibold text-foreground"> trust-based property ownership in Africa and beyond</span>.
+              </p>
+            </div>
+
+            <p className="text-center text-muted-foreground mb-8">Our vision is a future where:</p>
+
+            <div className="grid md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+              <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-4">
+                <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                <p className="text-foreground">Selling property is not stressful</p>
+              </div>
+              <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-4">
+                <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                <p className="text-foreground">Lawyers are easily accessible</p>
+              </div>
+              <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-4">
+                <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                <p className="text-foreground">Property deals are transparent</p>
+              </div>
+              <div className="flex items-center gap-3 bg-muted/50 rounded-lg p-4">
+                <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0" />
+                <p className="text-foreground">Everyone has equal access to safe property transactions</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Built for Real People */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <Heart className="h-16 w-16 text-primary mx-auto mb-6" />
+            <h2 className="text-3xl font-bold mb-6">Built for Real People</h2>
+            <p className="text-lg text-muted-foreground mb-6">
+              Proplinka was built by people who understand property, law, and technology — and who believe that
+              <span className="font-semibold text-foreground"> ownership should empower people, not punish them</span>.
+            </p>
+            <p className="text-xl font-semibold text-primary">
+              If you believe property ownership should be simpler, safer, and fairer — you belong here.
+            </p>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary text-primary-foreground">
+      <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4">Join the Revolution</h2>
-          <p className="text-lg mb-8 opacity-90">
-            Be part of the movement changing real estate in Africa
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Take Control?</h2>
+          <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+            Join Proplinka and experience property transactions the way they should be — transparent, secure, and in your hands.
           </p>
-          <div className="flex gap-4 justify-center">
+          <div className="flex gap-4 justify-center flex-wrap">
             <Link href="/register">
-              <Button size="lg" variant="secondary">
+              <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
                 Get Started Free
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
             <Link href="/contact">
-              <Button size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground hover:bg-primary-foreground/10">
+              <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10">
                 Contact Us
               </Button>
             </Link>
@@ -230,7 +343,7 @@ export default function AboutPage() {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 PropLinka. All rights reserved.
+          © 2025 PropLinka. All rights reserved.
         </div>
       </footer>
     </div>
