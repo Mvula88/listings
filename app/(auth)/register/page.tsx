@@ -282,70 +282,77 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* Right Side - Benefits */}
-      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-primary/10 via-primary/5 to-background relative overflow-hidden">
-        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
-        <div className="absolute top-10 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+      {/* Right Side - Benefits with Background Image */}
+      <div className="hidden lg:flex flex-1 relative overflow-hidden">
+        {/* Background Image */}
+        <Image
+          src="/hero-bg.jpg"
+          alt="Property"
+          fill
+          className="object-cover"
+          priority
+        />
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/60 to-black/50" />
 
-        <div className="relative z-10 flex flex-col justify-center p-12 max-w-lg mx-auto">
+        <div className="relative z-10 flex flex-col justify-center p-12 max-w-lg mx-auto text-white">
           <h2 className="text-3xl font-bold mb-6 font-[family-name:var(--font-poppins)]">
-            Why join <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">PropLinka</span>?
+            Why join <span className="text-primary">PropLinka</span>?
           </h2>
 
           <div className="space-y-6">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
                 <TrendingDown className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold mb-1">Save up to 92% on fees</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/70">
                   Our tiered flat-fee model saves you tens of thousands compared to agent commissions
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
                 <Users className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold mb-1">Direct communication</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/70">
                   Connect directly with buyers or sellers - no middlemen, no delays
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-emerald-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Shield className="h-5 w-5 text-emerald-600" />
+              <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
+                <Shield className="h-5 w-5 text-emerald-400" />
               </div>
               <div>
                 <h3 className="font-semibold mb-1">Verified lawyers</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/70">
                   Access to verified conveyancing lawyers with transparent flat-rate pricing
                 </p>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+              <div className="w-10 h-10 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center flex-shrink-0">
                 <Check className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <h3 className="font-semibold mb-1">No upfront costs</h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-sm text-white/70">
                   Free to list, free to browse. Only pay when your deal closes successfully
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 p-4 bg-background/80 backdrop-blur-sm rounded-xl border">
-            <p className="text-sm text-muted-foreground">
-              <span className="font-semibold text-foreground">Join 1,000+ users</span> who have already saved over R10 million in agent commissions
+          <div className="mt-8 p-4 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+            <p className="text-sm text-white/80">
+              <span className="font-semibold text-white">Join 1,000+ users</span> who have already saved over R10 million in agent commissions
             </p>
           </div>
         </div>
