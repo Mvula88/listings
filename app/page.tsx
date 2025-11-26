@@ -101,7 +101,7 @@ export default async function HomePage() {
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
-            src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1920&h=1080&fit=crop&q=80"
+            src="/hero-bg.jpg"
             alt="Modern luxury home"
             fill
             className="object-cover"
