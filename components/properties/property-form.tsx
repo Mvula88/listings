@@ -165,7 +165,7 @@ export function PropertyForm({ countries }: PropertyFormProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {countries?.map((country: any) => (
-                    <SelectItem key={country.id} value={country.id}>
+                    <SelectItem key={country.id} value={String(country.id)}>
                       {country.name}
                     </SelectItem>
                   ))}

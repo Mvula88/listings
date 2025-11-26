@@ -35,7 +35,7 @@ export async function POST(request: Request) {
         address: formData.get('address_line1'),
         city: formData.get('city'),
         province: formData.get('province'),
-        country_id: parseNumber(formData.get('country_id'), 1),
+        country_id: parseNumber(formData.get('country_id'), 1) || 1,
         location: `${formData.get('city')}, ${formData.get('province')}`,
         features: [],
       }
@@ -43,10 +43,14 @@ export async function POST(request: Request) {
       body = await request.json()
     }
 
+    // Log the body for debugging
+    console.log('Property creation body:', JSON.stringify(body, null, 2))
+
     // Call the testable business logic
     const result = await createProperty(body)
 
     if (!result.success) {
+      console.error('Property creation failed:', result.error)
       return NextResponse.json(
         { success: false, error: result.error },
         { status: result.error?.includes('Authentication') ? 401 :
