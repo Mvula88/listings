@@ -5,8 +5,10 @@ import { FilterDrawer } from '@/components/properties/filter-drawer'
 import { SortSelect } from '@/components/properties/sort-select'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Search, MapPin, SlidersHorizontal } from 'lucide-react'
+import { Search, MapPin, SlidersHorizontal, Home, Sparkles } from 'lucide-react'
 import { FadeIn } from '@/components/ui/fade-in'
+import { PageHeader } from '@/components/layout/page-header'
+import { PageFooter } from '@/components/layout/page-footer'
 import Link from 'next/link'
 import Image from 'next/image'
 
@@ -110,77 +112,77 @@ export default async function BrowsePropertiesPage({
     .select('*')
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Sticky Header */}
-      <div className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="transition-transform hover:scale-105">
-              <Image
-                src="/logo.png"
-                alt="PropLinka"
-                width={180}
-                height={50}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
-            <div className="hidden md:flex items-center gap-4">
-              <Link href="/list">
-                <Button variant="outline" className="transition-transform hover:scale-105">List Property</Button>
-              </Link>
-              <Link href="/login">
-                <Button className="transition-transform hover:scale-105">Sign In</Button>
-              </Link>
+    <div className="min-h-screen bg-background flex flex-col">
+      <PageHeader />
+
+      {/* Hero Section */}
+      <section className="relative py-16 bg-gradient-to-br from-primary/10 via-primary/5 to-background overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+        <div className="absolute top-10 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <FadeIn>
+            <div className="max-w-3xl mx-auto text-center mb-8">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+                <Home className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-primary">Find Your Dream Home</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                Browse <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Properties</span>
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Discover homes listed directly by owners - no agent fees
+              </p>
             </div>
-          </div>
+          </FadeIn>
+
+          {/* Search Bar */}
+          <FadeIn delay={0.1}>
+            <div className="max-w-4xl mx-auto bg-background/80 backdrop-blur-sm p-6 rounded-2xl border shadow-lg">
+              <form className="flex flex-col md:flex-row gap-3">
+                <div className="flex-1 relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    name="q"
+                    placeholder="Search by location, property type, or keyword..."
+                    defaultValue={params.q}
+                    className="pl-10 h-12"
+                  />
+                </div>
+                <div className="relative md:w-[200px]">
+                  <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+                  <Input
+                    name="city"
+                    placeholder="City"
+                    defaultValue={params.city}
+                    className="pl-10 h-12"
+                  />
+                </div>
+                <Button type="submit" size="lg" className="md:w-auto w-full">
+                  <Search className="h-4 w-4 mr-2" />
+                  Search
+                </Button>
+              </form>
+
+              {/* Mobile Filter Button */}
+              <div className="mt-4 md:hidden">
+                <FilterDrawer
+                  countries={countries || []}
+                  currentFilters={params}
+                />
+              </div>
+            </div>
+          </FadeIn>
         </div>
-      </div>
+      </section>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Enhanced Search Bar */}
-        <FadeIn>
-          <div className="mb-8 bg-muted/30 p-6 rounded-lg border">
-            <form className="flex flex-col md:flex-row gap-3">
-              <div className="flex-1 relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  name="q"
-                  placeholder="Search by location, property type, or keyword..."
-                  defaultValue={params.q}
-                  className="pl-10 h-12"
-                />
-              </div>
-              <div className="relative md:w-[200px]">
-                <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                <Input
-                  name="city"
-                  placeholder="City"
-                  defaultValue={params.city}
-                  className="pl-10 h-12"
-                />
-              </div>
-              <Button type="submit" size="lg" className="md:w-auto w-full transition-transform hover:scale-105">
-                <Search className="h-4 w-4 mr-2" />
-                Search
-              </Button>
-            </form>
-
-            {/* Mobile Filter Button */}
-            <div className="mt-4 md:hidden">
-              <FilterDrawer
-                countries={countries || []}
-                currentFilters={params}
-              />
-            </div>
-          </div>
-        </FadeIn>
-
+      <div className="container mx-auto px-4 py-8 flex-1">
         <div className="flex gap-8">
           {/* Sticky Filters Sidebar - Desktop Only */}
           <aside className="hidden md:block w-72 shrink-0">
             <div className="sticky top-24 space-y-6">
-              <div className="bg-card border rounded-lg p-4">
+              <div className="bg-card border rounded-xl p-5 shadow-sm">
                 <div className="flex items-center gap-2 mb-4">
                   <SlidersHorizontal className="h-5 w-5 text-primary" />
                   <h2 className="font-semibold text-lg">Filters</h2>
@@ -198,15 +200,13 @@ export default async function BrowsePropertiesPage({
             <FadeIn delay={0.1}>
               <div className="mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <h1 className="text-2xl md:text-3xl font-bold mb-1">
+                  <h2 className="text-2xl font-bold mb-1">
                     Available Properties
-                  </h1>
+                  </h2>
                   <p className="text-muted-foreground">
                     {properties?.length || 0} properties found
                   </p>
                 </div>
-
-                {/* Sort Options */}
                 <SortSelect currentSort={params.sort} />
               </div>
             </FadeIn>
@@ -221,7 +221,7 @@ export default async function BrowsePropertiesPage({
               </div>
             ) : (
               <FadeIn delay={0.2}>
-                <div className="text-center py-16 bg-muted/30 rounded-lg border-2 border-dashed">
+                <div className="text-center py-16 bg-muted/30 rounded-2xl border-2 border-dashed">
                   <div className="max-w-sm mx-auto">
                     <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground/50" />
                     <h3 className="text-lg font-semibold mb-2">No properties found</h3>
@@ -229,7 +229,7 @@ export default async function BrowsePropertiesPage({
                       Try adjusting your search criteria or filters
                     </p>
                     <Link href="/browse">
-                      <Button variant="outline" className="transition-transform hover:scale-105">
+                      <Button variant="outline">
                         Clear All Filters
                       </Button>
                     </Link>
@@ -240,6 +240,8 @@ export default async function BrowsePropertiesPage({
           </main>
         </div>
       </div>
+
+      <PageFooter />
     </div>
   )
 }

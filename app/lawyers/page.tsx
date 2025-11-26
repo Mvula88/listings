@@ -2,9 +2,12 @@ import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { MapPin, Star, Briefcase, CheckCircle } from "lucide-react"
+import { MapPin, Star, Briefcase, CheckCircle, Shield, Scale, ArrowRight, Sparkles } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import { formatPrice } from "@/lib/utils/format"
+import { PageHeader } from "@/components/layout/page-header"
+import { PageFooter } from "@/components/layout/page-footer"
+import { FadeIn } from "@/components/ui/fade-in"
 
 export default async function LawyersPage() {
   const supabase = await createClient()
@@ -30,195 +33,200 @@ export default async function LawyersPage() {
     .limit(20)
 
   return (
-    <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="transition-transform hover:scale-105">
-              <Image
-                src="/logo.png"
-                alt="PropLinka"
-                width={180}
-                height={50}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
-            <div className="flex items-center gap-6">
-              <Link href="/browse" className="text-sm font-medium hover:text-primary">
-                Browse Properties
-              </Link>
-              <Link href="/login">
-                <Button variant="outline" size="sm">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm">Get Started</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen flex flex-col">
+      <PageHeader />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary/10 to-background py-16">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">Verified Conveyancing Lawyers</h1>
-            <p className="text-lg text-muted-foreground">
-              All lawyers are verified professionals with transparent flat-rate pricing. No hidden fees.
-            </p>
-          </div>
+      <section className="relative py-20 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-background overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+        <div className="absolute top-10 right-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <FadeIn>
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full mb-6">
+                <Scale className="h-4 w-4 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-600">Trusted Legal Professionals</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                Verified <span className="bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text text-transparent">Conveyancing Lawyers</span>
+              </h1>
+              <p className="text-lg text-muted-foreground mb-8">
+                All lawyers are verified professionals with transparent flat-rate pricing. No hidden fees.
+              </p>
+              <Link href="/lawyers/onboarding">
+                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
+                  <Briefcase className="mr-2 h-5 w-5" />
+                  Join as a Conveyancer
+                </Button>
+              </Link>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
-      {/* Filters */}
-      <section className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-wrap gap-4">
-            <select className="px-4 py-2 border rounded-lg">
-              <option>All Countries</option>
-              <option>South Africa</option>
-              <option>Namibia</option>
-            </select>
-            <select className="px-4 py-2 border rounded-lg">
-              <option>All Specializations</option>
-              <option>Residential Property</option>
-              <option>Commercial Property</option>
-              <option>Agricultural Land</option>
-            </select>
-            <select className="px-4 py-2 border rounded-lg">
-              <option>Sort by Rating</option>
-              <option>Sort by Price</option>
-              <option>Sort by Experience</option>
-            </select>
-          </div>
+      {/* Why Use PropLinka Lawyers */}
+      <section className="py-16 bg-muted/30">
+        <div className="container mx-auto px-4">
+          <FadeIn>
+            <div className="max-w-5xl mx-auto">
+              <h2 className="text-2xl font-bold mb-8 text-center">Why Use PropLinka Lawyers?</h2>
+              <div className="grid md:grid-cols-3 gap-6">
+                <Card className="text-center border-2 hover:border-emerald-500/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle className="h-7 w-7 text-emerald-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2">Verified Professionals</h3>
+                    <p className="text-sm text-muted-foreground">
+                      All lawyers are verified with valid practicing certificates
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card className="text-center border-2 hover:border-emerald-500/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <span className="text-emerald-600 font-bold text-xl">R</span>
+                    </div>
+                    <h3 className="font-semibold mb-2">Transparent Pricing</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Flat-rate fees with no hidden costs or surprises
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card className="text-center border-2 hover:border-emerald-500/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="w-14 h-14 bg-emerald-500/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                      <Star className="h-7 w-7 text-emerald-600" />
+                    </div>
+                    <h3 className="font-semibold mb-2">Client Reviews</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Real reviews from verified clients help you choose
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* Lawyers List */}
-      <section className="py-12">
+      <section className="py-16 flex-1">
         <div className="container mx-auto px-4">
           {lawyers && lawyers.length > 0 ? (
             <>
+              <FadeIn>
+                <div className="flex items-center justify-between mb-8">
+                  <h2 className="text-2xl font-bold">Available Lawyers</h2>
+                  <p className="text-muted-foreground">{lawyers.length} lawyers found</p>
+                </div>
+              </FadeIn>
               <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-                {lawyers.map((lawyer: any) => {
+                {lawyers.map((lawyer: any, index: number) => {
                   const currency = lawyer.country?.currency || 'ZAR'
                   const specialization = lawyer.specializations?.[0] || 'Property Conveyancing'
 
                   return (
-                    <Card key={lawyer.id} className="hover:shadow-lg transition-shadow">
-                      <CardHeader>
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <CardTitle className="flex items-center gap-2">
-                              {lawyer.profile?.full_name || 'Unknown'}
-                              {lawyer.verified && (
-                                <CheckCircle className="h-5 w-5 text-primary" />
-                              )}
-                            </CardTitle>
-                            <CardDescription>{lawyer.firm_name}</CardDescription>
-                          </div>
-                          <div className="text-right">
-                            <div className="flex items-center gap-1">
-                              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                              <span className="font-semibold">{lawyer.rating || 0}</span>
-                              <span className="text-sm text-muted-foreground">
-                                ({lawyer.transactions_completed || 0})
-                              </span>
+                    <FadeIn key={lawyer.id} delay={index * 0.1}>
+                      <Card className="hover:shadow-xl transition-all duration-300 border-2 hover:border-emerald-500/30 overflow-hidden">
+                        <CardHeader className="pb-3">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <CardTitle className="flex items-center gap-2">
+                                {lawyer.profile?.full_name || 'Unknown'}
+                                {lawyer.verified && (
+                                  <CheckCircle className="h-5 w-5 text-emerald-600" />
+                                )}
+                              </CardTitle>
+                              <CardDescription className="mt-1">{lawyer.firm_name}</CardDescription>
+                            </div>
+                            <div className="text-right">
+                              <div className="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-900/20 px-2 py-1 rounded-full">
+                                <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                                <span className="font-semibold">{lawyer.rating || 0}</span>
+                                <span className="text-xs text-muted-foreground">
+                                  ({lawyer.transactions_completed || 0})
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                          <div className="flex items-start gap-2">
-                            <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                            <span>{lawyer.city}, {lawyer.country?.name}</span>
-                          </div>
-                          <div className="flex items-start gap-2">
-                            <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5" />
-                            <span>{lawyer.years_experience || 0} years</span>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="text-sm text-muted-foreground mb-1">Specialization</div>
-                          <div className="font-medium">{specialization}</div>
-                        </div>
-
-                        <div className="flex justify-between items-center pt-4 border-t">
-                          <div>
-                            <div className="text-sm text-muted-foreground">Buyer Fee</div>
-                            <div className="text-xl font-bold text-primary">
-                              {formatPrice(lawyer.flat_fee_buyer, currency)}
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                          <div className="grid grid-cols-2 gap-4 text-sm">
+                            <div className="flex items-start gap-2">
+                              <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
+                              <span>{lawyer.city}, {lawyer.country?.name}</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <Briefcase className="h-4 w-4 text-muted-foreground mt-0.5" />
+                              <span>{lawyer.years_experience || 0} years</span>
                             </div>
                           </div>
-                          <Button>View Profile</Button>
-                        </div>
-                      </CardContent>
-                    </Card>
+
+                          <div className="bg-muted/50 rounded-lg p-3">
+                            <div className="text-xs text-muted-foreground mb-1">Specialization</div>
+                            <div className="font-medium">{specialization}</div>
+                          </div>
+
+                          <div className="flex justify-between items-center pt-4 border-t">
+                            <div>
+                              <div className="text-xs text-muted-foreground">Buyer Fee</div>
+                              <div className="text-2xl font-bold text-emerald-600">
+                                {formatPrice(lawyer.flat_fee_buyer, currency)}
+                              </div>
+                            </div>
+                            <Button className="bg-emerald-600 hover:bg-emerald-700">
+                              View Profile
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </FadeIn>
                   )
                 })}
               </div>
             </>
           ) : (
-            <div className="text-center py-12">
-              <p className="text-lg text-muted-foreground mb-4">
-                No verified lawyers available yet.
-              </p>
-              <Link href="/lawyers/onboarding">
-                <Button>Join as a Conveyancer</Button>
-              </Link>
-            </div>
+            <FadeIn>
+              <div className="text-center py-16 max-w-md mx-auto">
+                <Shield className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">No verified lawyers available yet</h3>
+                <p className="text-muted-foreground mb-6">
+                  Be the first to join our network of verified property lawyers
+                </p>
+                <Link href="/lawyers/onboarding">
+                  <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
+                    Join as a Conveyancer
+                  </Button>
+                </Link>
+              </div>
+            </FadeIn>
           )}
         </div>
       </section>
 
-      {/* Info Section */}
-      <section className="py-12 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-center">Why Use PropLinka Lawyers?</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <CheckCircle className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold mb-2">Verified Professionals</h3>
-                <p className="text-sm text-muted-foreground">
-                  All lawyers are verified with valid practicing certificates
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-primary font-bold">R</span>
-                </div>
-                <h3 className="font-semibold mb-2">Transparent Pricing</h3>
-                <p className="text-sm text-muted-foreground">
-                  Flat-rate fees with no hidden costs or surprises
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Star className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="font-semibold mb-2">Client Reviews</h3>
-                <p className="text-sm text-muted-foreground">
-                  Real reviews from verified clients help you choose
-                </p>
-              </div>
-            </div>
-          </div>
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-emerald-600 via-emerald-700 to-emerald-800 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <FadeIn>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Are You a Property Lawyer?</h2>
+            <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+              Join PropLinka and receive pre-qualified property deals. Set your own rates and grow your practice.
+            </p>
+            <Link href="/lawyers/onboarding">
+              <Button size="lg" variant="secondary" className="bg-white text-emerald-700 hover:bg-emerald-50">
+                Apply to Join
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </Link>
+          </FadeIn>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 PropLinka. All rights reserved.
-        </div>
-      </footer>
+      <PageFooter />
     </div>
   )
 }

@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
@@ -8,11 +7,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { HelpCircle, MessageCircle, ArrowRight, Sparkles, Users, Home, Scale, DollarSign } from "lucide-react"
+import { PageHeader } from "@/components/layout/page-header"
+import { PageFooter } from "@/components/layout/page-footer"
+import { FadeIn } from "@/components/ui/fade-in"
 
 export default function FAQPage() {
   const faqs = [
     {
       category: "General",
+      icon: HelpCircle,
       questions: [
         {
           q: "What is PropLinka?",
@@ -30,6 +34,7 @@ export default function FAQPage() {
     },
     {
       category: "For Buyers",
+      icon: Users,
       questions: [
         {
           q: "How do I contact sellers?",
@@ -51,6 +56,7 @@ export default function FAQPage() {
     },
     {
       category: "For Sellers",
+      icon: Home,
       questions: [
         {
           q: "How many properties can I list?",
@@ -76,6 +82,7 @@ export default function FAQPage() {
     },
     {
       category: "Legal & Safety",
+      icon: Scale,
       questions: [
         {
           q: "Is it safe to buy/sell without an agent?",
@@ -97,6 +104,7 @@ export default function FAQPage() {
     },
     {
       category: "Fees & Payments",
+      icon: DollarSign,
       questions: [
         {
           q: "What fees do sellers pay?",
@@ -127,106 +135,164 @@ export default function FAQPage() {
   ]
 
   return (
-    <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="transition-transform hover:scale-105">
-              <Image
-                src="/logo.png"
-                alt="PropLinka"
-                width={180}
-                height={50}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
-            <div className="flex items-center gap-6">
-              <Link href="/browse" className="text-sm font-medium hover:text-primary">
-                Browse Properties
-              </Link>
-              <Link href="/login">
-                <Button variant="outline" size="sm">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm">Get Started</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen flex flex-col">
+      <PageHeader />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-primary/10 to-background py-16">
+      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-primary/5 to-background overflow-hidden">
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
+        <div className="absolute top-10 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <FadeIn>
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+                <HelpCircle className="h-4 w-4 text-primary" />
+                <span className="text-sm font-medium text-primary">Get Answers</span>
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                Frequently Asked <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Questions</span>
+              </h1>
+              <p className="text-lg text-muted-foreground">
+                Everything you need to know about buying and selling on PropLinka
+              </p>
+            </div>
+          </FadeIn>
+        </div>
+      </section>
+
+      {/* Quick Links */}
+      <section className="py-8 border-b bg-muted/30">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl font-bold mb-4">Frequently Asked Questions</h1>
-            <p className="text-lg text-muted-foreground">
-              Everything you need to know about buying and selling on PropLinka
-            </p>
-          </div>
+          <FadeIn>
+            <div className="flex flex-wrap justify-center gap-3">
+              {faqs.map((category, index) => {
+                const Icon = category.icon
+                return (
+                  <a
+                    key={index}
+                    href={`#${category.category.toLowerCase().replace(/\s+/g, '-')}`}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-background border-2 rounded-full hover:border-primary/50 transition-colors"
+                  >
+                    <Icon className="h-4 w-4 text-primary" />
+                    <span className="text-sm font-medium">{category.category}</span>
+                  </a>
+                )
+              })}
+            </div>
+          </FadeIn>
         </div>
       </section>
 
       {/* FAQ Content */}
-      <section className="py-16">
+      <section className="py-16 flex-1">
         <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto space-y-8">
-            {faqs.map((category, categoryIndex) => (
-              <div key={categoryIndex}>
-                <h2 className="text-2xl font-bold mb-4">{category.category}</h2>
-                <Accordion type="single" collapsible className="space-y-2">
-                  {category.questions.map((item, index) => (
-                    <AccordionItem key={index} value={`${categoryIndex}-${index}`}>
-                      <AccordionTrigger className="text-left">
-                        {item.q}
-                      </AccordionTrigger>
-                      <AccordionContent className="text-muted-foreground">
-                        {item.a}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-              </div>
-            ))}
+          <div className="max-w-3xl mx-auto space-y-12">
+            {faqs.map((category, categoryIndex) => {
+              const Icon = category.icon
+              return (
+                <FadeIn key={categoryIndex} delay={categoryIndex * 0.1}>
+                  <div id={category.category.toLowerCase().replace(/\s+/g, '-')}>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
+                        <Icon className="h-5 w-5 text-primary" />
+                      </div>
+                      <h2 className="text-2xl font-bold">{category.category}</h2>
+                    </div>
+                    <Card className="border-2 shadow-sm">
+                      <CardContent className="p-0">
+                        <Accordion type="single" collapsible className="divide-y">
+                          {category.questions.map((item, index) => (
+                            <AccordionItem
+                              key={index}
+                              value={`${categoryIndex}-${index}`}
+                              className="border-0"
+                            >
+                              <AccordionTrigger className="text-left px-6 py-4 hover:bg-muted/30 transition-colors">
+                                {item.q}
+                              </AccordionTrigger>
+                              <AccordionContent className="px-6 pb-4 text-muted-foreground">
+                                {item.a}
+                              </AccordionContent>
+                            </AccordionItem>
+                          ))}
+                        </Accordion>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </FadeIn>
+              )
+            })}
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="py-16 bg-muted/50">
+      <section className="py-16 bg-muted/30">
         <div className="container mx-auto px-4">
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader className="text-center">
-              <CardTitle>Still have questions?</CardTitle>
-              <CardDescription>
-                Our support team is here to help
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="text-center">
-              <p className="mb-6 text-muted-foreground">
-                Can't find the answer you're looking for? Get in touch with our friendly support team.
-              </p>
-              <div className="flex gap-4 justify-center">
-                <Button asChild>
-                  <Link href="/contact">Contact Support</Link>
-                </Button>
-                <Button variant="outline" asChild>
-                  <Link href="/how-it-works">How It Works</Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <FadeIn>
+            <Card className="max-w-2xl mx-auto border-2 shadow-lg">
+              <CardHeader className="text-center">
+                <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <MessageCircle className="h-7 w-7 text-primary" />
+                </div>
+                <CardTitle className="text-2xl">Still have questions?</CardTitle>
+                <CardDescription className="text-base">
+                  Our support team is here to help you
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="text-center pb-8">
+                <p className="mb-6 text-muted-foreground">
+                  Can't find the answer you're looking for? Get in touch with our friendly support team.
+                </p>
+                <div className="flex gap-4 justify-center flex-wrap">
+                  <Button asChild size="lg">
+                    <Link href="/contact">
+                      Contact Support
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Link>
+                  </Button>
+                  <Button variant="outline" size="lg" asChild>
+                    <Link href="/how-it-works">How It Works</Link>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </FadeIn>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
-          © 2024 PropLinka. All rights reserved.
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-900 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <FadeIn>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full mb-6">
+              <Sparkles className="h-4 w-4" />
+              <span className="text-sm font-medium">Ready to Start?</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Start Saving Today</h2>
+            <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+              Join thousands who are buying and selling smarter on PropLinka
+            </p>
+            <div className="flex gap-4 justify-center flex-wrap">
+              <Link href="/register">
+                <Button size="lg" className="bg-white text-blue-700 hover:bg-blue-50">
+                  Get Started Free
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/browse">
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white/10">
+                  Browse Properties
+                </Button>
+              </Link>
+            </div>
+          </FadeIn>
         </div>
-      </footer>
+      </section>
+
+      <PageFooter />
     </div>
   )
 }
