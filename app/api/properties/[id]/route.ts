@@ -83,8 +83,8 @@ export async function PATCH(request: Request, { params }: RouteParams) {
     const body = await request.json()
 
     // Update property
-    const { error: updateError } = await supabase
-      .from('properties')
+    const { error: updateError } = await (supabase
+      .from('properties') as any)
       .update({
         ...body,
         updated_at: new Date().toISOString(),
@@ -146,8 +146,8 @@ export async function DELETE(request: Request, { params }: RouteParams) {
     }
 
     // Soft delete
-    const { error: deleteError } = await supabase
-      .from('properties')
+    const { error: deleteError } = await (supabase
+      .from('properties') as any)
       .update({
         status: 'withdrawn',
         updated_at: new Date().toISOString(),
