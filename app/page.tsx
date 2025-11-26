@@ -125,11 +125,11 @@ export default async function HomePage() {
                   <span className="text-xs text-white/90">Sell your home with lawyers, not middlemen</span>
                 </div>
               </div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-3">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-3 font-[family-name:var(--font-poppins)]">
                 Sell your home <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">directly</span>.<br />
                 Let lawyers handle the deal.
               </h1>
-              <p className="text-base md:text-lg text-white/90 text-center mb-4 max-w-3xl mx-auto">
+              <p className="text-base md:text-lg text-white/90 text-center mb-4 max-w-3xl mx-auto font-[family-name:var(--font-poppins)]">
                 PropLinka connects you with real buyers and vetted property lawyers in one place.
                 No estate agents, no hidden commissions — just a clean, legal sale from listing to transfer.
               </p>
