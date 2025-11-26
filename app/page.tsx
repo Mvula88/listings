@@ -108,7 +108,7 @@ export default async function HomePage() {
             priority
           />
           {/* Glass effect overlay */}
-          <div className="absolute inset-0 backdrop-blur-[2px] bg-gradient-to-b from-black/50 via-black/40 to-black/20" />
+          <div className="absolute inset-0 backdrop-blur-[2px] bg-gradient-to-b from-black/70 via-black/60 to-black/40" />
           {/* Additional glass shine effect */}
           <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10" />
         </div>
