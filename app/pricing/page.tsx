@@ -6,6 +6,7 @@ import { PLATFORM_FEE_TIERS } from "@/lib/utils/savings-calculator"
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { PricingAnimation } from "@/components/pricing/pricing-animation"
 
 export default function PricingPage() {
   return (
@@ -20,20 +21,25 @@ export default function PricingPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
-                <TrendingDown className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Save Up to 92% on Fees</span>
+            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+                  <TrendingDown className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">Save Up to 92% on Fees</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                  Simple, <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Transparent</span> Pricing
+                </h1>
+                <p className="text-lg text-muted-foreground mb-2">
+                  Free to list. Free to browse. Only pay when your deal closes.
+                </p>
+                <p className="text-muted-foreground">
+                  Platform fee collected by lawyer at closing - no upfront costs, no percentage commissions.
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
-                Simple, <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Transparent</span> Pricing
-              </h1>
-              <p className="text-lg text-muted-foreground mb-2">
-                Free to list. Free to browse. Only pay when your deal closes.
-              </p>
-              <p className="text-muted-foreground">
-                Platform fee collected by lawyer at closing - no upfront costs, no percentage commissions.
-              </p>
+              <div className="flex-shrink-0">
+                <PricingAnimation />
+              </div>
             </div>
           </FadeIn>
         </div>

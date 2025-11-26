@@ -5,6 +5,7 @@ import { Eye, Sliders, ShieldCheck, Home, Users, Scale, Briefcase, Globe, Heart,
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { AboutAnimation } from "@/components/about/about-animation"
 
 export default function AboutPage() {
   return (
@@ -19,20 +20,25 @@ export default function AboutPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
-                <Heart className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Our Story</span>
+            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+                  <Heart className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">Our Story</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                  About <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">PropLinka</span>
+                </h1>
+                <p className="text-xl text-primary font-semibold mb-4">
+                  We're not another property platform.
+                </p>
+                <p className="text-lg text-muted-foreground">
+                  PropLinka was built to fix a broken system.
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
-                About <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">PropLinka</span>
-              </h1>
-              <p className="text-xl text-primary font-semibold mb-4">
-                We're not another property platform.
-              </p>
-              <p className="text-lg text-muted-foreground">
-                PropLinka was built to fix a broken system.
-              </p>
+              <div className="flex-shrink-0">
+                <AboutAnimation />
+              </div>
             </div>
           </FadeIn>
         </div>

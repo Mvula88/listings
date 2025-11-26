@@ -11,6 +11,7 @@ import { HelpCircle, MessageCircle, ArrowRight, Sparkles, Users, Home, Scale, Do
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { FAQHeroAnimation } from "@/components/faq/faq-hero-animation"
 
 export default function FAQPage() {
   const faqs = [
@@ -146,17 +147,22 @@ export default function FAQPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
-                <HelpCircle className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Get Answers</span>
+            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+                  <HelpCircle className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">Get Answers</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                  Frequently Asked <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Questions</span>
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  Everything you need to know about buying and selling on PropLinka
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
-                Frequently Asked <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Questions</span>
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                Everything you need to know about buying and selling on PropLinka
-              </p>
+              <div className="flex-shrink-0">
+                <FAQHeroAnimation />
+              </div>
             </div>
           </FadeIn>
         </div>

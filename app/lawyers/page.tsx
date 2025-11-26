@@ -8,6 +8,7 @@ import { formatPrice } from "@/lib/utils/format"
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { LawyersHeroAnimation } from "@/components/lawyers/lawyers-hero-animation"
 
 export default async function LawyersPage() {
   const supabase = await createClient()
@@ -44,23 +45,28 @@ export default async function LawyersPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full mb-6">
-                <Scale className="h-4 w-4 text-emerald-600" />
-                <span className="text-sm font-medium text-emerald-600">Trusted Legal Professionals</span>
+            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500/10 rounded-full mb-6">
+                  <Scale className="h-4 w-4 text-emerald-600" />
+                  <span className="text-sm font-medium text-emerald-600">Trusted Legal Professionals</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                  Verified <span className="bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text text-transparent">Conveyancing Lawyers</span>
+                </h1>
+                <p className="text-lg text-muted-foreground mb-8">
+                  All lawyers are verified professionals with transparent flat-rate pricing. No hidden fees.
+                </p>
+                <Link href="/lawyers/onboarding">
+                  <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
+                    <Briefcase className="mr-2 h-5 w-5" />
+                    Join as a Conveyancer
+                  </Button>
+                </Link>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
-                Verified <span className="bg-gradient-to-r from-emerald-500 to-emerald-700 bg-clip-text text-transparent">Conveyancing Lawyers</span>
-              </h1>
-              <p className="text-lg text-muted-foreground mb-8">
-                All lawyers are verified professionals with transparent flat-rate pricing. No hidden fees.
-              </p>
-              <Link href="/lawyers/onboarding">
-                <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
-                  <Briefcase className="mr-2 h-5 w-5" />
-                  Join as a Conveyancer
-                </Button>
-              </Link>
+              <div className="flex-shrink-0">
+                <LawyersHeroAnimation />
+              </div>
             </div>
           </FadeIn>
         </div>

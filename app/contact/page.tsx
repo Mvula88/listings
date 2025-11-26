@@ -8,6 +8,7 @@ import { Mail, MessageSquare, Phone, MapPin, Clock, ArrowRight, Sparkles, Send }
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ContactAnimation } from "@/components/contact/contact-animation"
 
 export default function ContactPage() {
   return (
@@ -22,17 +23,22 @@ export default function ContactPage() {
 
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
-                <MessageSquare className="h-4 w-4 text-primary" />
-                <span className="text-sm font-medium text-primary">Get In Touch</span>
+            <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-1 text-center md:text-left">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+                  <MessageSquare className="h-4 w-4 text-primary" />
+                  <span className="text-sm font-medium text-primary">Get In Touch</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+                  Contact <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Us</span>
+                </h1>
+                <p className="text-lg text-muted-foreground">
+                  We're here to help with any questions about buying, selling, or using PropLinka
+                </p>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
-                Contact <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Us</span>
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                We're here to help with any questions about buying, selling, or using PropLinka
-              </p>
+              <div className="flex-shrink-0">
+                <ContactAnimation />
+              </div>
             </div>
           </FadeIn>
         </div>
