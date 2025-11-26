@@ -5,7 +5,6 @@ import { TrendingDown } from "lucide-react"
 import { SavingsCalculator } from "@/components/calculator/savings-calculator"
 import { LottiePlayer } from "@/components/ui/lottie-player"
 import piggyBankAnimation from "@/public/piggy-bank.json"
-import savingsCoinAnimation from "@/public/savings-coin.json"
 
 export function SavingsSection() {
   return (
@@ -47,10 +46,10 @@ export function SavingsSection() {
             </Card>
           </div>
 
-          {/* Right Lottie - Savings Coin */}
+          {/* Right Lottie - Piggy Bank */}
           <div className="hidden md:block w-48 lg:w-64 flex-shrink-0">
             <LottiePlayer
-              animationData={savingsCoinAnimation}
+              animationData={piggyBankAnimation}
               className="w-full h-auto"
             />
           </div>
