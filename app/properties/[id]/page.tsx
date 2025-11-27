@@ -7,6 +7,7 @@ import { SellerInfo } from '@/components/properties/seller-info'
 import { PropertyMap } from '@/components/properties/property-map'
 import { SimilarProperties } from '@/components/properties/similar-properties'
 import { PropertyViewTracker } from '@/components/properties/property-view-tracker'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { FavoriteButton } from '@/components/properties/favorite-button'
 import { ReviewForm } from '@/components/reviews/review-form'
 import { ReviewList } from '@/components/reviews/review-list'
@@ -402,6 +403,9 @@ export default async function PropertyDetailPage({
           </div>
         )}
       </div>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

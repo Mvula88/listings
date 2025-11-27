@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Search, MapPin, SlidersHorizontal, Home, Sparkles } from 'lucide-react'
 import { FadeIn } from '@/components/ui/fade-in'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 import { PageHeader } from '@/components/layout/page-header'
 import { PageFooter } from '@/components/layout/page-footer'
 import Link from 'next/link'
@@ -251,6 +252,9 @@ export default async function BrowsePropertiesPage({
       </div>
 
       <PageFooter />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }
