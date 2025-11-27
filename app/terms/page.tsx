@@ -5,6 +5,7 @@ import { FileText, Shield, Scale, ArrowRight, Mail } from "lucide-react"
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 
 export default function TermsPage() {
   return (
@@ -322,6 +323,9 @@ export default function TermsPage() {
       </section>
 
       <PageFooter />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

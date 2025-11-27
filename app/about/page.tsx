@@ -5,6 +5,7 @@ import { Eye, Sliders, ShieldCheck, Home, Users, Scale, Briefcase, Globe, Heart,
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { AboutAnimation } from "@/components/about/about-animation"
 
 export default function AboutPage() {
@@ -389,6 +390,9 @@ export default function AboutPage() {
       </section>
 
       <PageFooter />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

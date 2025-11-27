@@ -8,6 +8,7 @@ import { Mail, MessageSquare, Phone, MapPin, Clock, ArrowRight, Sparkles, Send }
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { ContactAnimation } from "@/components/contact/contact-animation"
 
 export default function ContactPage() {
@@ -284,6 +285,9 @@ export default function ContactPage() {
       </section>
 
       <PageFooter />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

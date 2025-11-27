@@ -8,6 +8,7 @@ import { formatPrice } from "@/lib/utils/format"
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { LawyersHeroAnimation } from "@/components/lawyers/lawyers-hero-animation"
 
 export default async function LawyersPage() {
@@ -233,6 +234,9 @@ export default async function LawyersPage() {
       </section>
 
       <PageFooter />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

@@ -6,6 +6,7 @@ import { ArrowRight, Home, Users, DollarSign, Shield, MapPin, Bed, Bath, Square,
 import { getFeaturedProperties, formatPropertyPrice } from "@/lib/data/properties"
 import { calculateSavings, formatSavingsDisplay } from "@/lib/utils/savings-calculator"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { SavingsSection } from "@/components/calculator/savings-section"
 import { FAQSection } from "@/components/faq/faq-section"
 
@@ -591,6 +592,9 @@ export default async function HomePage() {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

@@ -5,6 +5,7 @@ import { Calendar, Clock, User } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 
 export const metadata: Metadata = {
   title: 'Blog | PropLinka - Real Estate Tips & Insights',
@@ -189,6 +190,9 @@ export default async function BlogPage({
           </div>
         </div>
       </div>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

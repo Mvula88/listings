@@ -3,6 +3,7 @@
 import { Metadata } from 'next'
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import { ScrollToTop } from '@/components/ui/scroll-to-top'
 
 export const metadata: Metadata = {
   title: 'Privacy Policy | PropLinka',
@@ -262,6 +263,9 @@ export default function PrivacyPolicyPage() {
           </section>
         </Card>
       </div>
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

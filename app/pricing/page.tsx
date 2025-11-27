@@ -6,6 +6,7 @@ import { PLATFORM_FEE_TIERS } from "@/lib/utils/savings-calculator"
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { PricingAnimation } from "@/components/pricing/pricing-animation"
 
 export default function PricingPage() {
@@ -403,6 +404,9 @@ export default function PricingPage() {
       </section>
 
       <PageFooter />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }

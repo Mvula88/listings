@@ -11,6 +11,7 @@ import { HelpCircle, MessageCircle, ArrowRight, Sparkles, Users, Home, Scale, Do
 import { PageHeader } from "@/components/layout/page-header"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
+import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { FAQHeroAnimation } from "@/components/faq/faq-hero-animation"
 
 export default function FAQPage() {
@@ -299,6 +300,9 @@ export default function FAQPage() {
       </section>
 
       <PageFooter />
+
+      {/* Scroll to Top Button */}
+      <ScrollToTop />
     </div>
   )
 }
