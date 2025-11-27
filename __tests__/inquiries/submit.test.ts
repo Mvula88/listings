@@ -17,7 +17,7 @@ jest.mock('@/lib/supabase/server', () => ({
 global.fetch = jest.fn()
 
 // Mock environment variable
-process.env.NEXT_PUBLIC_BASE_URL = 'http://localhost:3000'
+process.env.NEXT_PUBLIC_URL = 'http://localhost:3000'
 
 // Helper function to create common mocks
 function createSuccessMocks(options: {
@@ -66,7 +66,7 @@ function createSuccessMocks(options: {
               data: {
                 id: propertyId,
                 title: propertyTitle,
-                owner_id: sellerId,
+                seller_id: sellerId,
               },
               error: null,
             }),
@@ -274,7 +274,7 @@ describe('Inquiry Submission', () => {
 
       mockGetUser.mockResolvedValue({
         data: {
-          user: { id: sellerId }, // Same as owner_id
+          user: { id: sellerId }, // Same as seller_id
         },
         error: null,
       })
@@ -288,7 +288,7 @@ describe('Inquiry Submission', () => {
                   data: {
                     id: validInquiryData.property_id,
                     title: 'Test Property',
-                    owner_id: sellerId, // Same as current user
+                    seller_id: sellerId, // Same as current user
                   },
                   error: null,
                 }),
@@ -323,7 +323,7 @@ describe('Inquiry Submission', () => {
                 single: jest.fn().mockResolvedValue({
                   data: {
                     id: validInquiryData.property_id,
-                    owner_id: sellerId,
+                    seller_id: sellerId,
                   },
                   error: null,
                 }),

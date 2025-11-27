@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import type { Database } from '@/lib/types/database'
+import { sendRemittanceReminderEmail } from '@/lib/email/send-emails'
 
 export const dynamic = 'force-dynamic'
 
@@ -120,9 +121,44 @@ export async function GET(request: Request) {
       // Send email reminders on specific days
       const reminderDays = [1, 10, 20, 28, 35, 45, 55, 60]
       if (reminderDays.includes(daysOverdue)) {
-        // TODO: Implement email sending via your email service
-        // For now, just log the intent
-        console.log(`Would send ${action} email to ${profile.email} (${daysOverdue} days overdue)`)
+        // Get transaction details for the email
+        const { data: transactionDetails } = await (supabase
+          .from('transactions') as any)
+          .select('id, platform_fee_amount, currency, remittance_due_date')
+          .eq('id', transaction.transaction_id)
+          .single()
+
+        const amountDue = transactionDetails
+          ? `${transactionDetails.currency || 'R'}${transactionDetails.platform_fee_amount?.toLocaleString() || '0'}`
+          : 'Amount pending'
+
+        const dueDate = transactionDetails?.remittance_due_date
+          ? new Date(transactionDetails.remittance_due_date).toLocaleDateString('en-ZA', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })
+          : 'N/A'
+
+        // Send email
+        const emailResult = await sendRemittanceReminderEmail({
+          to: profile.email,
+          lawyerName: profile.full_name,
+          firmName: lawyer.firm_name,
+          transactionId: transaction.transaction_id.slice(0, 8).toUpperCase(),
+          amountDue,
+          daysOverdue,
+          dueDate,
+          dashboardUrl: `${process.env.NEXT_PUBLIC_URL}/dashboard/transactions`,
+          isWarning: daysOverdue >= 30,
+          isSuspension: action === 'suspended',
+        })
+
+        if (emailResult.success) {
+          console.log(`Sent ${action} email to ${profile.email} (${daysOverdue} days overdue)`)
+        } else {
+          console.error(`Failed to send email to ${profile.email}:`, emailResult.error)
+        }
 
         // Update reminder timestamp
         await (supabase

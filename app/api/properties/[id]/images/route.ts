@@ -76,7 +76,7 @@ export async function POST(
           .insert({
             property_id: propertyId,
             url: publicUrl,
-            alt_text: `${property} - Image ${i + 1}`,
+            alt_text: `Property image ${i + 1}`,
             order_index: i
           })
           .select()

@@ -40,7 +40,7 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
     // 2. Verify property exists
     const { data: property, error: propertyError } = await (supabase
       .from('properties') as any)
-      .select('id, owner_id, title')
+      .select('id, seller_id, title')
       .eq('id', validatedData.property_id)
       .single()
 
@@ -52,7 +52,7 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
     }
 
     // 3. Prevent sellers from inquiring on their own properties
-    if (property.owner_id === user.id) {
+    if (property.seller_id === user.id) {
       return {
         success: false,
         error: 'You cannot inquire about your own property.',
@@ -100,22 +100,22 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
       }
     }
 
-    // 6. Get owner details for email notification
-    const { data: owner } = await (supabase
+    // 6. Get seller details for email notification
+    const { data: seller } = await (supabase
       .from('profiles') as any)
       .select('email, full_name')
-      .eq('id', property.owner_id)
+      .eq('id', property.seller_id)
       .single()
 
-    // 7. Send email notification to property owner (fire and forget)
-    if (owner?.email) {
+    // 7. Send email notification to property seller (fire and forget)
+    if (seller?.email) {
       try {
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/email/inquiry-notification`, {
+        await fetch(`${process.env.NEXT_PUBLIC_URL}/api/email/inquiry-notification`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            to: owner.email,
-            ownerName: owner.full_name,
+            to: seller.email,
+            ownerName: seller.full_name,
             propertyTitle: property.title,
             buyerMessage: validatedData.message,
             buyerPhone: validatedData.phone_number,
@@ -198,14 +198,15 @@ export async function getInquiriesForSeller(userId: string) {
         full_name,
         email
       ),
-      property:properties(
+      property:properties!inner(
         id,
         title,
         price,
-        currency
+        currency,
+        seller_id
       )
     `)
-    .eq('property.owner_id', userId)
+    .eq('property.seller_id', userId)
     .order('created_at', { ascending: false })
 
   if (error) {
@@ -222,17 +223,17 @@ export async function markInquiryAsRead(inquiryId: string, userId: string) {
   // Verify the inquiry belongs to a property owned by this user
   const { data: inquiry } = await supabase
     .from('inquiries')
-    .select('id, property:properties(owner_id)')
+    .select('id, property:properties(seller_id)')
     .eq('id', inquiryId)
     .single() as {
       data: {
         id: string
-        property: { owner_id: string } | null
+        property: { seller_id: string } | null
       } | null
       error: any
     }
 
-  if (!inquiry || inquiry.property?.owner_id !== userId) {
+  if (!inquiry || inquiry.property?.seller_id !== userId) {
     return {
       success: false,
       error: 'Unauthorized',

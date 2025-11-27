@@ -77,7 +77,7 @@ function getApprovalEmailHtml(propertyTitle: string): string {
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard"
+            <a href="${process.env.NEXT_PUBLIC_URL}/dashboard"
                style="background-color: #2563eb; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600;">
               View Your Dashboard
             </a>
@@ -143,7 +143,7 @@ function getRejectionEmailHtml(propertyTitle: string, reason?: string): string {
           </div>
 
           <div style="text-align: center; margin: 30px 0;">
-            <a href="${process.env.NEXT_PUBLIC_BASE_URL}/dashboard"
+            <a href="${process.env.NEXT_PUBLIC_URL}/dashboard"
                style="background-color: #2563eb; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: 600;">
               Edit Your Listing
             </a>
@@ -176,7 +176,7 @@ What Happens Next?
 - You'll receive email notifications for all inquiries
 - Track your property's performance in your dashboard
 
-View Your Dashboard: ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard
+View Your Dashboard: ${process.env.NEXT_PUBLIC_URL}/dashboard
 
 Pro Tip: Properties with high-quality images and detailed descriptions receive 3x more inquiries.
 
@@ -206,7 +206,7 @@ How to Fix This:
 3. Make the necessary updates
 4. Resubmit for review
 
-Edit Your Listing: ${process.env.NEXT_PUBLIC_BASE_URL}/dashboard
+Edit Your Listing: ${process.env.NEXT_PUBLIC_URL}/dashboard
 
 Our verification process ensures all listings on PropLinka meet our quality standards, protecting both buyers and sellers.
 

@@ -100,7 +100,8 @@ export async function getAllActiveProperties() {
       )
     `)
     .eq('status', 'active')
-    .order('featured', { ascending: false })
+    .order('premium', { ascending: false })  // Premium first
+    .order('featured', { ascending: false }) // Then featured
     .order('created_at', { ascending: false })
 
   if (error) {

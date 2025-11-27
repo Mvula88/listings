@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { sendFeaturedExpiredEmail } from '@/lib/email/send-emails'
 
 export const dynamic = 'force-dynamic'
 
@@ -79,8 +80,26 @@ export async function GET(request: Request) {
       console.log('Could not create notifications (table may not exist):', notifError)
     }
 
-    // Log the expired properties
+    // Send email notifications to sellers
     for (const property of expiredProperties) {
+      // Get seller email
+      const { data: seller } = await supabase
+        .from('profiles')
+        .select('email, full_name')
+        .eq('id', property.seller_id)
+        .single() as { data: { email: string; full_name: string } | null; error: any }
+
+      if (seller?.email) {
+        const baseUrl = process.env.NEXT_PUBLIC_URL || 'https://proplinka.com'
+        await sendFeaturedExpiredEmail({
+          to: seller.email,
+          sellerName: seller.full_name || 'Property Owner',
+          propertyTitle: property.title,
+          propertyUrl: `${baseUrl}/properties/${property.id}`,
+          renewUrl: `${baseUrl}/properties/${property.id}/feature`,
+        })
+      }
+
       console.log(`Expired featured listing: ${property.title} (${property.id})`)
     }
 

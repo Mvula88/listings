@@ -57,13 +57,17 @@ export default async function BrowsePropertiesPage({
     `)
     .eq('status', 'active')
 
-  // Apply sorting - ALWAYS put featured listings first, then apply user's sort preference
+  // Apply sorting - Priority: Premium > Featured > Regular
+  // Within each tier, apply user's sort preference
   const sortBy = params.sort || 'newest'
 
-  // First, always order by featured status (featured = true comes first)
+  // 1. Premium listings first (featured=true AND premium=true)
+  query = query.order('premium', { ascending: false, nullsFirst: false })
+
+  // 2. Then featured listings (featured=true)
   query = query.order('featured', { ascending: false, nullsFirst: false })
 
-  // Then apply the user's chosen sort as secondary sort
+  // 3. Then apply the user's chosen sort as tertiary sort
   switch (sortBy) {
     case 'price-asc':
       query = query.order('price', { ascending: true })

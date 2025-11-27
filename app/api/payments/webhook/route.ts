@@ -82,6 +82,10 @@ export async function POST(request: Request) {
         }
 
         // Create payment record
+        const paymentIntentId = typeof session.payment_intent === 'string'
+          ? session.payment_intent
+          : session.payment_intent?.id || null
+
         await (supabase.from('payments') as any).insert({
           user_id: userId,
           property_id: propertyId,
@@ -89,7 +93,7 @@ export async function POST(request: Request) {
           amount: session.amount_total! / 100, // Convert from cents
           currency: session.currency?.toUpperCase() || 'ZAR',
           stripe_checkout_session_id: session.id,
-          stripe_payment_intent_id: session.payment_intent as string,
+          stripe_payment_intent_id: paymentIntentId,
           status: 'completed',
           payment_method: 'card',
           paid_at: new Date().toISOString(),
