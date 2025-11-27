@@ -38,11 +38,12 @@ export default async function PaymentSuccessPage({
     notFound()
   }
 
-  // If property is not featured yet but we have a session_id, verify with Stripe and activate
+  // Verify with Stripe and activate/extend the featured listing
+  // This handles both new featured listings AND extensions
   let activationNeeded = false
   let activationError = false
 
-  if (!property.featured && resolvedSearchParams.session_id) {
+  if (resolvedSearchParams.session_id) {
     try {
       // Verify the checkout session with Stripe
       const session = await stripe.checkout.sessions.retrieve(resolvedSearchParams.session_id)
@@ -52,27 +53,44 @@ export default async function PaymentSuccessPage({
         const plan = session.metadata?.plan || ''
 
         // Calculate featured_until date
-        const featuredUntil = new Date()
+        // If already featured, extend from current end date (not from today)
+        let featuredUntil = new Date()
+        if (property.featured && property.featured_until) {
+          const currentEnd = new Date(property.featured_until)
+          if (currentEnd > featuredUntil) {
+            featuredUntil = currentEnd
+          }
+        }
         featuredUntil.setDate(featuredUntil.getDate() + days)
 
-        // Activate the feature
-        const { error: updateError } = await (supabase.from('properties') as any)
-          .update({
-            featured: true,
-            featured_until: featuredUntil.toISOString(),
-            premium: plan.includes('premium'),
-            updated_at: new Date().toISOString(),
-          })
-          .eq('id', resolvedParams.id)
+        // Check if this session has already been processed by comparing featured_until
+        // Only update if the new date would actually extend the featured period
+        const existingEndDate = property.featured_until ? new Date(property.featured_until) : new Date(0)
+        const shouldUpdate = featuredUntil > existingEndDate
 
-        if (updateError) {
-          console.error('Error activating feature:', updateError)
-          activationError = true
+        if (shouldUpdate) {
+          // Activate or extend the feature
+          const { error: updateError } = await (supabase.from('properties') as any)
+            .update({
+              featured: true,
+              featured_until: featuredUntil.toISOString(),
+              premium: plan.includes('premium'),
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', resolvedParams.id)
+
+          if (updateError) {
+            console.error('Error activating/extending feature:', updateError)
+            activationError = true
+          } else {
+            activationNeeded = true
+            // Update property object for display
+            property.featured = true
+            property.featured_until = featuredUntil.toISOString()
+          }
         } else {
-          activationNeeded = true
-          // Update property object for display
+          // Already processed, just update the display
           property.featured = true
-          property.featured_until = featuredUntil.toISOString()
         }
       }
     } catch (error) {
