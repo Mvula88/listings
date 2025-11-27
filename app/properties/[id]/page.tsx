@@ -14,6 +14,7 @@ import { RatingSummary } from '@/components/reviews/rating-summary'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft, Share2 } from 'lucide-react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
 import { checkIfFavorited } from '@/lib/actions/favorites'
 import { getPropertyReviews, checkUserReview } from '@/lib/actions/reviews'
@@ -254,8 +255,15 @@ export default async function PropertyDetailPage({
                   <ArrowLeft className="h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/" className="text-xl font-bold text-primary">
-                PropLinka
+              <Link href="/" className="transition-transform hover:scale-105">
+                <Image
+                  src="/logo.png"
+                  alt="PropLinka"
+                  width={180}
+                  height={50}
+                  className="h-8 w-auto"
+                  priority
+                />
               </Link>
             </div>
             <div className="flex items-center gap-2">
