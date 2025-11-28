@@ -430,8 +430,8 @@ export async function acceptModeratorInvitation(
   }
 
   // Mark invitation as accepted
-  await supabase
-    .from('moderator_invitations')
+  await (supabase
+    .from('moderator_invitations') as any)
     .update({ accepted_at: new Date().toISOString() })
     .eq('id', invitation.id)
 
