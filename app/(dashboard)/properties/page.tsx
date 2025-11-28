@@ -3,12 +3,13 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Building, Plus, Eye, Edit, Trash2, MapPin, Star, Zap } from 'lucide-react'
+import { Building, Plus, Eye, Edit, MapPin, Star, Zap } from 'lucide-react'
 import Link from 'next/link'
 import { FadeIn } from '@/components/ui/fade-in'
 import Image from 'next/image'
 import { formatPrice } from '@/lib/utils/format'
 import { FeaturePropertyButton } from '@/components/properties/feature-property-button'
+import { DeletePropertyButton } from '@/components/properties/delete-property-button'
 
 export default async function ManagePropertiesPage() {
   const supabase = await createClient()
@@ -198,10 +199,85 @@ export default async function ManagePropertiesPage() {
                           Edit
                         </Button>
                       </Link>
-                      <Button variant="outline" className="flex-1 md:flex-initial text-red-600 hover:text-red-700">
-                        <Trash2 className="h-4 w-4 mr-2" />
-                        Delete
-                      </Button>
+                      <DeletePropertyButton
+                        propertyId={property.id}
+                        propertyTitle={property.title}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </FadeIn>
+      )}
+
+      {/* Draft Properties */}
+      {draftProperties.length > 0 && (
+        <FadeIn delay={0.3}>
+          <Card className="border-2 border-orange-200">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <Edit className="h-6 w-6 text-orange-600" />
+                Draft Listings
+              </CardTitle>
+              <CardDescription>Properties you haven&apos;t published yet</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {draftProperties.map((property: any) => (
+                  <div
+                    key={property.id}
+                    className="flex flex-col md:flex-row gap-4 p-4 border-2 border-dashed border-orange-200 rounded-lg hover:shadow-lg transition-all group"
+                  >
+                    {/* Image */}
+                    <div className="relative w-full md:w-48 h-48 rounded-lg overflow-hidden bg-muted shrink-0">
+                      {property.property_images?.[0] ? (
+                        <Image
+                          src={property.property_images[0].url}
+                          alt={property.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <Building className="h-12 w-12 text-muted-foreground" />
+                        </div>
+                      )}
+                      <Badge className="absolute top-2 right-2 bg-orange-500">
+                        Draft
+                      </Badge>
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-xl font-semibold mb-2 line-clamp-1">{property.title}</h3>
+                      <div className="flex items-center gap-2 text-muted-foreground mb-3">
+                        <MapPin className="h-4 w-4" />
+                        <span className="text-sm">{property.city}, {property.province}</span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary mb-3">
+                        {formatPrice(property.price, property.country?.currency || 'ZAR')}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <Badge variant="outline" className="capitalize">
+                          {property.property_type}
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex md:flex-col gap-2 shrink-0">
+                      <Link href={`/properties/${property.id}/edit`} className="flex-1 md:flex-initial">
+                        <Button className="w-full">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Continue Editing
+                        </Button>
+                      </Link>
+                      <DeletePropertyButton
+                        propertyId={property.id}
+                        propertyTitle={property.title}
+                      />
                     </div>
                   </div>
                 ))}
