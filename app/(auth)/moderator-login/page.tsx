@@ -43,7 +43,7 @@ export default function ModeratorLoginPage() {
         .from('admin_profiles')
         .select('role, status')
         .eq('id', authData.user.id)
-        .single()
+        .single<{ role: string; status: string | null }>()
 
       if (adminError || !adminProfile) {
         // Sign out non-moderator users
