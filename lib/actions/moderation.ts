@@ -73,7 +73,7 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
     reviewer_id: access.userId,
     action: 'approved',
     notes
-  })
+  } as any)
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
@@ -123,7 +123,7 @@ export async function rejectProperty(
     action: 'rejected',
     reason,
     notes
-  })
+  } as any)
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
@@ -164,7 +164,7 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
     reviewer_id: access.userId,
     action: 'flagged',
     reason
-  })
+  } as any)
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
@@ -203,7 +203,7 @@ export async function unflagProperty(propertyId: string): Promise<ActionResult> 
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'unflagged'
-  })
+  } as any)
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)

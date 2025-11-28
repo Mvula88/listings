@@ -120,7 +120,7 @@ export async function inviteModerator(email: string): Promise<ActionResult & { t
       invited_by: access.userId,
       token,
       expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
-    })
+    } as any)
 
   if (insertError) {
     return { success: false, error: 'Failed to create invitation' }
