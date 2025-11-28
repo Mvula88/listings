@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   description: "Linking buyers and sellers directly without agent commissions. Save thousands with PropLinka.",
   keywords: "real estate, property, buy, sell, commission-free, no agent fees, direct sale, Namibia, South Africa",
   authors: [{ name: "PropLinka" }],
+  icons: {
+    icon: "/icon.png",
+    apple: "/apple-touch-icon.png",
+  },
   openGraph: {
     title: "PropLinka - Direct Property Connections",
     description: "Linking buyers and sellers directly without agent commissions. Save thousands with PropLinka.",
