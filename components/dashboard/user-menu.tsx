@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { User, Settings, LogOut, Bell } from 'lucide-react'
+import { User, Settings, LogOut } from 'lucide-react'
 
 interface UserMenuProps {
   user: any
@@ -40,13 +40,6 @@ export function UserMenu({ user, profile }: UserMenuProps) {
 
   return (
     <div className="flex items-center gap-4">
-      <Button variant="ghost" size="icon" className="relative">
-        <Bell className="h-5 w-5" />
-        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-destructive text-[10px] font-medium text-destructive-foreground flex items-center justify-center">
-          3
-        </span>
-      </Button>
-
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-10 w-10 rounded-full">
