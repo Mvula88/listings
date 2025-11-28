@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { HelpCircle, MessageCircle, ArrowRight, Sparkles, Users, Home, Scale, DollarSign } from "lucide-react"
-import { PageHeader } from "@/components/layout/page-header"
+import { AuthHeaderServer } from "@/components/layout/auth-header-server"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ScrollToTop } from "@/components/ui/scroll-to-top"
@@ -138,7 +138,7 @@ export default function FAQPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <PageHeader />
+      <AuthHeaderServer />
 
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary/10 via-primary/5 to-background overflow-hidden">

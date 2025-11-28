@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileText, Shield, Scale, ArrowRight, Mail } from "lucide-react"
-import { PageHeader } from "@/components/layout/page-header"
+import { AuthHeaderServer } from "@/components/layout/auth-header-server"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ScrollToTop } from "@/components/ui/scroll-to-top"
@@ -10,7 +10,7 @@ import { ScrollToTop } from "@/components/ui/scroll-to-top"
 export default function TermsPage() {
   return (
     <div className="min-h-screen flex flex-col">
-      <PageHeader />
+      <AuthHeaderServer />
 
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary/10 via-primary/5 to-background overflow-hidden">

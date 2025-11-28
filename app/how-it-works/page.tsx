@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { AnimatedStepsSection } from "@/components/how-it-works/animated-steps"
+import { AuthHeaderServer } from "@/components/layout/auth-header-server"
 import {
   ArrowRight,
   MessageSquare,
@@ -23,34 +24,7 @@ import {
 export default function HowItWorksPage() {
   return (
     <div className="min-h-screen">
-      {/* Navigation */}
-      <nav className="border-b backdrop-blur-xl bg-background/80 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="transition-transform hover:scale-105">
-              <Image
-                src="/logo.png"
-                alt="PropLinka"
-                width={180}
-                height={50}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
-            <div className="flex items-center gap-6">
-              <Link href="/browse" className="text-sm font-medium hover:text-primary transition-colors">
-                Browse Properties
-              </Link>
-              <Link href="/login">
-                <Button variant="outline" size="sm">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm">Get Started</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <AuthHeaderServer />
 
       {/* Hero Section with Background Image - Matching Landing Page Style */}
       <section className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden">

@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { MapPin, Star, Briefcase, CheckCircle, Shield, Scale, ArrowRight, Sparkles } from "lucide-react"
 import { createClient } from "@/lib/supabase/server"
 import { formatPrice } from "@/lib/utils/format"
-import { PageHeader } from "@/components/layout/page-header"
+import { AuthHeaderServer } from "@/components/layout/auth-header-server"
 import { PageFooter } from "@/components/layout/page-footer"
 import { FadeIn } from "@/components/ui/fade-in"
 import { ScrollToTop } from "@/components/ui/scroll-to-top"
@@ -36,7 +36,7 @@ export default async function LawyersPage() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <PageHeader />
+      <AuthHeaderServer />
 
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-background overflow-hidden">
