@@ -33,9 +33,9 @@ async function checkModeratorAccess(): Promise<{ userId: string } | { error: str
   }
 
   // Update last_active timestamp
-  await supabase
-    .from('admin_profiles')
-    .update({ last_active: new Date().toISOString() } as any)
+  await (supabase
+    .from('admin_profiles') as any)
+    .update({ last_active: new Date().toISOString() })
     .eq('id', user.id)
 
   return { userId: user.id }
@@ -68,12 +68,12 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
   }
 
   // Create review record
-  await supabase.from('property_reviews').insert({
+  await (supabase.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'approved',
     notes
-  } as any)
+  })
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
@@ -117,13 +117,13 @@ export async function rejectProperty(
   }
 
   // Create review record
-  await supabase.from('property_reviews').insert({
+  await (supabase.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'rejected',
     reason,
     notes
-  } as any)
+  })
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
@@ -159,12 +159,12 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
   }
 
   // Create review record
-  await supabase.from('property_reviews').insert({
+  await (supabase.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'flagged',
     reason
-  } as any)
+  })
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
@@ -199,11 +199,11 @@ export async function unflagProperty(propertyId: string): Promise<ActionResult> 
   }
 
   // Create review record
-  await supabase.from('property_reviews').insert({
+  await (supabase.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'unflagged'
-  } as any)
+  })
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)

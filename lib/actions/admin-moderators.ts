@@ -113,14 +113,14 @@ export async function inviteModerator(email: string): Promise<ActionResult & { t
 
   // Create invitation
   const token = generateInviteToken()
-  const { error: insertError } = await supabase
-    .from('moderator_invitations')
+  const { error: insertError } = await (supabase
+    .from('moderator_invitations') as any)
     .insert({
       email,
       invited_by: access.userId,
       token,
       expires_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() // 7 days
-    } as any)
+    })
 
   if (insertError) {
     return { success: false, error: 'Failed to create invitation' }
@@ -270,14 +270,14 @@ export async function suspendModerator(moderatorId: string, reason: string): Pro
   const supabase = await createClient()
 
   // Update moderator status
-  const { error } = await supabase
-    .from('admin_profiles')
+  const { error } = await (supabase
+    .from('admin_profiles') as any)
     .update({
       status: 'suspended',
       suspension_reason: reason,
       suspended_at: new Date().toISOString(),
       suspended_by: access.userId
-    } as any)
+    })
     .eq('id', moderatorId)
     .eq('role', 'moderator')
 
@@ -302,14 +302,14 @@ export async function unsuspendModerator(moderatorId: string): Promise<ActionRes
 
   const supabase = await createClient()
 
-  const { error } = await supabase
-    .from('admin_profiles')
+  const { error } = await (supabase
+    .from('admin_profiles') as any)
     .update({
       status: 'active',
       suspension_reason: null,
       suspended_at: null,
       suspended_by: null
-    } as any)
+    })
     .eq('id', moderatorId)
     .eq('role', 'moderator')
 
@@ -417,13 +417,13 @@ export async function acceptModeratorInvitation(
   }
 
   // Create admin profile for the user
-  const { error: insertError } = await supabase
-    .from('admin_profiles')
+  const { error: insertError } = await (supabase
+    .from('admin_profiles') as any)
     .insert({
       id: userId,
       role: 'moderator',
       status: 'active'
-    } as any)
+    })
 
   if (insertError) {
     return { success: false, error: 'Failed to create moderator profile' }
