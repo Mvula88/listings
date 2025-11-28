@@ -26,7 +26,7 @@ async function checkModeratorAccess(): Promise<{ userId: string } | { error: str
     .from('admin_profiles')
     .select('role')
     .eq('id', user.id)
-    .single()
+    .single<{ role: string }>()
 
   if (!adminProfile) {
     return { error: 'Not authorized - moderator access required' }
