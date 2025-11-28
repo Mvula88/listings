@@ -3,7 +3,8 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Building, Plus, Eye, Edit, MapPin, Star, Zap } from 'lucide-react'
+import { Building, Plus, Eye, Edit, MapPin, Star, Zap, AlertTriangle, XCircle } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import Link from 'next/link'
 import { FadeIn } from '@/components/ui/fade-in'
 import Image from 'next/image'
@@ -40,9 +41,10 @@ export default async function ManagePropertiesPage() {
     .eq('seller_id', user.id)
     .order('created_at', { ascending: false })
 
-  const activeProperties = properties?.filter((p: any) => p.status === 'active') || []
+  const activeProperties = properties?.filter((p: any) => p.status === 'active' && p.moderation_status !== 'rejected') || []
   const draftProperties = properties?.filter((p: any) => p.status === 'draft') || []
   const soldProperties = properties?.filter((p: any) => p.status === 'sold') || []
+  const rejectedProperties = properties?.filter((p: any) => p.moderation_status === 'rejected') || []
   const featuredProperties = activeProperties.filter((p: any) => p.featured && new Date(p.featured_until) > new Date())
 
   return (
@@ -110,8 +112,108 @@ export default async function ManagePropertiesPage() {
               <p className="text-xs text-muted-foreground">Successfully sold</p>
             </CardContent>
           </Card>
+
+          {rejectedProperties.length > 0 && (
+            <Card className="border-2 hover:shadow-lg transition-all border-red-200 bg-red-50/50">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Requires Attention</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-red-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-red-700">{rejectedProperties.length}</div>
+                <p className="text-xs text-muted-foreground">Rejected by moderation</p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </FadeIn>
+
+      {/* Rejected Properties - Show first as they need attention */}
+      {rejectedProperties.length > 0 && (
+        <FadeIn delay={0.15}>
+          <Card className="border-2 border-red-300 bg-red-50/30">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center gap-2 text-red-700">
+                <XCircle className="h-6 w-6" />
+                Rejected Listings
+              </CardTitle>
+              <CardDescription>These listings were rejected by our moderation team. Please review the reason and make necessary changes.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {rejectedProperties.map((property: any) => (
+                  <div
+                    key={property.id}
+                    className="flex flex-col md:flex-row gap-4 p-4 border-2 border-red-200 rounded-lg bg-white"
+                  >
+                    {/* Image */}
+                    <div className="relative w-full md:w-48 h-48 rounded-lg overflow-hidden bg-muted shrink-0">
+                      {property.property_images?.[0] ? (
+                        <Image
+                          src={property.property_images[0].url}
+                          alt={property.title}
+                          fill
+                          className="object-cover opacity-75"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <Building className="h-12 w-12 text-muted-foreground" />
+                        </div>
+                      )}
+                      <Badge className="absolute top-2 right-2 bg-red-600">
+                        Rejected
+                      </Badge>
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex-1 min-w-0 space-y-3">
+                      <h3 className="text-xl font-semibold line-clamp-1">{property.title}</h3>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        <span className="text-sm">{property.city}, {property.province}</span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary">
+                        {formatPrice(property.price, property.country?.currency || 'ZAR')}
+                      </p>
+
+                      {/* Rejection Reason */}
+                      {property.moderation_notes && (
+                        <Alert variant="destructive" className="mt-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertTitle>Rejection Reason</AlertTitle>
+                          <AlertDescription className="mt-1">
+                            {property.moderation_notes}
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex md:flex-col gap-2 shrink-0">
+                      <Link href={`/properties/${property.id}/edit`} className="flex-1 md:flex-initial">
+                        <Button className="w-full bg-red-600 hover:bg-red-700">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Fix & Resubmit
+                        </Button>
+                      </Link>
+                      <Link href={`/properties/${property.id}`} className="flex-1 md:flex-initial">
+                        <Button variant="outline" className="w-full">
+                          <Eye className="h-4 w-4 mr-2" />
+                          View
+                        </Button>
+                      </Link>
+                      <DeletePropertyButton
+                        propertyId={property.id}
+                        propertyTitle={property.title}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </FadeIn>
+      )}
 
       {/* Active Properties */}
       {activeProperties.length > 0 && (

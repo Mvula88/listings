@@ -17,6 +17,7 @@ import {
   Bell,
   Mail,
   Activity,
+  UserCog,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
@@ -74,6 +75,12 @@ const navigation: NavigationItem[] = [
     href: '/admin/moderation',
     icon: Flag,
     permission: 'content.moderate',
+  },
+  {
+    name: 'Moderators',
+    href: '/admin/moderators',
+    icon: UserCog,
+    permission: null, // Only super_admin can access, handled by page
   },
   {
     name: 'Audit Logs',
