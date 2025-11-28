@@ -22,7 +22,7 @@ export default async function ModeratorLayout({
     .from('admin_profiles')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .single<{ id: string; role: string; status: string | null; last_active: string | null }>()
 
   if (adminError || !adminProfile) {
     redirect('/moderator-login?error=moderator_access_required')
