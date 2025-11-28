@@ -10,58 +10,9 @@ import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { SavingsSection } from "@/components/calculator/savings-section"
 import { FAQSection } from "@/components/faq/faq-section"
 
-interface MockProperty {
-  id: string
-  title: string
-  city: string
-  province: string
-  price: number
-  currency: string
-  images: Array<{ id: string; url: string; alt_text: string; order_index: number }>
-  bedrooms: number
-  bathrooms: number
-  square_meters: number
-  property_type: string
-  country: { name: string; currency_symbol: string; code?: string }
-}
-
 export default async function HomePage() {
   // Fetch real featured properties from Supabase
   const featuredListings = await getFeaturedProperties(8)
-
-  // Fallback to mock data if no properties in database
-  const mockListings: MockProperty[] = [
-    {
-      id: '1',
-      title: "Modern Family Home in Windhoek",
-      city: "Windhoek",
-      province: "Khomas",
-      price: 2850000,
-      currency: 'NAD',
-      images: [{ id: '1', url: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop", alt_text: "Modern home", order_index: 0 }],
-      bedrooms: 4,
-      bathrooms: 3,
-      square_meters: 280,
-      property_type: "house",
-      country: { name: "Namibia", currency_symbol: "N$", code: 'NA' }
-    },
-    {
-      id: '2',
-      title: "Luxury Apartment with Ocean Views",
-      city: "Cape Town",
-      province: "Western Cape",
-      price: 4500000,
-      currency: 'ZAR',
-      images: [{ id: '2', url: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=800&h=600&fit=crop", alt_text: "Apartment", order_index: 0 }],
-      bedrooms: 3,
-      bathrooms: 2,
-      square_meters: 180,
-      property_type: "apartment",
-      country: { name: "South Africa", currency_symbol: "R", code: 'ZA' }
-    }
-  ]
-
-  const displayListings = featuredListings.length > 0 ? featuredListings : mockListings
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -174,88 +125,111 @@ export default async function HomePage() {
             </div>
           </FadeIn>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {displayListings.map((listing, index) => {
-              const countryCode = listing.country?.code || 'ZA'
-              const currency = listing.currency || 'ZAR'
-              const savings = calculateSavings(listing.price, countryCode, currency)
-              const formatted = formatSavingsDisplay(savings)
+          {featuredListings.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredListings.map((listing, index) => {
+                const countryCode = listing.country?.code || 'ZA'
+                const currency = listing.currency || 'ZAR'
+                const savings = calculateSavings(listing.price, countryCode, currency)
+                const formatted = formatSavingsDisplay(savings)
 
+                return (
+                  <FadeIn key={listing.id} delay={index * 0.1}>
+                    <Link href={`/properties/${listing.id}`}>
+                      <Card className="hover:shadow-2xl transition-all duration-300 cursor-pointer h-full group border-2 hover:border-primary/50">
+                        <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
+                        {listing.images?.[0]?.url ? (
+                          <Image
+                            src={listing.images[0].url}
+                            alt={listing.images[0].alt_text || listing.title}
+                            fill
+                            className="object-cover hover:scale-105 transition-transform duration-300"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <Home className="h-12 w-12 text-muted-foreground/50" />
+                          </div>
+                        )}
+                        <div className="absolute top-3 left-3">
+                          <span className="bg-background/90 backdrop-blur px-2 py-1 rounded text-xs font-medium capitalize">
+                            {listing.property_type?.replace('_', ' ') || 'Property'}
+                          </span>
+                        </div>
+                        {/* Prominent Savings Badge */}
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <div className="bg-primary/95 text-primary-foreground rounded-md px-3 py-1.5 flex items-center justify-between">
+                            <span className="text-xs font-medium flex items-center gap-1">
+                              <TrendingDown className="h-3 w-3" />
+                              Save {formatted.totalSavings}
+                            </span>
+                            <span className="text-xs">
+                              vs agent fees
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <CardContent className="p-4">
+                        <div className="mb-2">
+                          <h3 className="font-semibold text-lg line-clamp-1">{listing.title}</h3>
+                          <div className="flex items-center gap-1 text-muted-foreground text-sm mt-1">
+                            <MapPin className="h-3 w-3" />
+                            <span className="line-clamp-1">{listing.city}, {listing.province}</span>
+                          </div>
+                        </div>
 
-              return (
-                <FadeIn key={listing.id} delay={index * 0.1}>
-                  <Link href={`/properties/${listing.id}`}>
-                    <Card className="hover:shadow-2xl transition-all duration-300 cursor-pointer h-full group border-2 hover:border-primary/50">
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-t-lg">
-                      <Image
-                        src={listing.images?.[0]?.url || "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&h=600&fit=crop"}
-                        alt={listing.images?.[0]?.alt_text || listing.title}
-                        fill
-                        className="object-cover hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-                      />
-                      <div className="absolute top-3 left-3">
-                        <span className="bg-background/90 backdrop-blur px-2 py-1 rounded text-xs font-medium capitalize">
-                          {listing.property_type?.replace('_', ' ') || 'Property'}
-                        </span>
-                      </div>
-                      {/* Prominent Savings Badge */}
-                      <div className="absolute bottom-2 left-2 right-2">
-                        <div className="bg-primary/95 text-primary-foreground rounded-md px-3 py-1.5 flex items-center justify-between">
-                          <span className="text-xs font-medium flex items-center gap-1">
-                            <TrendingDown className="h-3 w-3" />
-                            Save {formatted.totalSavings}
-                          </span>
-                          <span className="text-xs">
-                            vs agent fees
-                          </span>
+                        <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
+                          <div className="flex items-center gap-1">
+                            <Bed className="h-4 w-4" />
+                            <span>{listing.bedrooms || 0}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Bath className="h-4 w-4" />
+                            <span>{listing.bathrooms || 0}</span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Square className="h-4 w-4" />
+                            <span>{listing.square_meters || 0}m²</span>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <CardContent className="p-4">
-                      <div className="mb-2">
-                        <h3 className="font-semibold text-lg line-clamp-1">{listing.title}</h3>
-                        <div className="flex items-center gap-1 text-muted-foreground text-sm mt-1">
-                          <MapPin className="h-3 w-3" />
-                          <span className="line-clamp-1">{listing.city}, {listing.province}</span>
+
+                        <div>
+                          <p className="text-2xl font-bold">
+                            {formatPropertyPrice(listing.price, listing.country?.currency_symbol || 'R')}
+                          </p>
+                          <div className="mt-1 flex items-center gap-2 text-xs">
+                            <span className="text-muted-foreground line-through">
+                              Agent: {formatted.traditionalAgentFee}
+                            </span>
+                            <span className="font-medium text-primary">
+                              Platform fee: {formatted.platformFee}
+                            </span>
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="flex items-center gap-3 text-sm text-muted-foreground mb-3">
-                        <div className="flex items-center gap-1">
-                          <Bed className="h-4 w-4" />
-                          <span>{listing.bedrooms || 0}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Bath className="h-4 w-4" />
-                          <span>{listing.bathrooms || 0}</span>
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Square className="h-4 w-4" />
-                          <span>{listing.square_meters || 0}m²</span>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <p className="text-2xl font-bold">
-                          {formatPropertyPrice(listing.price, listing.country?.currency_symbol || 'R')}
-                        </p>
-                        <div className="mt-1 flex items-center gap-2 text-xs">
-                          <span className="text-muted-foreground line-through">
-                            Agent: {formatted.traditionalAgentFee}
-                          </span>
-                          <span className="font-medium text-primary">
-                            Platform fee: {formatted.platformFee}
-                          </span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </FadeIn>
+                )
+              })}
+            </div>
+          ) : (
+            <FadeIn>
+              <div className="text-center py-16">
+                <Home className="h-16 w-16 text-muted-foreground/50 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">No featured properties yet</h3>
+                <p className="text-muted-foreground mb-6">
+                  Be the first to list your property and reach buyers directly
+                </p>
+                <Link href="/register">
+                  <Button size="lg">
+                    List Your Property
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
                 </Link>
-              </FadeIn>
-              )
-            })}
-          </div>
+              </div>
+            </FadeIn>
+          )}
         </div>
       </section>
 
