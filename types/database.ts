@@ -43,6 +43,7 @@ export interface Database {
           phone: string | null
           country_id: string | null
           user_type: string | null
+          roles: string[] | null
           avatar_url: string | null
           stripe_customer_id: string | null
           created_at: string
@@ -55,6 +56,7 @@ export interface Database {
           phone?: string | null
           country_id?: string | null
           user_type?: string | null
+          roles?: string[] | null
           avatar_url?: string | null
           stripe_customer_id?: string | null
           created_at?: string
@@ -67,6 +69,7 @@ export interface Database {
           phone?: string | null
           country_id?: string | null
           user_type?: string | null
+          roles?: string[] | null
           avatar_url?: string | null
           stripe_customer_id?: string | null
           created_at?: string

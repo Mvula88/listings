@@ -2,7 +2,9 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { DashboardNav } from '@/components/dashboard/nav'
 import { UserMenu } from '@/components/dashboard/user-menu'
+import { RoleSwitcher } from '@/components/dashboard/role-switcher'
 import Image from 'next/image'
+import type { UserRole } from '@/lib/actions/roles'
 
 export default async function DashboardLayout({
   children,
@@ -10,9 +12,9 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   const supabase = await createClient()
-  
+
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   if (!user) {
     redirect('/login')
   }
@@ -21,7 +23,11 @@ export default async function DashboardLayout({
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single<{ user_type: string; [key: string]: any }>()
+    .single<{ user_type: string; roles: string[] | null; [key: string]: any }>()
+
+  // Get roles from profile, default to user_type if roles array doesn't exist
+  const roles = (profile?.roles || (profile?.user_type ? [profile.user_type] : ['buyer'])) as UserRole[]
+  const activeRole = (profile?.user_type || 'buyer') as UserRole
 
   return (
     <div className="min-h-screen bg-background">
@@ -30,7 +36,7 @@ export default async function DashboardLayout({
         <div className="flex h-16 items-center px-4 gap-4">
           <a href="/" className="flex items-center">
             <Image
-              src="/proplinka-logo.png"
+              src="/logo.png"
               alt="PropLinka"
               width={140}
               height={40}
@@ -47,6 +53,11 @@ export default async function DashboardLayout({
       <div className="flex">
         {/* Sidebar Navigation */}
         <aside className="w-64 border-r bg-muted/10 min-h-[calc(100vh-4rem)]">
+          {/* Role Switcher */}
+          <div className="p-4 border-b">
+            <p className="text-xs text-muted-foreground mb-2">Active Role</p>
+            <RoleSwitcher roles={roles} activeRole={activeRole} />
+          </div>
           <DashboardNav userType={profile?.user_type} />
         </aside>
 
