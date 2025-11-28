@@ -42,7 +42,7 @@ export default function ModeratorLoginPage() {
       const { data: adminProfile, error: adminError } = await supabase
         .from('admin_profiles')
         .select('role, status')
-        .eq('profile_id', authData.user.id)
+        .eq('id', authData.user.id)
         .single()
 
       if (adminError || !adminProfile) {

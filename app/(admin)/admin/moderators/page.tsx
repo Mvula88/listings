@@ -128,7 +128,7 @@ export default async function AdminModeratorsPage() {
                 <div className="space-y-4">
                   {moderators.map((moderator: any) => (
                     <div
-                      key={moderator.profile_id}
+                      key={moderator.id}
                       className="flex items-center justify-between p-4 rounded-lg border bg-card"
                     >
                       <div className="flex items-center gap-4">
@@ -168,12 +168,12 @@ export default async function AdminModeratorsPage() {
                         </div>
                         <div className="flex items-center gap-2">
                           <Button variant="ghost" size="sm" asChild>
-                            <Link href={`/admin/moderators/${moderator.profile_id}`}>
+                            <Link href={`/admin/moderators/${moderator.id}`}>
                               <Eye className="h-4 w-4" />
                             </Link>
                           </Button>
                           <ModeratorActions
-                            moderatorId={moderator.profile_id}
+                            moderatorId={moderator.id}
                             status={moderator.status}
                           />
                         </div>

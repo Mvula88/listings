@@ -25,7 +25,7 @@ async function checkModeratorAccess(): Promise<{ userId: string } | { error: str
   const { data: adminProfile } = await supabase
     .from('admin_profiles')
     .select('role')
-    .eq('profile_id', user.id)
+    .eq('id', user.id)
     .single()
 
   if (!adminProfile) {
@@ -36,7 +36,7 @@ async function checkModeratorAccess(): Promise<{ userId: string } | { error: str
   await supabase
     .from('admin_profiles')
     .update({ last_active: new Date().toISOString() })
-    .eq('profile_id', user.id)
+    .eq('id', user.id)
 
   return { userId: user.id }
 }

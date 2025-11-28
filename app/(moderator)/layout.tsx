@@ -21,7 +21,7 @@ export default async function ModeratorLayout({
   const { data: adminProfile, error: adminError } = await supabase
     .from('admin_profiles')
     .select('*')
-    .eq('profile_id', user.id)
+    .eq('id', user.id)
     .single()
 
   if (adminError || !adminProfile) {

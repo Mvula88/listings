@@ -23,7 +23,7 @@ async function checkAdminAccess(): Promise<{ userId: string; role: string } | { 
   const { data: adminProfile } = await supabase
     .from('admin_profiles')
     .select('role')
-    .eq('profile_id', user.id)
+    .eq('id', user.id)
     .single()
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
@@ -47,7 +47,7 @@ async function checkSuperAdminAccess(): Promise<{ userId: string } | { error: st
   const { data: adminProfile } = await supabase
     .from('admin_profiles')
     .select('role')
-    .eq('profile_id', user.id)
+    .eq('id', user.id)
     .single()
 
   if (!adminProfile || adminProfile.role !== 'super_admin') {
@@ -90,7 +90,7 @@ export async function inviteModerator(email: string): Promise<ActionResult & { t
     const { data: existingAdmin } = await supabase
       .from('admin_profiles')
       .select('role')
-      .eq('profile_id', existingProfile.id)
+      .eq('id', existingProfile.id)
       .single()
 
     if (existingAdmin) {
@@ -201,7 +201,7 @@ export async function getModeratorsList() {
     .from('admin_profiles')
     .select(`
       *,
-      profile:profiles!profile_id (
+      profile:profiles!id (
         id,
         full_name,
         email,
@@ -234,7 +234,7 @@ export async function getModeratorDetails(moderatorId: string) {
     .from('admin_profiles')
     .select(`
       *,
-      profile:profiles!profile_id (
+      profile:profiles!id (
         id,
         full_name,
         email,
@@ -243,7 +243,7 @@ export async function getModeratorDetails(moderatorId: string) {
         created_at
       )
     `)
-    .eq('profile_id', moderatorId)
+    .eq('id', moderatorId)
     .eq('role', 'moderator')
     .single()
 
@@ -278,7 +278,7 @@ export async function suspendModerator(moderatorId: string, reason: string): Pro
       suspended_at: new Date().toISOString(),
       suspended_by: access.userId
     })
-    .eq('profile_id', moderatorId)
+    .eq('id', moderatorId)
     .eq('role', 'moderator')
 
   if (error) {
@@ -310,7 +310,7 @@ export async function unsuspendModerator(moderatorId: string): Promise<ActionRes
       suspended_at: null,
       suspended_by: null
     })
-    .eq('profile_id', moderatorId)
+    .eq('id', moderatorId)
     .eq('role', 'moderator')
 
   if (error) {
@@ -338,7 +338,7 @@ export async function removeModerator(moderatorId: string): Promise<ActionResult
   const { error } = await supabase
     .from('admin_profiles')
     .delete()
-    .eq('profile_id', moderatorId)
+    .eq('id', moderatorId)
     .eq('role', 'moderator')
 
   if (error) {
@@ -420,7 +420,7 @@ export async function acceptModeratorInvitation(
   const { error: insertError } = await supabase
     .from('admin_profiles')
     .insert({
-      profile_id: userId,
+      id: userId,
       role: 'moderator',
       status: 'active'
     })
