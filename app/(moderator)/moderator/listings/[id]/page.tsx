@@ -37,8 +37,8 @@ export default async function ModeratorListingDetailPage({ params }: Props) {
     notFound()
   }
 
-  const property = propertyResult.property
-  const reviews = historyResult.reviews
+  const property = propertyResult.property as any
+  const reviews = (historyResult.reviews || []) as any[]
 
   const getStatusBadge = (status: string | null) => {
     switch (status) {
