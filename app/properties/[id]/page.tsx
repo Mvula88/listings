@@ -13,7 +13,8 @@ import { ReviewForm } from '@/components/reviews/review-form'
 import { ReviewList } from '@/components/reviews/review-list'
 import { RatingSummary } from '@/components/reviews/rating-summary'
 import { Button } from '@/components/ui/button'
-import { ArrowLeft, Share2 } from 'lucide-react'
+import { BackButton } from '@/components/ui/back-button'
+import { Share2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
@@ -251,11 +252,7 @@ export default async function PropertyDetailPage({
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Link href="/browse">
-                <Button variant="ghost" size="icon">
-                  <ArrowLeft className="h-4 w-4" />
-                </Button>
-              </Link>
+              <BackButton fallbackUrl="/browse" />
               <Link href="/" className="transition-transform hover:scale-105">
                 <Image
                   src="/logo.png"
