@@ -5,13 +5,12 @@ import { FilterDrawer } from '@/components/properties/filter-drawer'
 import { SortSelect } from '@/components/properties/sort-select'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Search, MapPin, SlidersHorizontal, Home, Sparkles } from 'lucide-react'
+import { Search, MapPin, SlidersHorizontal, Home } from 'lucide-react'
 import { FadeIn } from '@/components/ui/fade-in'
 import { ScrollToTop } from '@/components/ui/scroll-to-top'
-import { PageHeader } from '@/components/layout/page-header'
+import { AuthHeader } from '@/components/layout/auth-header'
 import { PageFooter } from '@/components/layout/page-footer'
 import Link from 'next/link'
-import Image from 'next/image'
 
 interface SearchParams {
   q?: string
@@ -35,9 +34,17 @@ export default async function BrowsePropertiesPage({
   // Get current user to check favorites
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Get user's favorites if logged in
+  // Get user profile if logged in
+  let profile = null
   let userFavorites: string[] = []
   if (user) {
+    const { data: profileData } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single()
+    profile = profileData
+
     const { data: favorites } = await supabase
       .from('property_favorites')
       .select('property_id')
@@ -136,7 +143,7 @@ export default async function BrowsePropertiesPage({
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <PageHeader />
+      <AuthHeader user={user} profile={profile} />
 
       {/* Hero Section */}
       <section className="relative py-16 bg-gradient-to-br from-primary/10 via-primary/5 to-background overflow-hidden">
