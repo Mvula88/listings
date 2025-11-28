@@ -13,7 +13,8 @@ import {
   Briefcase,
   PlusCircle,
   Star,
-  Heart
+  Heart,
+  Search
 } from 'lucide-react'
 
 interface NavItem {
@@ -40,6 +41,12 @@ const navItems: NavItem[] = [
     href: '/featured',
     icon: Star,
     userTypes: ['seller']
+  },
+  {
+    title: 'Browse Properties',
+    href: '/browse',
+    icon: Search,
+    userTypes: ['buyer']
   },
   {
     title: 'Saved Properties',
