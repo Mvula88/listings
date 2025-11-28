@@ -10,8 +10,15 @@ export default async function TransactionsPage() {
   const supabase = await createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
-  
+
   if (!user) return null
+
+  // Get user profile to check role
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('user_type')
+    .eq('id', user.id)
+    .single<{ user_type: string }>()
 
   // Get user's transactions
   const { data: transactions } = await supabase
@@ -168,15 +175,21 @@ export default async function TransactionsPage() {
             <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Transactions Yet</h3>
             <p className="text-muted-foreground mb-4">
-              Start by browsing properties or listing your own
+              {profile?.user_type === 'seller'
+                ? 'Start by listing a property to sell'
+                : 'Start by browsing properties to find your dream home'}
             </p>
             <div className="flex gap-4 justify-center">
-              <Link href="/browse">
-                <Button variant="outline">Browse Properties</Button>
-              </Link>
-              <Link href="/list">
-                <Button>List Property</Button>
-              </Link>
+              {profile?.user_type === 'buyer' && (
+                <Link href="/browse">
+                  <Button>Browse Properties</Button>
+                </Link>
+              )}
+              {profile?.user_type === 'seller' && (
+                <Link href="/properties/new">
+                  <Button>List Property</Button>
+                </Link>
+              )}
             </div>
           </CardContent>
         </Card>

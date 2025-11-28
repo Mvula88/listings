@@ -153,17 +153,19 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
-              {/* List Property - Available to all users */}
-              <Link href="/properties/new">
-                <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
-                      <Building className="h-5 w-5" />
+              {/* List Property - Seller only */}
+              {profile?.user_type === 'seller' && (
+                <Link href="/properties/new">
+                  <Button variant="outline" className="w-full justify-start h-auto py-4 hover:bg-primary hover:text-primary-foreground transition-all group">
+                    <div className="flex items-center gap-3">
+                      <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary-foreground/20">
+                        <Building className="h-5 w-5" />
+                      </div>
+                      <span className="font-medium">List New Property</span>
                     </div>
-                    <span className="font-medium">List New Property</span>
-                  </div>
-                </Button>
-              </Link>
+                  </Button>
+                </Link>
+              )}
 
               {/* Browse Properties */}
               <Link href="/browse">
