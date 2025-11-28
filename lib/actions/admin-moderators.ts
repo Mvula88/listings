@@ -24,7 +24,7 @@ async function checkAdminAccess(): Promise<{ userId: string; role: string } | { 
     .from('admin_profiles')
     .select('role')
     .eq('id', user.id)
-    .single()
+    .single<{ role: string }>()
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
     return { error: 'Not authorized - admin access required' }
@@ -48,7 +48,7 @@ async function checkSuperAdminAccess(): Promise<{ userId: string } | { error: st
     .from('admin_profiles')
     .select('role')
     .eq('id', user.id)
-    .single()
+    .single<{ role: string }>()
 
   if (!adminProfile || adminProfile.role !== 'super_admin') {
     return { error: 'Not authorized - super admin access required' }
