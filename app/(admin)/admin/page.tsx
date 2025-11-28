@@ -7,11 +7,8 @@ import {
   Scale,
   FileText,
   TrendingUp,
-  TrendingDown,
-  DollarSign,
   Activity,
   AlertCircle,
-  CheckCircle2,
 } from 'lucide-react'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { FadeIn } from '@/components/ui/fade-in'

@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { getAnalyticsData, getPlatformStats } from '@/lib/admin/actions'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AnalyticsCharts } from '@/components/admin/analytics-charts'
 import { TrendingUp, Users, Home, DollarSign } from 'lucide-react'
 

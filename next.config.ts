@@ -23,12 +23,17 @@ const nextConfig: NextConfig = {
     ],
     unoptimized: false,
   },
+
+  // Enable instrumentation hook for Sentry
+  experimental: {
+    instrumentationHook: true,
+  },
 };
 
-// Only enable Sentry if all required env vars are present
-const enableSentry = process.env.SENTRY_ORG && process.env.SENTRY_PROJECT && process.env.SENTRY_AUTH_TOKEN;
+// Only enable Sentry build-time features if all required env vars are present
+const enableSentryBuildFeatures = process.env.SENTRY_ORG && process.env.SENTRY_PROJECT && process.env.SENTRY_AUTH_TOKEN;
 
-export default enableSentry ? withSentryConfig(nextConfig, {
+export default enableSentryBuildFeatures ? withSentryConfig(nextConfig, {
   // For all available options, see:
   // https://github.com/getsentry/sentry-webpack-plugin#options
 

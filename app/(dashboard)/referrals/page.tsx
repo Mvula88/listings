@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
-import { Users, Gift, Copy, Check, TrendingUp, DollarSign, Trophy, Award } from 'lucide-react'
+import { Users, Gift, TrendingUp, Trophy, Award } from 'lucide-react'
 import { CopyReferralButton } from '@/components/referrals/copy-referral-button'
 import { getUserRewards } from '@/lib/actions/rewards'
 import Link from 'next/link'

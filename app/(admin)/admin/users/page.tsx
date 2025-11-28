@@ -1,11 +1,8 @@
-import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
 import { UsersTable } from '@/components/admin/users-table'
 import { getUsers } from '@/lib/admin/actions'
-import { Search, UserPlus, Download } from 'lucide-react'
+import { UserPlus, Download } from 'lucide-react'
 import Link from 'next/link'
 
 interface PageProps {

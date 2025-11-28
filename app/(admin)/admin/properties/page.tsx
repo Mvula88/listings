@@ -1,11 +1,9 @@
 import { createClient } from '@/lib/supabase/server'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { PropertiesTable } from '@/components/admin/properties-table'
 import { getProperties } from '@/lib/admin/actions'
 import { Building, Download, CheckCircle, Clock, XCircle } from 'lucide-react'
-import Link from 'next/link'
 
 interface PageProps {
   searchParams: Promise<{

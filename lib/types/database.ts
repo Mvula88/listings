@@ -20,6 +20,8 @@ export type Json =
 export type UserType = 'buyer' | 'seller' | 'lawyer' | 'admin'
 export type PropertyType = 'house' | 'apartment' | 'townhouse' | 'land' | 'commercial' | 'farm'
 export type PropertyStatus = 'draft' | 'active' | 'pending' | 'sold' | 'withdrawn'
+export type ModerationStatus = 'pending' | 'approved' | 'rejected' | 'flagged'
+export type ModerationAction = 'approved' | 'rejected' | 'flagged' | 'unflagged'
 export type InquiryStatus = 'new' | 'responded' | 'proceeded_to_transaction' | 'declined' | 'closed'
 export type TransactionStatus = 'initiated' | 'pending' | 'in_progress' | 'completed' | 'cancelled' | 'failed'
 export type ConversationStatus = 'active' | 'archived' | 'closed'
@@ -27,6 +29,9 @@ export type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 
 export type PaymentType = 'platform_fee' | 'lawyer_fee' | 'success_fee'
 export type NotificationType = 'inquiry' | 'message' | 'transaction' | 'payment' | 'system'
 export type DocumentType = 'title_deed' | 'id_document' | 'proof_of_address' | 'contract' | 'other'
+export type AdminRole = 'super_admin' | 'admin' | 'moderator'
+export type RewardTier = 'bronze' | 'silver' | 'gold' | 'platinum'
+export type ReferralTransactionType = 'referral_signup' | 'referral_listing' | 'referral_transaction' | 'redemption'
 
 // ============================================================================
 // DATABASE TABLES
@@ -108,6 +113,10 @@ export interface Database {
           price: number
           property_type: PropertyType
           status: PropertyStatus
+          moderation_status: ModerationStatus | null
+          moderation_notes: string | null
+          moderated_by: string | null
+          moderated_at: string | null
           bedrooms: number | null
           bathrooms: number | null
           square_meters: number | null
@@ -135,6 +144,10 @@ export interface Database {
           price: number
           property_type: PropertyType
           status?: PropertyStatus
+          moderation_status?: ModerationStatus | null
+          moderation_notes?: string | null
+          moderated_by?: string | null
+          moderated_at?: string | null
           bedrooms?: number | null
           bathrooms?: number | null
           square_meters?: number | null
@@ -162,6 +175,10 @@ export interface Database {
           price?: number
           property_type?: PropertyType
           status?: PropertyStatus
+          moderation_status?: ModerationStatus | null
+          moderation_notes?: string | null
+          moderated_by?: string | null
+          moderated_at?: string | null
           bedrooms?: number | null
           bathrooms?: number | null
           square_meters?: number | null
@@ -712,6 +729,340 @@ export interface Database {
           created_at?: string
         }
       }
+      admin_profiles: {
+        Row: {
+          id: string
+          role: AdminRole
+          is_active: boolean
+          last_active: string | null
+          status: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id: string
+          role?: AdminRole
+          is_active?: boolean
+          last_active?: string | null
+          status?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          role?: AdminRole
+          is_active?: boolean
+          last_active?: string | null
+          status?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      moderator_invitations: {
+        Row: {
+          id: string
+          email: string
+          invited_by: string
+          token: string
+          expires_at: string
+          accepted_at: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          invited_by: string
+          token: string
+          expires_at: string
+          accepted_at?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          invited_by?: string
+          token?: string
+          expires_at?: string
+          accepted_at?: string | null
+          created_at?: string
+        }
+      }
+      property_reviews: {
+        Row: {
+          id: string
+          property_id: string
+          reviewer_id: string
+          action: ModerationAction
+          reason: string | null
+          notes: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          reviewer_id: string
+          action: ModerationAction
+          reason?: string | null
+          notes?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          reviewer_id?: string
+          action?: ModerationAction
+          reason?: string | null
+          notes?: string | null
+          created_at?: string
+        }
+      }
+      saved_properties: {
+        Row: {
+          id: string
+          user_id: string
+          property_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          property_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          property_id?: string
+          created_at?: string
+        }
+      }
+      referral_rewards: {
+        Row: {
+          id: string
+          user_id: string
+          points: number
+          lifetime_points: number
+          tier: RewardTier
+          free_featured_listings: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          points?: number
+          lifetime_points?: number
+          tier?: RewardTier
+          free_featured_listings?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          points?: number
+          lifetime_points?: number
+          tier?: RewardTier
+          free_featured_listings?: number
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      referral_transactions: {
+        Row: {
+          id: string
+          user_id: string
+          transaction_type: ReferralTransactionType
+          points_earned: number
+          related_user_id: string | null
+          related_property_id: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          transaction_type: ReferralTransactionType
+          points_earned: number
+          related_user_id?: string | null
+          related_property_id?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          transaction_type?: ReferralTransactionType
+          points_earned?: number
+          related_user_id?: string | null
+          related_property_id?: string | null
+          created_at?: string
+        }
+      }
+      user_notifications: {
+        Row: {
+          id: string
+          user_id: string
+          type: string
+          title: string
+          message: string
+          read: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          type: string
+          title: string
+          message: string
+          read?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          type?: string
+          title?: string
+          message?: string
+          read?: boolean
+          created_at?: string
+        }
+      }
+      user_roles: {
+        Row: {
+          id: string
+          user_id: string
+          role: UserType
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          role: UserType
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          role?: UserType
+          is_active?: boolean
+          created_at?: string
+        }
+      }
+      property_views: {
+        Row: {
+          id: string
+          property_id: string
+          viewer_id: string | null
+          session_id: string | null
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          property_id: string
+          viewer_id?: string | null
+          session_id?: string | null
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          property_id?: string
+          viewer_id?: string | null
+          session_id?: string | null
+          viewed_at?: string
+        }
+      }
+      payments: {
+        Row: {
+          id: string
+          transaction_id: string | null
+          user_id: string
+          lawyer_id: string | null
+          type: PaymentType
+          amount: number
+          currency: string
+          status: PaymentStatus
+          stripe_payment_intent_id: string | null
+          stripe_invoice_id: string | null
+          paid_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          transaction_id?: string | null
+          user_id: string
+          lawyer_id?: string | null
+          type: PaymentType
+          amount: number
+          currency?: string
+          status?: PaymentStatus
+          stripe_payment_intent_id?: string | null
+          stripe_invoice_id?: string | null
+          paid_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          transaction_id?: string | null
+          user_id?: string
+          lawyer_id?: string | null
+          type?: PaymentType
+          amount?: number
+          currency?: string
+          status?: PaymentStatus
+          stripe_payment_intent_id?: string | null
+          stripe_invoice_id?: string | null
+          paid_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      blog_posts: {
+        Row: {
+          id: string
+          slug: string
+          title: string
+          excerpt: string | null
+          content: string
+          author_id: string
+          published: boolean
+          featured_image: string | null
+          tags: string[] | null
+          created_at: string
+          updated_at: string
+          published_at: string | null
+        }
+        Insert: {
+          id?: string
+          slug: string
+          title: string
+          excerpt?: string | null
+          content: string
+          author_id: string
+          published?: boolean
+          featured_image?: string | null
+          tags?: string[] | null
+          created_at?: string
+          updated_at?: string
+          published_at?: string | null
+        }
+        Update: {
+          id?: string
+          slug?: string
+          title?: string
+          excerpt?: string | null
+          content?: string
+          author_id?: string
+          published?: boolean
+          featured_image?: string | null
+          tags?: string[] | null
+          created_at?: string
+          updated_at?: string
+          published_at?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never
@@ -726,6 +1077,8 @@ export interface Database {
       user_type: UserType
       property_type: PropertyType
       property_status: PropertyStatus
+      moderation_status: ModerationStatus
+      moderation_action: ModerationAction
       inquiry_status: InquiryStatus
       transaction_status: TransactionStatus
       conversation_status: ConversationStatus
@@ -733,6 +1086,9 @@ export interface Database {
       payment_type: PaymentType
       notification_type: NotificationType
       document_type: DocumentType
+      admin_role: AdminRole
+      reward_tier: RewardTier
+      referral_transaction_type: ReferralTransactionType
     }
     CompositeTypes: {
       [_ in never]: never

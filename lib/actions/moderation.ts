@@ -2,8 +2,9 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import type { ModerationAction, ModerationStatus } from '@/lib/types/database'
 
-export type ModerationAction = 'approved' | 'rejected' | 'flagged' | 'unflagged'
+export type { ModerationAction }
 export type ModerationFilter = 'all' | 'pending' | 'flagged' | 'approved' | 'rejected'
 
 interface ActionResult {
@@ -53,8 +54,8 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
   const supabase = await createClient()
 
   // Update property moderation status
-  const { error: updateError } = await supabase
-    .from('properties')
+  const { error: updateError } = await (supabase
+    .from('properties') as any)
     .update({
       moderation_status: 'approved',
       moderation_notes: null,
@@ -102,8 +103,8 @@ export async function rejectProperty(
   const supabase = await createClient()
 
   // Update property moderation status
-  const { error: updateError } = await supabase
-    .from('properties')
+  const { error: updateError } = await (supabase
+    .from('properties') as any)
     .update({
       moderation_status: 'rejected',
       moderation_notes: reason,
@@ -144,8 +145,8 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
   const supabase = await createClient()
 
   // Update property moderation status
-  const { error: updateError } = await supabase
-    .from('properties')
+  const { error: updateError } = await (supabase
+    .from('properties') as any)
     .update({
       moderation_status: 'flagged',
       moderation_notes: reason,
@@ -184,8 +185,8 @@ export async function unflagProperty(propertyId: string): Promise<ActionResult> 
   const supabase = await createClient()
 
   // Update property moderation status back to approved
-  const { error: updateError } = await supabase
-    .from('properties')
+  const { error: updateError } = await (supabase
+    .from('properties') as any)
     .update({
       moderation_status: 'approved',
       moderation_notes: null,

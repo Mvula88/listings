@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import crypto from 'crypto'
+import type { AdminRole, Tables, TablesInsert, TablesUpdate } from '@/lib/types/database'
 
 interface ActionResult {
   success: boolean
