@@ -24,10 +24,6 @@ const nextConfig: NextConfig = {
     unoptimized: false,
   },
 
-  // Enable instrumentation hook for Sentry
-  experimental: {
-    instrumentationHook: true,
-  },
 };
 
 // Only enable Sentry build-time features if all required env vars are present
