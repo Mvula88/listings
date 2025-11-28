@@ -27,6 +27,19 @@ export function SecuritySettingsForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const { toast } = useToast()
 
+  function resetForm() {
+    setShowCurrentPassword(false)
+    setShowNewPassword(false)
+    setShowConfirmPassword(false)
+  }
+
+  function handleDialogChange(open: boolean) {
+    setIsDialogOpen(open)
+    if (!open) {
+      resetForm()
+    }
+  }
+
   async function handlePasswordChange(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setIsLoading(true)
@@ -38,8 +51,7 @@ export function SecuritySettingsForm() {
 
       if (result.success) {
         toast.success(result.message || 'Password changed successfully')
-        setIsDialogOpen(false)
-        // Reset form
+        handleDialogChange(false)
         e.currentTarget.reset()
       } else {
         toast.error(result.error || 'Failed to change password')
@@ -68,7 +80,7 @@ export function SecuritySettingsForm() {
             <p className="font-medium">Password</p>
             <p className="text-sm text-muted-foreground">Change your password</p>
           </div>
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <Dialog open={isDialogOpen} onOpenChange={handleDialogChange}>
             <DialogTrigger asChild>
               <Button variant="outline" size="sm">
                 Change Password

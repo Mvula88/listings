@@ -21,21 +21,21 @@ export function BillingSettings() {
       <CardContent className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium">Payment Methods</p>
-            <p className="text-sm text-muted-foreground">Manage your payment methods</p>
+            <p className="font-medium">Featured Listings</p>
+            <p className="text-sm text-muted-foreground">View and manage your featured properties</p>
           </div>
           <Button variant="outline" size="sm" asChild>
-            <Link href="/dashboard/payments">Manage</Link>
+            <Link href="/featured">View Featured</Link>
           </Button>
         </div>
         <Separator />
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium">Billing History</p>
-            <p className="text-sm text-muted-foreground">View your past transactions</p>
+            <p className="font-medium">Transaction History</p>
+            <p className="text-sm text-muted-foreground">View your property transactions</p>
           </div>
           <Button variant="outline" size="sm" asChild>
-            <Link href="/dashboard/transactions">View History</Link>
+            <Link href="/transactions">View History</Link>
           </Button>
         </div>
       </CardContent>
