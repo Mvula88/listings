@@ -71,24 +71,46 @@ export async function updateNotificationPreferences(formData: FormData): Promise
       return { success: false, error: 'Not authenticated' }
     }
 
-    const emailNotifications = formData.get('emailNotifications') === 'true'
-    const smsNotifications = formData.get('smsNotifications') === 'true'
-    const marketingEmails = formData.get('marketingEmails') === 'true'
-    const listingUpdates = formData.get('listingUpdates') === 'true'
-    const inquiryAlerts = formData.get('inquiryAlerts') === 'true'
+    const emailInquiries = formData.get('emailInquiries') === 'true'
+    const emailMessages = formData.get('emailMessages') === 'true'
+    const emailTransactions = formData.get('emailTransactions') === 'true'
+    const emailMarketing = formData.get('emailMarketing') === 'true'
+    const smsInquiries = formData.get('smsInquiries') === 'true'
+    const smsTransactions = formData.get('smsTransactions') === 'true'
 
-    const { error: updateError } = await (supabase.from('profiles') as any)
-      .update({
-        notification_preferences: {
-          email_notifications: emailNotifications,
-          sms_notifications: smsNotifications,
-          marketing_emails: marketingEmails,
-          listing_updates: listingUpdates,
-          inquiry_alerts: inquiryAlerts,
-        },
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', user.id)
+    // Check if preferences record exists
+    const { data: existingPrefs } = await (supabase.from('notification_preferences') as any)
+      .select('id')
+      .eq('user_id', user.id)
+      .single()
+
+    const prefsData = {
+      email_inquiries: emailInquiries,
+      email_messages: emailMessages,
+      email_transactions: emailTransactions,
+      email_marketing: emailMarketing,
+      sms_inquiries: smsInquiries,
+      sms_transactions: smsTransactions,
+      updated_at: new Date().toISOString(),
+    }
+
+    let updateError
+
+    if (existingPrefs) {
+      // Update existing record
+      const result = await (supabase.from('notification_preferences') as any)
+        .update(prefsData)
+        .eq('user_id', user.id)
+      updateError = result.error
+    } else {
+      // Insert new record
+      const result = await (supabase.from('notification_preferences') as any)
+        .insert({
+          user_id: user.id,
+          ...prefsData,
+        })
+      updateError = result.error
+    }
 
     if (updateError) {
       console.error('Notification preferences update error:', updateError)

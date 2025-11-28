@@ -9,19 +9,19 @@ import {
   DangerZone,
 } from '@/components/settings'
 
-interface NotificationPreferences {
-  email_notifications?: boolean
-  sms_notifications?: boolean
-  marketing_emails?: boolean
-  listing_updates?: boolean
-  inquiry_alerts?: boolean
-}
-
 interface Profile {
   full_name: string | null
   phone: string | null
   user_type: string | null
-  notification_preferences?: NotificationPreferences | null
+}
+
+interface NotificationPreferences {
+  email_inquiries?: boolean
+  email_messages?: boolean
+  email_transactions?: boolean
+  email_marketing?: boolean
+  sms_inquiries?: boolean
+  sms_transactions?: boolean
 }
 
 export default async function SettingsPage() {
@@ -40,6 +40,13 @@ export default async function SettingsPage() {
     .select('*')
     .eq('id', user.id)
     .single() as { data: Profile | null }
+
+  // Get notification preferences from the separate table
+  const { data: notificationPrefs } = await (supabase
+    .from('notification_preferences') as any)
+    .select('*')
+    .eq('user_id', user.id)
+    .single() as { data: NotificationPreferences | null }
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -63,7 +70,7 @@ export default async function SettingsPage() {
       {/* Notification Settings */}
       <FadeIn delay={0.2}>
         <NotificationSettingsForm
-          preferences={profile?.notification_preferences || null}
+          preferences={notificationPrefs}
         />
       </FadeIn>
 

@@ -10,11 +10,12 @@ import { updateNotificationPreferences } from '@/lib/actions/settings'
 import { useToast } from '@/lib/hooks/use-toast'
 
 interface NotificationPreferences {
-  email_notifications?: boolean
-  sms_notifications?: boolean
-  marketing_emails?: boolean
-  listing_updates?: boolean
-  inquiry_alerts?: boolean
+  email_inquiries?: boolean
+  email_messages?: boolean
+  email_transactions?: boolean
+  email_marketing?: boolean
+  sms_inquiries?: boolean
+  sms_transactions?: boolean
 }
 
 interface NotificationSettingsFormProps {
@@ -27,11 +28,12 @@ export function NotificationSettingsForm({ preferences }: NotificationSettingsFo
   const { toast } = useToast()
 
   const [settings, setSettings] = useState({
-    emailNotifications: preferences?.email_notifications ?? true,
-    smsNotifications: preferences?.sms_notifications ?? false,
-    marketingEmails: preferences?.marketing_emails ?? false,
-    listingUpdates: preferences?.listing_updates ?? true,
-    inquiryAlerts: preferences?.inquiry_alerts ?? true,
+    emailInquiries: preferences?.email_inquiries ?? true,
+    emailMessages: preferences?.email_messages ?? true,
+    emailTransactions: preferences?.email_transactions ?? true,
+    emailMarketing: preferences?.email_marketing ?? false,
+    smsInquiries: preferences?.sms_inquiries ?? false,
+    smsTransactions: preferences?.sms_transactions ?? true,
   })
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -40,11 +42,12 @@ export function NotificationSettingsForm({ preferences }: NotificationSettingsFo
     setSuccess(false)
 
     const formData = new FormData()
-    formData.set('emailNotifications', String(settings.emailNotifications))
-    formData.set('smsNotifications', String(settings.smsNotifications))
-    formData.set('marketingEmails', String(settings.marketingEmails))
-    formData.set('listingUpdates', String(settings.listingUpdates))
-    formData.set('inquiryAlerts', String(settings.inquiryAlerts))
+    formData.set('emailInquiries', String(settings.emailInquiries))
+    formData.set('emailMessages', String(settings.emailMessages))
+    formData.set('emailTransactions', String(settings.emailTransactions))
+    formData.set('emailMarketing', String(settings.emailMarketing))
+    formData.set('smsInquiries', String(settings.smsInquiries))
+    formData.set('smsTransactions', String(settings.smsTransactions))
 
     try {
       const result = await updateNotificationPreferences(formData)
@@ -77,82 +80,104 @@ export function NotificationSettingsForm({ preferences }: NotificationSettingsFo
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label htmlFor="emailNotifications">Email Notifications</Label>
-                <p className="text-sm text-muted-foreground">
-                  Receive email updates about your listings and inquiries
-                </p>
-              </div>
-              <Switch
-                id="emailNotifications"
-                checked={settings.emailNotifications}
-                onCheckedChange={(checked) =>
-                  setSettings((prev) => ({ ...prev, emailNotifications: checked }))
-                }
-              />
-            </div>
+            <h4 className="text-sm font-medium text-muted-foreground">Email Notifications</h4>
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="smsNotifications">SMS Notifications</Label>
-                <p className="text-sm text-muted-foreground">
-                  Get text messages for important updates
-                </p>
-              </div>
-              <Switch
-                id="smsNotifications"
-                checked={settings.smsNotifications}
-                onCheckedChange={(checked) =>
-                  setSettings((prev) => ({ ...prev, smsNotifications: checked }))
-                }
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="space-y-0.5">
-                <Label htmlFor="inquiryAlerts">Inquiry Alerts</Label>
+                <Label htmlFor="emailInquiries">Property Inquiries</Label>
                 <p className="text-sm text-muted-foreground">
                   Get notified when someone inquires about your listing
                 </p>
               </div>
               <Switch
-                id="inquiryAlerts"
-                checked={settings.inquiryAlerts}
+                id="emailInquiries"
+                checked={settings.emailInquiries}
                 onCheckedChange={(checked) =>
-                  setSettings((prev) => ({ ...prev, inquiryAlerts: checked }))
+                  setSettings((prev) => ({ ...prev, emailInquiries: checked }))
                 }
               />
             </div>
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="listingUpdates">Listing Updates</Label>
+                <Label htmlFor="emailMessages">Messages</Label>
                 <p className="text-sm text-muted-foreground">
-                  Get notified about status changes to your listings
+                  Receive email notifications for new messages
                 </p>
               </div>
               <Switch
-                id="listingUpdates"
-                checked={settings.listingUpdates}
+                id="emailMessages"
+                checked={settings.emailMessages}
                 onCheckedChange={(checked) =>
-                  setSettings((prev) => ({ ...prev, listingUpdates: checked }))
+                  setSettings((prev) => ({ ...prev, emailMessages: checked }))
                 }
               />
             </div>
 
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="marketingEmails">Marketing Emails</Label>
+                <Label htmlFor="emailTransactions">Transactions</Label>
+                <p className="text-sm text-muted-foreground">
+                  Get updates about your property transactions
+                </p>
+              </div>
+              <Switch
+                id="emailTransactions"
+                checked={settings.emailTransactions}
+                onCheckedChange={(checked) =>
+                  setSettings((prev) => ({ ...prev, emailTransactions: checked }))
+                }
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="emailMarketing">Marketing & Tips</Label>
                 <p className="text-sm text-muted-foreground">
                   Receive tips, product updates, and promotional offers
                 </p>
               </div>
               <Switch
-                id="marketingEmails"
-                checked={settings.marketingEmails}
+                id="emailMarketing"
+                checked={settings.emailMarketing}
                 onCheckedChange={(checked) =>
-                  setSettings((prev) => ({ ...prev, marketingEmails: checked }))
+                  setSettings((prev) => ({ ...prev, emailMarketing: checked }))
+                }
+              />
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-sm font-medium text-muted-foreground">SMS Notifications</h4>
+
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="smsInquiries">Inquiry Alerts</Label>
+                <p className="text-sm text-muted-foreground">
+                  Get SMS when someone inquires about your listing
+                </p>
+              </div>
+              <Switch
+                id="smsInquiries"
+                checked={settings.smsInquiries}
+                onCheckedChange={(checked) =>
+                  setSettings((prev) => ({ ...prev, smsInquiries: checked }))
+                }
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="smsTransactions">Transaction Updates</Label>
+                <p className="text-sm text-muted-foreground">
+                  Get SMS for important transaction updates
+                </p>
+              </div>
+              <Switch
+                id="smsTransactions"
+                checked={settings.smsTransactions}
+                onCheckedChange={(checked) =>
+                  setSettings((prev) => ({ ...prev, smsTransactions: checked }))
                 }
               />
             </div>
