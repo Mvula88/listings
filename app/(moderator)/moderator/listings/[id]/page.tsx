@@ -31,14 +31,14 @@ export default async function ModeratorListingDetailPage({ params }: Props) {
   const [propertyResult, historyResult] = await Promise.all([
     getPropertyForReview(id),
     getPropertyReviewHistory(id)
-  ])
+  ]) as [{ property: any; error?: string }, { reviews: any[]; error?: string }]
 
   if (propertyResult.error || !propertyResult.property) {
     notFound()
   }
 
-  const property = propertyResult.property as any
-  const reviews = (historyResult.reviews || []) as any[]
+  const property = propertyResult.property
+  const reviews = historyResult.reviews || []
 
   const getStatusBadge = (status: string | null) => {
     switch (status) {
