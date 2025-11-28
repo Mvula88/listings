@@ -84,14 +84,14 @@ export async function inviteModerator(email: string): Promise<ActionResult & { t
     .from('profiles')
     .select('id')
     .eq('email', email)
-    .single()
+    .single<{ id: string }>()
 
   if (existingProfile) {
     const { data: existingAdmin } = await supabase
       .from('admin_profiles')
       .select('role')
       .eq('id', existingProfile.id)
-      .single()
+      .single<{ role: string }>()
 
     if (existingAdmin) {
       return { success: false, error: 'This user is already a moderator or admin' }
@@ -105,7 +105,7 @@ export async function inviteModerator(email: string): Promise<ActionResult & { t
     .eq('email', email)
     .is('accepted_at', null)
     .gt('expires_at', new Date().toISOString())
-    .single()
+    .single<{ id: string }>()
 
   if (existingInvite) {
     return { success: false, error: 'A pending invitation already exists for this email' }
@@ -410,7 +410,7 @@ export async function acceptModeratorInvitation(
     .eq('token', token)
     .is('accepted_at', null)
     .gt('expires_at', new Date().toISOString())
-    .single()
+    .single<{ id: string; email: string; token: string; expires_at: string }>()
 
   if (fetchError || !invitation) {
     return { success: false, error: 'Invalid or expired invitation' }
@@ -450,7 +450,7 @@ export async function verifyInvitationToken(token: string) {
     .eq('token', token)
     .is('accepted_at', null)
     .gt('expires_at', new Date().toISOString())
-    .single()
+    .single<{ email: string; expires_at: string }>()
 
   if (error || !invitation) {
     return { valid: false, email: null }
