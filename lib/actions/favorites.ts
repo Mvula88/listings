@@ -32,7 +32,7 @@ export async function toggleFavorite(propertyId: string) {
     }
 
     revalidatePath('/browse')
-    revalidatePath('/favorites')
+    revalidatePath('/saved')
     revalidatePath(`/properties/${propertyId}`)
     return { success: true, favorited: false }
   } else {
@@ -49,7 +49,7 @@ export async function toggleFavorite(propertyId: string) {
     }
 
     revalidatePath('/browse')
-    revalidatePath('/favorites')
+    revalidatePath('/saved')
     revalidatePath(`/properties/${propertyId}`)
     return { success: true, favorited: true }
   }

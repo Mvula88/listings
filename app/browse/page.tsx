@@ -32,6 +32,19 @@ export default async function BrowsePropertiesPage({
   const supabase = await createClient()
   const params = await searchParams
 
+  // Get current user to check favorites
+  const { data: { user } } = await supabase.auth.getUser()
+
+  // Get user's favorites if logged in
+  let userFavorites: string[] = []
+  if (user) {
+    const { data: favorites } = await supabase
+      .from('property_favorites')
+      .select('property_id')
+      .eq('user_id', user.id) as { data: { property_id: string }[] | null }
+    userFavorites = favorites?.map(f => f.property_id) || []
+  }
+
   // Build query - show active properties
   let query = supabase
     .from('properties')
@@ -225,7 +238,10 @@ export default async function BrowsePropertiesPage({
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {properties.map((property: any, index: number) => (
                   <FadeIn key={property.id} delay={index * 0.05}>
-                    <PropertyCard property={property} />
+                    <PropertyCard
+                      property={property}
+                      initialFavorited={userFavorites.includes(property.id)}
+                    />
                   </FadeIn>
                 ))}
               </div>
