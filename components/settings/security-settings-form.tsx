@@ -52,7 +52,7 @@ export function SecuritySettingsForm() {
       if (result.success) {
         toast.success(result.message || 'Password changed successfully')
         handleDialogChange(false)
-        e.currentTarget.reset()
+        // Form reset not needed - dialog unmounts and fields are cleared on next open
       } else {
         toast.error(result.error || 'Failed to change password')
       }
