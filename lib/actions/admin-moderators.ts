@@ -277,7 +277,7 @@ export async function suspendModerator(moderatorId: string, reason: string): Pro
       suspension_reason: reason,
       suspended_at: new Date().toISOString(),
       suspended_by: access.userId
-    })
+    } as any)
     .eq('id', moderatorId)
     .eq('role', 'moderator')
 
@@ -309,7 +309,7 @@ export async function unsuspendModerator(moderatorId: string): Promise<ActionRes
       suspension_reason: null,
       suspended_at: null,
       suspended_by: null
-    })
+    } as any)
     .eq('id', moderatorId)
     .eq('role', 'moderator')
 
@@ -423,7 +423,7 @@ export async function acceptModeratorInvitation(
       id: userId,
       role: 'moderator',
       status: 'active'
-    })
+    } as any)
 
   if (insertError) {
     return { success: false, error: 'Failed to create moderator profile' }

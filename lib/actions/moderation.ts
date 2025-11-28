@@ -35,7 +35,7 @@ async function checkModeratorAccess(): Promise<{ userId: string } | { error: str
   // Update last_active timestamp
   await supabase
     .from('admin_profiles')
-    .update({ last_active: new Date().toISOString() })
+    .update({ last_active: new Date().toISOString() } as any)
     .eq('id', user.id)
 
   return { userId: user.id }
