@@ -49,7 +49,7 @@ export default async function ModeratorLayout({
 
   const moderatorWithProfile = {
     ...adminProfile,
-    profile: profile
+    profile: profile || undefined
   }
 
   return (
