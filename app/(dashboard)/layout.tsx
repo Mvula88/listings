@@ -4,6 +4,9 @@ import { DashboardNav } from '@/components/dashboard/nav'
 import { UserMenu } from '@/components/dashboard/user-menu'
 import { RoleSwitcher } from '@/components/dashboard/role-switcher'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Search } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import type { UserRole } from '@/lib/actions/roles'
 
 export default async function DashboardLayout({
@@ -45,6 +48,14 @@ export default async function DashboardLayout({
             />
           </a>
           <div className="ml-auto flex items-center space-x-4">
+            {profile?.user_type === 'buyer' && (
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/browse" className="flex items-center gap-2">
+                  <Search className="h-4 w-4" />
+                  Browse Properties
+                </Link>
+              </Button>
+            )}
             <UserMenu user={user} profile={profile} />
           </div>
         </div>
