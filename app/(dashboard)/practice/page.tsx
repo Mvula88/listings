@@ -43,7 +43,7 @@ export default async function PracticePage() {
     .from('lawyers')
     .select('*')
     .eq('profile_id', user.id)
-    .single<{ id: string; firm_name?: string; practice_areas?: string | string[]; years_of_experience?: number; bar_number?: string; office_phone?: string; office_address?: string; website?: string; verification_status?: string; [key: string]: any }>()
+    .single<{ id: string; firm_name?: string; practice_areas?: string | string[]; years_of_experience?: number; bar_number?: string; office_phone?: string; office_address?: string; website?: string; verified?: boolean; [key: string]: any }>()
 
   if (!lawyer) {
     redirect('/lawyers/onboarding')
@@ -75,7 +75,7 @@ export default async function PracticePage() {
     ? reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / reviews.length
     : 0
 
-  const verificationStatus = lawyer.verification_status || 'pending'
+  const verificationStatus = lawyer.verified ? 'approved' : 'pending'
 
   return (
     <div className="space-y-8">

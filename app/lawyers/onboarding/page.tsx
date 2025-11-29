@@ -93,7 +93,7 @@ export default function LawyerOnboardingPage() {
           languages: formData.languages,
           specializations: formData.specializations,
           payment_method: formData.paymentMethod,
-          verification_status: 'pending',
+          verified: false,
           available: true
         })
 
