@@ -92,9 +92,12 @@ const navItems: NavItem[] = [
 export function DashboardNav({ userType }: { userType?: string }) {
   const pathname = usePathname()
 
+  // Default to 'buyer' if no userType is set
+  const effectiveUserType = userType || 'buyer'
+
   const filteredItems = navItems.filter(item => {
     if (!item.userTypes) return true
-    return item.userTypes.includes(userType || '')
+    return item.userTypes.includes(effectiveUserType)
   })
 
   return (
