@@ -92,7 +92,7 @@ export default function RegisterPage() {
       // Check if user already exists and provide helpful message
       if (errorMessage.toLowerCase().includes('already registered') ||
           errorMessage.toLowerCase().includes('already exists')) {
-        setError('This email is already registered. Please sign in to your existing account. You can switch between roles (Buyer/Seller/Lawyer) using the Role Switcher in your dashboard sidebar.')
+        setError('This email is already registered. Please sign in to your existing account. You can switch between Buyer and Seller roles using the Role Switcher in your dashboard sidebar.')
       } else {
         setError(errorMessage)
       }
