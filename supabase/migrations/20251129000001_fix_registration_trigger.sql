@@ -27,15 +27,16 @@ BEGIN
     v_country_id := NULL;
   END IF;
 
-  -- Insert the profile
-  INSERT INTO public.profiles (id, email, full_name, phone, user_type, country_id)
+  -- Insert the profile with roles initialized
+  INSERT INTO public.profiles (id, email, full_name, phone, user_type, country_id, roles)
   VALUES (
     new.id,
     new.email,
     new.raw_user_meta_data->>'full_name',
     new.raw_user_meta_data->>'phone',
     COALESCE(new.raw_user_meta_data->>'user_type', 'buyer'),
-    v_country_id
+    v_country_id,
+    ARRAY[COALESCE(new.raw_user_meta_data->>'user_type', 'buyer')]::TEXT[]
   );
 
   RETURN new;
@@ -44,12 +45,13 @@ EXCEPTION WHEN OTHERS THEN
   RAISE WARNING 'handle_new_user error: %', SQLERRM;
   -- Still try to create a basic profile
   BEGIN
-    INSERT INTO public.profiles (id, email, full_name, user_type)
+    INSERT INTO public.profiles (id, email, full_name, user_type, roles)
     VALUES (
       new.id,
       new.email,
       new.raw_user_meta_data->>'full_name',
-      COALESCE(new.raw_user_meta_data->>'user_type', 'buyer')
+      COALESCE(new.raw_user_meta_data->>'user_type', 'buyer'),
+      ARRAY[COALESCE(new.raw_user_meta_data->>'user_type', 'buyer')]::TEXT[]
     );
   EXCEPTION WHEN OTHERS THEN
     RAISE WARNING 'handle_new_user fallback error: %', SQLERRM;
