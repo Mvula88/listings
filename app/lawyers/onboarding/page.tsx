@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -11,21 +11,42 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Checkbox } from '@/components/ui/checkbox'
-import { 
-  Award, 
-  DollarSign, 
+import {
+  Award,
+  DollarSign,
   CheckCircle,
   Loader2,
   ArrowRight,
   Users
 } from 'lucide-react'
 
+interface Country {
+  id: string
+  name: string
+  code: string
+}
+
 export default function LawyerOnboardingPage() {
   const [step, setStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [countries, setCountries] = useState<Country[]>([])
   const router = useRouter()
   const supabase: any = createClient()
+
+  // Fetch countries on mount
+  useEffect(() => {
+    async function fetchCountries() {
+      const { data } = await supabase
+        .from('countries')
+        .select('id, name, code')
+        .order('name')
+      if (data) {
+        setCountries(data)
+      }
+    }
+    fetchCountries()
+  }, [supabase])
   
   const [formData, setFormData] = useState({
     firmName: '',
@@ -63,16 +84,16 @@ export default function LawyerOnboardingPage() {
           profile_id: user.id,
           firm_name: formData.firmName,
           registration_number: formData.registrationNumber,
-          country_id: formData.country,
+          country_id: formData.country || null,
           city: formData.city,
-          years_experience: parseInt(formData.yearsExperience),
-          flat_fee_buyer: parseFloat(formData.flatFeeBuyer),
-          flat_fee_seller: parseFloat(formData.flatFeeSeller),
+          years_of_experience: parseInt(formData.yearsExperience) || null,
+          flat_fee_buyer: parseFloat(formData.flatFeeBuyer) || null,
+          flat_fee_seller: parseFloat(formData.flatFeeSeller) || null,
           bio: formData.bio,
           languages: formData.languages,
           specializations: formData.specializations,
           payment_method: formData.paymentMethod,
-          verified: false,
+          verification_status: 'pending',
           available: true
         })
 
@@ -128,16 +149,19 @@ export default function LawyerOnboardingPage() {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="country">Country</Label>
-                <Select 
-                  value={formData.country} 
+                <Select
+                  value={formData.country}
                   onValueChange={(value) => setFormData({...formData, country: value})}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select country" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="NA">Namibia</SelectItem>
-                    <SelectItem value="ZA">South Africa</SelectItem>
+                    {countries.map((country) => (
+                      <SelectItem key={country.id} value={country.id}>
+                        {country.name}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
