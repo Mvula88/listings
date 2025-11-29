@@ -71,6 +71,12 @@ const navItems: NavItem[] = [
     icon: MessageSquare,
   },
   {
+    title: 'Deal Management',
+    href: '/lawyer-deals',
+    icon: FileText,
+    userTypes: ['lawyer']
+  },
+  {
     title: 'Clients',
     href: '/clients',
     icon: Users,
