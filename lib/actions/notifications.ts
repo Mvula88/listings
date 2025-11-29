@@ -21,6 +21,54 @@ interface ActionResult {
   message?: string
 }
 
+export type NotificationType =
+  | 'inquiry'
+  | 'message'
+  | 'property_approved'
+  | 'property_rejected'
+  | 'property_flagged'
+  | 'payment'
+  | 'featured_expired'
+  | 'system'
+
+interface CreateNotificationData {
+  userId: string
+  type: NotificationType
+  title: string
+  message: string
+  data?: Record<string, any>
+}
+
+/**
+ * Create a notification for a user
+ */
+export async function createNotification(data: CreateNotificationData): Promise<ActionResult> {
+  try {
+    const supabase = await createClient()
+
+    const { error } = await (supabase
+      .from('notifications') as any)
+      .insert({
+        user_id: data.userId,
+        type: data.type,
+        title: data.title,
+        message: data.message,
+        data: data.data || {},
+        read: false,
+      })
+
+    if (error) {
+      console.error('Error creating notification:', error)
+      return { success: false, error: 'Failed to create notification' }
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error('Create notification error:', error)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
 /**
  * Get user notifications
  */

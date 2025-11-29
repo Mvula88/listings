@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { z } from 'zod'
+import { createNotification } from './notifications'
 
 const inquirySchema = z.object({
   property_id: z.string().uuid('Invalid property ID'),
@@ -100,14 +101,35 @@ export async function submitInquiry(data: InquiryData): Promise<SubmitInquiryRes
       }
     }
 
-    // 6. Get seller details for email notification
+    // 6. Get seller details and buyer details for notifications
     const { data: seller } = await (supabase
       .from('profiles') as any)
       .select('email, full_name')
       .eq('id', property.seller_id)
       .single()
 
-    // 7. Send email notification to property seller (fire and forget)
+    const { data: buyer } = await (supabase
+      .from('profiles') as any)
+      .select('full_name')
+      .eq('id', user.id)
+      .single()
+
+    // 7. Create in-app notification for seller
+    const buyerName = buyer?.full_name || 'Someone'
+    await createNotification({
+      userId: property.seller_id,
+      type: 'inquiry',
+      title: 'New Property Inquiry',
+      message: `${buyerName} is interested in your property "${property.title}"`,
+      data: {
+        inquiry_id: inquiry.id,
+        property_id: property.id,
+        property_title: property.title,
+        buyer_id: user.id,
+      },
+    })
+
+    // 8. Send email notification to property seller (fire and forget)
     if (seller?.email) {
       try {
         await fetch(`${process.env.NEXT_PUBLIC_URL}/api/email/inquiry-notification`, {

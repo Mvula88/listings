@@ -36,8 +36,11 @@ const notificationIcons: Record<string, React.ReactNode> = {
   payment: <CreditCard className="h-4 w-4 text-green-500" />,
   featured_expired: <AlertCircle className="h-4 w-4 text-orange-500" />,
   inquiry: <MessageSquare className="h-4 w-4 text-blue-500" />,
+  message: <MessageSquare className="h-4 w-4 text-purple-500" />,
   property_approved: <Home className="h-4 w-4 text-green-500" />,
   property_rejected: <Home className="h-4 w-4 text-red-500" />,
+  property_flagged: <AlertCircle className="h-4 w-4 text-yellow-500" />,
+  system: <Bell className="h-4 w-4 text-blue-500" />,
   default: <Bell className="h-4 w-4 text-gray-500" />,
 }
 

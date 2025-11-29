@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import { createNotification } from './notifications'
 
 export async function getUserRewards() {
   try {
@@ -141,6 +142,28 @@ export async function redeemFeaturedListing(propertyId: string, days: number) {
     if (!data.success) {
       return { success: false, error: data.error || 'Redemption failed' }
     }
+
+    // Get property details for notification
+    const { data: property } = await (supabase
+      .from('properties') as any)
+      .select('title')
+      .eq('id', propertyId)
+      .single()
+
+    // Create notification for successful redemption
+    await createNotification({
+      userId: user.id,
+      type: 'payment',
+      title: 'Featured Listing Activated',
+      message: `Your property "${property?.title || 'Unknown'}" is now featured for ${days} days!`,
+      data: {
+        property_id: propertyId,
+        property_title: property?.title,
+        days,
+        used_free_listing: data.used_free_listing,
+        points_used: data.points_used,
+      },
+    })
 
     revalidatePath('/rewards')
     revalidatePath('/dashboard')

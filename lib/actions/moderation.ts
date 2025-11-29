@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { ModerationAction, ModerationStatus } from '@/lib/types/database'
+import { createNotification } from './notifications'
 
 export type { ModerationAction }
 export type ModerationFilter = 'all' | 'pending' | 'flagged' | 'approved' | 'rejected'
@@ -53,6 +54,13 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
 
   const supabase = await createClient()
 
+  // Get property details for notification
+  const { data: property } = await (supabase
+    .from('properties') as any)
+    .select('title, seller_id')
+    .eq('id', propertyId)
+    .single()
+
   // Update property moderation status
   const { error: updateError } = await (supabase
     .from('properties') as any)
@@ -75,6 +83,20 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
     action: 'approved',
     notes
   })
+
+  // Notify seller that their property was approved
+  if (property?.seller_id) {
+    await createNotification({
+      userId: property.seller_id,
+      type: 'property_approved',
+      title: 'Property Approved',
+      message: `Your property "${property.title}" has been approved and is now visible to buyers.`,
+      data: {
+        property_id: propertyId,
+        property_title: property.title,
+      },
+    })
+  }
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
@@ -102,6 +124,13 @@ export async function rejectProperty(
 
   const supabase = await createClient()
 
+  // Get property details for notification
+  const { data: property } = await (supabase
+    .from('properties') as any)
+    .select('title, seller_id')
+    .eq('id', propertyId)
+    .single()
+
   // Update property moderation status
   const { error: updateError } = await (supabase
     .from('properties') as any)
@@ -126,6 +155,21 @@ export async function rejectProperty(
     notes
   })
 
+  // Notify seller that their property was rejected
+  if (property?.seller_id) {
+    await createNotification({
+      userId: property.seller_id,
+      type: 'property_rejected',
+      title: 'Property Needs Changes',
+      message: `Your property "${property.title}" requires changes: ${reason}`,
+      data: {
+        property_id: propertyId,
+        property_title: property.title,
+        rejection_reason: reason,
+      },
+    })
+  }
+
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
   revalidatePath('/browse')
@@ -143,6 +187,13 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
   }
 
   const supabase = await createClient()
+
+  // Get property details for notification
+  const { data: property } = await (supabase
+    .from('properties') as any)
+    .select('title, seller_id')
+    .eq('id', propertyId)
+    .single()
 
   // Update property moderation status
   const { error: updateError } = await (supabase
@@ -166,6 +217,21 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
     action: 'flagged',
     reason
   })
+
+  // Notify seller that their property was flagged
+  if (property?.seller_id) {
+    await createNotification({
+      userId: property.seller_id,
+      type: 'property_flagged',
+      title: 'Property Under Review',
+      message: `Your property "${property.title}" has been flagged for review: ${reason}`,
+      data: {
+        property_id: propertyId,
+        property_title: property.title,
+        flag_reason: reason,
+      },
+    })
+  }
 
   revalidatePath('/moderator/listings')
   revalidatePath(`/moderator/listings/${propertyId}`)
