@@ -93,18 +93,40 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
     const messageContent = newMessage.trim()
     setNewMessage('')
 
+    // Create optimistic message to show immediately
+    const optimisticMessage: Message = {
+      id: `temp-${Date.now()}`,
+      conversation_id: conversation.id,
+      sender_id: currentUserId,
+      recipient_id: conversation.participant?.id,
+      content: messageContent,
+      read: false,
+      created_at: new Date().toISOString(),
+    }
+
+    // Add message optimistically
+    setMessages(prev => [...prev, optimisticMessage])
+
     try {
       // Use server action which triggers notifications
       const result = await sendMessageAction(conversation.id, messageContent)
 
       if (!result.success) {
         toast.error(result.error || 'Failed to send message')
-        setNewMessage(messageContent) // Restore message on failure
+        // Remove optimistic message and restore input on failure
+        setMessages(prev => prev.filter(m => m.id !== optimisticMessage.id))
+        setNewMessage(messageContent)
+      } else if (result.message) {
+        // Replace optimistic message with real one
+        setMessages(prev =>
+          prev.map(m => m.id === optimisticMessage.id ? result.message : m)
+        )
       }
-      // Real-time subscription will add the message to the list
     } catch (error) {
       console.error('Error sending message:', error)
       toast.error('Failed to send message')
+      // Remove optimistic message and restore input on failure
+      setMessages(prev => prev.filter(m => m.id !== optimisticMessage.id))
       setNewMessage(messageContent)
     } finally {
       setSending(false)

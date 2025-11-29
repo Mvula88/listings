@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -53,6 +54,7 @@ export function NotificationDropdown() {
   const [unreadCount, setUnreadCount] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   async function fetchNotifications() {
     const { notifications, unreadCount } = await getNotifications(20)
@@ -80,6 +82,67 @@ export function NotificationDropdown() {
     await markAllNotificationsAsRead()
     setNotifications(prev => prev.map(n => ({ ...n, read: true, read_at: new Date().toISOString() })))
     setUnreadCount(0)
+  }
+
+  // Get the navigation URL based on notification type and data
+  function getNotificationUrl(notification: Notification): string | null {
+    const data = notification.data as Record<string, any> | null
+
+    switch (notification.type) {
+      case 'message':
+        if (data?.conversation_id) {
+          return `/messages?conversation=${data.conversation_id}`
+        }
+        return '/messages'
+
+      case 'inquiry':
+        if (data?.inquiry_id) {
+          return `/messages?inquiry=${data.inquiry_id}`
+        }
+        if (data?.property_id) {
+          return `/properties/${data.property_id}`
+        }
+        return '/messages'
+
+      case 'property_approved':
+      case 'property_rejected':
+      case 'property_flagged':
+        if (data?.property_id) {
+          return `/properties/${data.property_id}`
+        }
+        return '/properties'
+
+      case 'payment':
+      case 'featured_activated':
+      case 'featured_expired':
+        if (data?.property_id) {
+          return `/properties/${data.property_id}`
+        }
+        return '/featured'
+
+      case 'transaction':
+        if (data?.transaction_id) {
+          return `/transactions/${data.transaction_id}`
+        }
+        return '/transactions'
+
+      default:
+        return null
+    }
+  }
+
+  async function handleNotificationClick(notification: Notification) {
+    // Mark as read if not already
+    if (!notification.read) {
+      await handleMarkAsRead(notification.id)
+    }
+
+    // Navigate to the relevant page
+    const url = getNotificationUrl(notification)
+    if (url) {
+      setIsOpen(false)
+      router.push(url)
+    }
   }
 
   return (
@@ -132,7 +195,7 @@ export function NotificationDropdown() {
                   "flex flex-col items-start gap-1 p-3 cursor-pointer",
                   !notification.read && "bg-muted/50"
                 )}
-                onClick={() => !notification.read && handleMarkAsRead(notification.id)}
+                onClick={() => handleNotificationClick(notification)}
               >
                 <div className="flex items-start gap-3 w-full">
                   <div className="flex-shrink-0 mt-0.5">
