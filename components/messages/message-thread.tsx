@@ -11,8 +11,7 @@ import { cn } from '@/lib/utils/cn'
 import { formatRelativeTime } from '@/lib/utils/format'
 import { Send, User, Home } from 'lucide-react'
 import Link from 'next/link'
-import type { Message } from '@/lib/types'
-import { sendMessage as sendMessageAction } from '@/lib/actions/messages'
+import { sendMessage as sendMessageAction, type Message } from '@/lib/actions/messages'
 import { useToast } from '@/lib/hooks/use-toast'
 
 interface MessageThreadProps {
