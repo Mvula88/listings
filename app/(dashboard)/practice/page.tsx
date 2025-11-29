@@ -32,7 +32,7 @@ export default async function PracticePage() {
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .single<{ user_type: string; email: string; full_name: string; [key: string]: any }>()
 
   if (profile?.user_type !== 'lawyer') {
     redirect('/dashboard')
