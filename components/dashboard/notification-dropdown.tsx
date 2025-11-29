@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Bell, Check, CheckCheck, Trash2, CreditCard, Home, MessageSquare, AlertCircle } from 'lucide-react'
+import { Bell, Check, CheckCheck, Trash2, CreditCard, Home, MessageSquare, AlertCircle, Briefcase, DollarSign } from 'lucide-react'
 import {
   getNotifications,
   markNotificationAsRead,
@@ -42,6 +42,10 @@ const notificationIcons: Record<string, React.ReactNode> = {
   property_rejected: <Home className="h-4 w-4 text-red-500" />,
   property_flagged: <AlertCircle className="h-4 w-4 text-yellow-500" />,
   system: <Bell className="h-4 w-4 text-blue-500" />,
+  lawyer_deal_assigned: <Briefcase className="h-4 w-4 text-purple-500" />,
+  fee_remittance_reminder: <DollarSign className="h-4 w-4 text-orange-500" />,
+  remittance_overdue: <AlertCircle className="h-4 w-4 text-red-500" />,
+  transaction: <Briefcase className="h-4 w-4 text-blue-500" />,
   default: <Bell className="h-4 w-4 text-gray-500" />,
 }
 
@@ -125,6 +129,16 @@ export function NotificationDropdown() {
           return `/transactions/${data.transaction_id}`
         }
         return '/transactions'
+
+      case 'lawyer_deal_assigned':
+        if (data?.transaction_id) {
+          return `/lawyer-deals/${data.transaction_id}`
+        }
+        return '/lawyer-deals'
+
+      case 'fee_remittance_reminder':
+      case 'remittance_overdue':
+        return '/lawyer-deals/remit-fees'
 
       default:
         return null

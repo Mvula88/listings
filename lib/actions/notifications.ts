@@ -30,6 +30,10 @@ export type NotificationType =
   | 'payment'
   | 'featured_expired'
   | 'system'
+  | 'lawyer_deal_assigned'
+  | 'fee_remittance_reminder'
+  | 'remittance_overdue'
+  | 'transaction'
 
 interface CreateNotificationData {
   userId: string

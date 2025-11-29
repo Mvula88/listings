@@ -7,6 +7,7 @@ import {
   SecuritySettingsForm,
   BillingSettings,
   DangerZone,
+  LawyerPracticeSettings,
 } from '@/components/settings'
 
 interface Profile {
@@ -22,6 +23,18 @@ interface NotificationPreferences {
   email_marketing?: boolean
   sms_inquiries?: boolean
   sms_transactions?: boolean
+}
+
+interface Lawyer {
+  id: string
+  firm_name: string | null
+  bar_number: string | null
+  years_of_experience: number | null
+  practice_areas: string[] | null
+  office_phone: string | null
+  office_address: string | null
+  website: string | null
+  bio: string | null
 }
 
 export default async function SettingsPage() {
@@ -47,6 +60,17 @@ export default async function SettingsPage() {
     .select('*')
     .eq('user_id', user.id)
     .single() as { data: NotificationPreferences | null }
+
+  // Get lawyer data if user is a lawyer
+  let lawyer: Lawyer | null = null
+  if (profile?.user_type === 'lawyer') {
+    const { data: lawyerData } = await supabase
+      .from('lawyers')
+      .select('id, firm_name, bar_number, years_of_experience, practice_areas, office_phone, office_address, website, bio')
+      .eq('profile_id', user.id)
+      .single() as { data: Lawyer | null }
+    lawyer = lawyerData
+  }
 
   return (
     <div className="space-y-6 max-w-4xl">
@@ -83,6 +107,13 @@ export default async function SettingsPage() {
       {profile?.user_type === 'seller' && (
         <FadeIn delay={0.4}>
           <BillingSettings />
+        </FadeIn>
+      )}
+
+      {/* Lawyer Practice Settings */}
+      {profile?.user_type === 'lawyer' && lawyer && (
+        <FadeIn delay={0.4}>
+          <LawyerPracticeSettings lawyer={lawyer} />
         </FadeIn>
       )}
 
