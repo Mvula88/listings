@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { toggleFavorite } from '@/lib/actions/favorites'
 import { useRouter } from 'next/navigation'
 import { cn } from '@/lib/utils/cn'
+import { toast } from 'sonner'
 
 interface FavoriteButtonProps {
   propertyId: string
@@ -35,8 +36,12 @@ export function FavoriteButton({
 
       if (result.success) {
         setIsFavorited(result.favorited!)
+        toast.success(result.favorited ? 'Added to favorites' : 'Removed from favorites')
       } else if (result.error === 'Not authenticated') {
         router.push('/login')
+      } else {
+        toast.error(result.error || 'Failed to update favorite')
+        console.error('Favorite error:', result.error)
       }
     })
   }
