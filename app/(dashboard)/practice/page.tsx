@@ -43,7 +43,7 @@ export default async function PracticePage() {
     .from('lawyers')
     .select('*')
     .eq('profile_id', user.id)
-    .single()
+    .single<{ id: string; firm_name?: string; practice_areas?: string | string[]; years_of_experience?: number; bar_number?: string; office_phone?: string; office_address?: string; website?: string; verification_status?: string; [key: string]: any }>()
 
   if (!lawyer) {
     redirect('/lawyers/onboarding')
