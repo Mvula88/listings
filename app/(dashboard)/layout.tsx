@@ -3,9 +3,10 @@ import { redirect } from 'next/navigation'
 import { DashboardNav } from '@/components/dashboard/nav'
 import { UserMenu } from '@/components/dashboard/user-menu'
 import { RoleSwitcher } from '@/components/dashboard/role-switcher'
+import { ListPropertyButton } from '@/components/dashboard/list-property-button'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Search, PlusCircle, Building } from 'lucide-react'
+import { Search, Building } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { UserRole } from '@/lib/actions/roles'
 
@@ -57,20 +58,16 @@ export default async function DashboardLayout({
               </Button>
             )}
             {profile?.user_type === 'seller' && (
-              <>
-                <Button variant="outline" size="sm" asChild>
-                  <Link href="/properties" className="flex items-center gap-2">
-                    <Building className="h-4 w-4" />
-                    My Properties
-                  </Link>
-                </Button>
-                <Button variant="default" size="sm" asChild>
-                  <Link href="/properties/new" className="flex items-center gap-2">
-                    <PlusCircle className="h-4 w-4" />
-                    List Property
-                  </Link>
-                </Button>
-              </>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/properties" className="flex items-center gap-2">
+                  <Building className="h-4 w-4" />
+                  My Properties
+                </Link>
+              </Button>
+            )}
+            {/* Show List Property for both buyers and sellers */}
+            {(profile?.user_type === 'buyer' || profile?.user_type === 'seller') && (
+              <ListPropertyButton userType={profile?.user_type || 'buyer'} />
             )}
             <UserMenu user={user} profile={profile} />
           </div>

@@ -120,6 +120,61 @@ export async function addRole(newRole: UserRole): Promise<RoleActionResult> {
 }
 
 /**
+ * Upgrade a buyer to seller role (adds seller role and switches to it)
+ */
+export async function upgradeToSeller(): Promise<RoleActionResult> {
+  try {
+    const supabase = await createClient()
+
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return { success: false, error: 'Not authenticated' }
+    }
+
+    // Get current profile
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('roles, user_type')
+      .eq('id', user.id)
+      .single() as { data: { roles: string[] | null; user_type: string | null } | null; error: any }
+
+    if (!profile) {
+      return { success: false, error: 'Profile not found' }
+    }
+
+    const currentRoles = profile.roles || []
+
+    // Add seller role if not already present
+    const updatedRoles = currentRoles.includes('seller')
+      ? currentRoles
+      : [...currentRoles, 'seller']
+
+    // Update profile with seller role and switch to seller
+    const { error: updateError } = await (supabase.from('profiles') as any)
+      .update({
+        roles: updatedRoles,
+        user_type: 'seller',
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', user.id)
+
+    if (updateError) {
+      return { success: false, error: 'Failed to upgrade to seller' }
+    }
+
+    revalidatePath('/dashboard')
+    revalidatePath('/properties')
+    revalidatePath('/settings')
+
+    return { success: true }
+  } catch (error) {
+    console.error('Upgrade to seller error:', error)
+    return { success: false, error: 'An unexpected error occurred' }
+  }
+}
+
+/**
  * Get user's roles and current active role
  */
 export async function getUserRoles(): Promise<{
