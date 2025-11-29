@@ -12,6 +12,8 @@ import { formatRelativeTime } from '@/lib/utils/format'
 import { Send, User, Home } from 'lucide-react'
 import Link from 'next/link'
 import type { Message } from '@/lib/types'
+import { sendMessage as sendMessageAction } from '@/lib/actions/messages'
+import { useToast } from '@/lib/hooks/use-toast'
 
 interface MessageThreadProps {
   conversation: any
@@ -24,6 +26,7 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
   const [sending, setSending] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const supabase = createClient()
+  const { toast } = useToast()
 
   useEffect(() => {
     async function loadMessages() {
@@ -87,24 +90,22 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
     if (!newMessage.trim() || sending) return
 
     setSending(true)
-    const recipientId = conversation.participants.find((id: string) => id !== currentUserId)
+    const messageContent = newMessage.trim()
+    setNewMessage('')
 
     try {
-      const { error } = await (supabase
-        .from('messages') as any)
-        .insert({
-          conversation_id: conversation.id,
-          sender_id: currentUserId,
-          recipient_id: recipientId,
-          content: newMessage.trim(),
-          transaction_id: conversation.transaction_id
-        })
+      // Use server action which triggers notifications
+      const result = await sendMessageAction(conversation.id, messageContent)
 
-      if (!error) {
-        setNewMessage('')
+      if (!result.success) {
+        toast.error(result.error || 'Failed to send message')
+        setNewMessage(messageContent) // Restore message on failure
       }
+      // Real-time subscription will add the message to the list
     } catch (error) {
       console.error('Error sending message:', error)
+      toast.error('Failed to send message')
+      setNewMessage(messageContent)
     } finally {
       setSending(false)
     }

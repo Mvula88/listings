@@ -12,6 +12,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { MessageSquare, CheckCircle, ArrowRight, Loader2 } from 'lucide-react'
 import { formatPrice } from '@/lib/utils/format'
 import { getPlatformFee } from '@/lib/utils/savings-calculator'
+import { startConversation } from '@/lib/actions/messages'
 import type { Property, Inquiry } from '@/lib/types'
 import type { User } from '@supabase/supabase-js'
 
@@ -56,17 +57,17 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
 
       if (error) throw error
 
-      // Create conversation
-      const { data: conversation } = await (supabase
-        .from('conversations') as any)
-        .insert([{
-          inquiry_id: inquiry.id,
-          property_id: property.id,
-          participants: [user.id, property.seller_id],
-          status: 'active'
-        }])
-        .select()
-        .single()
+      // Start conversation and send initial message (this triggers notifications)
+      const result = await startConversation(
+        property.seller_id,
+        property.id,
+        inquiry.id,
+        message // Send the inquiry message as the first message
+      )
+
+      if (!result.success) {
+        console.error('Failed to start conversation:', result.error)
+      }
 
       // Send email notification to seller
       try {
@@ -75,7 +76,7 @@ export function PropertyInquiry({ property, user, existingInquiry }: PropertyInq
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             inquiryId: inquiry.id,
-            conversationId: conversation?.id,
+            conversationId: result.conversationId,
           })
         })
       } catch (emailError) {
