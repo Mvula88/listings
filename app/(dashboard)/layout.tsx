@@ -81,8 +81,8 @@ export default async function DashboardLayout({
         {/* Sidebar Navigation */}
         <aside className="w-64 border-r bg-muted/10 min-h-[calc(100vh-4rem)]">
           {/* Role Switcher */}
-          <div className="p-4 border-b">
-            <p className="text-xs text-muted-foreground mb-2">Active Role</p>
+          <div className="p-4 border-b bg-primary/10 border-l-4 border-l-primary">
+            <p className="text-xs font-medium text-primary mb-2">Switch Role</p>
             <RoleSwitcher roles={roles} activeRole={activeRole} />
           </div>
           <DashboardNav userType={profile?.user_type} />
