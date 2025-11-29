@@ -117,8 +117,9 @@ export function MessageThread({ conversation, currentUserId }: MessageThreadProp
         setNewMessage(messageContent)
       } else if (result.message) {
         // Replace optimistic message with real one
+        const realMessage = result.message
         setMessages(prev =>
-          prev.map(m => m.id === optimisticMessage.id ? result.message : m)
+          prev.map(m => m.id === optimisticMessage.id ? realMessage : m)
         )
       }
     } catch (error) {
