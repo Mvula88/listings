@@ -49,7 +49,7 @@ export function FlagActions({ flagId, currentStatus, contentType, contentId }: F
   async function updateStatus(newStatus: string) {
     setLoading(true)
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('content_flags')
         .update({
           status: newStatus,
