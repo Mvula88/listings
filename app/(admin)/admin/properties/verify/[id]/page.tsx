@@ -47,7 +47,7 @@ export default async function PropertyVerificationPage({ params }: PageProps) {
   }
 
   // Fetch property with owner details
-  const { data: property, error } = await supabase
+  const { data: property, error } = await (supabase as any)
     .from('properties')
     .select(`
       *,
@@ -65,23 +65,14 @@ export default async function PropertyVerificationPage({ params }: PageProps) {
       )
     `)
     .eq('id', id)
-    .single<{
-      id: string
-      title: string
-      address: string
-      location: string
-      status: string
-      created_at: string
-      updated_at: string
-      [key: string]: any
-    }>()
+    .single()
 
   if (error || !property) {
     notFound()
   }
 
   // Check for duplicate listings (same address)
-  const { data: duplicates } = await supabase
+  const { data: duplicates } = await (supabase as any)
     .from('properties')
     .select('id, title, status, created_at, owner:profiles!properties_owner_id_fkey(full_name)')
     .neq('id', id)
@@ -89,7 +80,7 @@ export default async function PropertyVerificationPage({ params }: PageProps) {
     .limit(5)
 
   // Get property view stats
-  const { data: viewStats } = await supabase
+  const { data: viewStats } = await (supabase as any)
     .from('property_views')
     .select('id')
     .eq('property_id', id)

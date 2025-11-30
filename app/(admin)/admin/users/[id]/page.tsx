@@ -29,7 +29,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   const supabase = await createClient()
 
   // Get user profile
-  const { data: user, error } = await supabase
+  const { data: user, error } = await (supabase as any)
     .from('profiles')
     .select(`
       *,
@@ -43,7 +43,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   }
 
   // Get user's properties if seller
-  const { data: properties } = await supabase
+  const { data: properties } = await (supabase as any)
     .from('properties')
     .select('id, title, status, created_at')
     .eq('seller_id', id)
@@ -51,7 +51,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     .limit(5)
 
   // Get user's transactions
-  const { data: transactions } = await supabase
+  const { data: transactions } = await (supabase as any)
     .from('transactions')
     .select('id, status, created_at, property:properties(title)')
     .or(`buyer_id.eq.${id},seller_id.eq.${id}`)
@@ -61,7 +61,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   // Get lawyer info if applicable
   let lawyer = null
   if (user.user_type === 'lawyer') {
-    const { data } = await supabase
+    const { data } = await (supabase as any)
       .from('lawyers')
       .select('*')
       .eq('profile_id', id)
