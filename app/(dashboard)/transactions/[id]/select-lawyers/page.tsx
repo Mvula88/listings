@@ -17,7 +17,7 @@ export default async function SelectLawyersPage(props: {
   if (!user) return null
 
   // Get transaction details
-  const { data: transaction } = await supabase
+  const { data: transaction } = await (supabase as any)
     .from('transactions')
     .select(`
       *,
@@ -49,11 +49,7 @@ export default async function SelectLawyersPage(props: {
       )
     `)
     .eq('id', id)
-    .single<{
-      buyer_id: string
-      seller_id: string
-      [key: string]: any
-    }>()
+    .single()
 
   if (!transaction) {
     notFound()
@@ -68,7 +64,7 @@ export default async function SelectLawyersPage(props: {
   }
 
   // Get available lawyers
-  const { data: lawyers } = await supabase
+  const { data: lawyers } = await (supabase as any)
     .from('lawyers')
     .select(`
       *,

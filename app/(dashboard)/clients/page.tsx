@@ -42,11 +42,11 @@ export default async function ClientsPage() {
   }
 
   // Get lawyer record
-  const { data: lawyer } = await supabase
+  const { data: lawyer } = await (supabase as any)
     .from('lawyers')
     .select('*')
     .eq('profile_id', user.id)
-    .single<{ id: string; [key: string]: any }>()
+    .single()
 
   if (!lawyer) {
     redirect('/lawyers/onboarding')

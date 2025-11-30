@@ -47,11 +47,11 @@ export default function RemitFeesPage() {
       }
 
       // Get lawyer record
-      const { data: lawyer } = await supabase
+      const { data: lawyer } = await (supabase as any)
         .from('lawyers')
         .select('id')
         .eq('profile_id', user.id)
-        .single<{ id: string }>()
+        .single()
 
       if (!lawyer) {
         router.push('/lawyers/onboarding')

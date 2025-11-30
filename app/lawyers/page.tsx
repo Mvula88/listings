@@ -14,7 +14,7 @@ export default async function LawyersPage() {
   const supabase = await createClient()
 
   // Get verified lawyers with their profiles
-  const { data: lawyers } = await supabase
+  const { data: lawyers } = await (supabase as any)
     .from('lawyers')
     .select(`
       *,

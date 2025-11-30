@@ -64,11 +64,11 @@ export default async function SettingsPage() {
   // Get lawyer data if user is a lawyer
   let lawyer: Lawyer | null = null
   if (profile?.user_type === 'lawyer') {
-    const { data: lawyerData } = await supabase
+    const { data: lawyerData } = await (supabase as any)
       .from('lawyers')
       .select('id, firm_name, bar_number, years_experience, practice_areas, office_phone, office_address, website, bio')
       .eq('profile_id', user.id)
-      .single() as { data: Lawyer | null }
+      .single()
     lawyer = lawyerData
   }
 

@@ -31,11 +31,11 @@ export default async function DashboardLayout({
 
   // Check if user is a lawyer and verify their status
   if (profile?.user_type === 'lawyer') {
-    const { data: lawyer } = await supabase
+    const { data: lawyer } = await (supabase as any)
       .from('lawyers')
       .select('verified')
       .eq('profile_id', user.id)
-      .single<{ verified: boolean }>()
+      .single()
 
     // If no lawyer record exists, redirect to onboarding
     if (!lawyer) {

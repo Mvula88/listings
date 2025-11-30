@@ -39,11 +39,11 @@ export default async function PracticePage() {
   }
 
   // Get lawyer record
-  const { data: lawyer } = await supabase
+  const { data: lawyer } = await (supabase as any)
     .from('lawyers')
     .select('*')
     .eq('profile_id', user.id)
-    .single<{ id: string; firm_name?: string; practice_areas?: string | string[]; years_experience?: number; bar_number?: string; office_phone?: string; office_address?: string; website?: string; verified?: boolean; [key: string]: any }>()
+    .single()
 
   if (!lawyer) {
     redirect('/lawyers/onboarding')
