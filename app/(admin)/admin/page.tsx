@@ -47,7 +47,7 @@ export default async function AdminDashboard() {
     .select('id')
     .eq('verified', false)
 
-  const { data: contentFlags } = await supabase
+  const { data: contentFlags } = await (supabase as any)
     .from('content_flags')
     .select('id')
     .eq('status', 'pending')

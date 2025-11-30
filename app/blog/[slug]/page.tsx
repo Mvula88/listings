@@ -15,7 +15,7 @@ export async function generateMetadata({
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: post } = await supabase
+  const { data: post } = await (supabase as any)
     .from('blog_posts')
     .select('*')
     .eq('slug', slug)
@@ -69,7 +69,7 @@ export default async function BlogPostPage({
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: post } = await supabase
+  const { data: post } = await (supabase as any)
     .from('blog_posts')
     .select(`
       *,
@@ -101,14 +101,14 @@ export default async function BlogPostPage({
   }
 
   // Get category
-  const { data: category } = await supabase
+  const { data: category } = await (supabase as any)
     .from('blog_categories')
     .select('*')
     .eq('slug', (post as any).category)
-    .single<{ color: string; [key: string]: any }>()
+    .single()
 
   // Get related posts
-  const { data: relatedPosts } = await supabase
+  const { data: relatedPosts } = await (supabase as any)
     .from('blog_posts')
     .select('id, title, slug, excerpt, cover_image, published_at')
     .eq('status', 'published')

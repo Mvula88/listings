@@ -14,7 +14,7 @@ export default async function AdminBlogPage() {
   const supabase = await createClient()
 
   // Get blog posts
-  const { data: posts, count } = await supabase
+  const { data: posts, count } = await (supabase as any)
     .from('blog_posts')
     .select(`
       *,
@@ -23,12 +23,12 @@ export default async function AdminBlogPage() {
     .order('created_at', { ascending: false })
 
   // Get stats
-  const { count: publishedCount } = await supabase
+  const { count: publishedCount } = await (supabase as any)
     .from('blog_posts')
     .select('id', { count: 'exact', head: true })
     .eq('status', 'published')
 
-  const { count: draftCount } = await supabase
+  const { count: draftCount } = await (supabase as any)
     .from('blog_posts')
     .select('id', { count: 'exact', head: true })
     .eq('status', 'draft')
