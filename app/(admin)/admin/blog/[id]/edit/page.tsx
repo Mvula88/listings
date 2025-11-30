@@ -53,28 +53,31 @@ export default function EditBlogPostPage() {
         .eq('id', params.id)
         .single()
 
-      if (error) {
+      if (error || !data) {
         toast.error('Failed to load post')
         router.push('/admin/blog')
         return
       }
 
+      const post = data as Record<string, any>
       setFormData({
-        title: data.title || '',
-        slug: data.slug || '',
-        excerpt: data.excerpt || '',
-        content: data.content || '',
-        category: data.category || '',
-        featured_image: data.featured_image || '',
-        status: data.status || 'draft',
-        is_featured: data.is_featured || false,
-        meta_title: data.meta_title || '',
-        meta_description: data.meta_description || '',
+        title: post.title || '',
+        slug: post.slug || '',
+        excerpt: post.excerpt || '',
+        content: post.content || '',
+        category: post.category || '',
+        featured_image: post.featured_image || '',
+        status: post.status || 'draft',
+        is_featured: post.is_featured || false,
+        meta_title: post.meta_title || '',
+        meta_description: post.meta_description || '',
       })
       setLoading(false)
     }
 
-    fetchPost()
+    if (params.id) {
+      fetchPost()
+    }
   }, [params.id, router, supabase, toast])
 
   async function handleSubmit(e: React.FormEvent) {
