@@ -35,7 +35,7 @@ export function LawyerVerificationActions({
   async function handleVerify() {
     setLoading(true)
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('lawyers')
         .update({ verified: true, updated_at: new Date().toISOString() })
         .eq('id', lawyerId)
@@ -56,7 +56,7 @@ export function LawyerVerificationActions({
   async function handleUnverify() {
     setLoading(true)
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('lawyers')
         .update({ verified: false, updated_at: new Date().toISOString() })
         .eq('id', lawyerId)
