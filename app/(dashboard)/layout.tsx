@@ -29,6 +29,25 @@ export default async function DashboardLayout({
     .eq('id', user.id)
     .single<{ user_type: string; roles: string[] | null; [key: string]: any }>()
 
+  // Check if user is a lawyer and verify their status
+  if (profile?.user_type === 'lawyer') {
+    const { data: lawyer } = await supabase
+      .from('lawyers')
+      .select('verified')
+      .eq('profile_id', user.id)
+      .single<{ verified: boolean }>()
+
+    // If no lawyer record exists, redirect to onboarding
+    if (!lawyer) {
+      redirect('/lawyers/onboarding')
+    }
+
+    // Redirect unverified lawyers to verification pending page
+    if (!lawyer.verified) {
+      redirect('/lawyer/verification-pending')
+    }
+  }
+
   // Get roles from profile, default to user_type if roles array doesn't exist
   const roles = (profile?.roles || (profile?.user_type ? [profile.user_type] : ['buyer'])) as UserRole[]
   const activeRole = (profile?.user_type || 'buyer') as UserRole

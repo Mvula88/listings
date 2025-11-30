@@ -1,9 +1,57 @@
+'use client'
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Clock, CheckCircle, Mail, ArrowRight } from 'lucide-react'
+import { Clock, CheckCircle, Mail, ArrowRight, RefreshCw, LogOut } from 'lucide-react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 export default function VerificationPendingPage() {
+  const [checking, setChecking] = useState(false)
+  const [message, setMessage] = useState<string | null>(null)
+  const router = useRouter()
+  const supabase = createClient()
+
+  async function checkVerificationStatus() {
+    setChecking(true)
+    setMessage(null)
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      const { data: lawyer } = await supabase
+        .from('lawyers')
+        .select('verified')
+        .eq('profile_id', user.id)
+        .single()
+
+      if (lawyer?.verified) {
+        setMessage('Your account has been verified! Redirecting to dashboard...')
+        setTimeout(() => {
+          router.push('/dashboard')
+        }, 1500)
+      } else {
+        setMessage('Your account is still pending verification. Please check back later.')
+      }
+    } catch (error) {
+      setMessage('Error checking status. Please try again.')
+    } finally {
+      setChecking(false)
+    }
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    router.push('/login')
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-50 to-background flex items-center justify-center p-4">
       <Card className="max-w-2xl w-full">
@@ -65,17 +113,48 @@ export default function VerificationPendingPage() {
             </ol>
           </div>
 
+          {message && (
+            <div className={`text-center p-4 rounded-lg ${
+              message.includes('verified!')
+                ? 'bg-green-50 text-green-700 border border-green-200'
+                : 'bg-yellow-50 text-yellow-700 border border-yellow-200'
+            }`}>
+              {message}
+            </div>
+          )}
+
           <div className="pt-4 space-y-3">
-            <Button asChild className="w-full" size="lg">
+            <Button
+              onClick={checkVerificationStatus}
+              className="w-full"
+              size="lg"
+              disabled={checking}
+            >
+              {checking ? (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+                  Checking...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Check Verification Status
+                </>
+              )}
+            </Button>
+            <Button asChild variant="outline" className="w-full">
               <Link href="/">
                 Return to Homepage
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
-            <Button asChild variant="outline" className="w-full">
-              <Link href="/login">
-                Go to Login
-              </Link>
+            <Button
+              variant="ghost"
+              className="w-full text-muted-foreground"
+              onClick={handleLogout}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign Out
             </Button>
           </div>
 

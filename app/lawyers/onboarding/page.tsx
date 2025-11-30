@@ -59,7 +59,7 @@ export default function LawyerOnboardingPage() {
     bio: '',
     languages: [] as string[],
     specializations: [] as string[],
-    paymentMethod: 'invoice',
+    paymentMethod: 'deduct',
     agreedToTerms: false
   })
 
@@ -105,13 +105,9 @@ export default function LawyerOnboardingPage() {
         .update({ user_type: 'lawyer' })
         .eq('id', user.id)
 
-      // If Stripe Connect selected, redirect to Stripe onboarding
-      if (formData.paymentMethod === 'stripe_connect') {
-        // TODO: Create Stripe Connect account and redirect
-        router.push('/lawyers/stripe-onboarding')
-      } else {
-        router.push('/dashboard')
-      }
+      // Redirect to verification pending page
+      // Lawyers need admin approval before accessing the dashboard
+      router.push('/lawyer/verification-pending')
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -320,8 +316,8 @@ export default function LawyerOnboardingPage() {
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="deduct_before_remittance"
-                    checked={formData.paymentMethod === 'deduct_before_remittance'}
+                    value="deduct"
+                    checked={formData.paymentMethod === 'deduct'}
                     onChange={(e) => setFormData({...formData, paymentMethod: e.target.value})}
                     className="mt-1"
                   />
@@ -337,8 +333,8 @@ export default function LawyerOnboardingPage() {
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="monthly_invoice"
-                    checked={formData.paymentMethod === 'monthly_invoice'}
+                    value="invoice"
+                    checked={formData.paymentMethod === 'invoice'}
                     onChange={(e) => setFormData({...formData, paymentMethod: e.target.value})}
                     className="mt-1"
                   />

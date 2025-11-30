@@ -83,7 +83,12 @@ export default function RegisterPage() {
         // Profile will be created automatically by database trigger
         // Note: Country can be updated later in user profile settings
 
-        router.push('/dashboard')
+        // Lawyers need to complete onboarding before accessing the dashboard
+        if (formData.userType === 'lawyer') {
+          router.push('/lawyers/onboarding')
+        } else {
+          router.push('/dashboard')
+        }
         router.refresh()
       }
     } catch (error) {
