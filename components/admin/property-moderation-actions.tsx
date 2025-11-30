@@ -46,7 +46,7 @@ export function PropertyModerationActions({
   async function handleApprove() {
     setLoading(true)
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('properties')
         .update({
           moderation_status: 'approved',
@@ -71,7 +71,7 @@ export function PropertyModerationActions({
   async function handleReject() {
     setLoading(true)
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('properties')
         .update({
           moderation_status: 'rejected',
@@ -97,13 +97,13 @@ export function PropertyModerationActions({
   async function toggleFeatured() {
     setLoading(true)
     try {
-      const { data: property } = await supabase
+      const { data: property } = await (supabase as any)
         .from('properties')
         .select('is_featured')
         .eq('id', propertyId)
         .single()
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('properties')
         .update({ is_featured: !property?.is_featured })
         .eq('id', propertyId)

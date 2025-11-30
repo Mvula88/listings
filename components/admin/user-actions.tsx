@@ -45,7 +45,7 @@ export function UserActions({ userId, user }: UserActionsProps) {
     setLoading(true)
     try {
       const newStatus = !user.is_suspended
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('profiles')
         .update({ is_suspended: newStatus })
         .eq('id', userId)
@@ -67,7 +67,7 @@ export function UserActions({ userId, user }: UserActionsProps) {
     try {
       // Note: This soft-deletes by updating the profile
       // Full deletion would require admin API access
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('profiles')
         .update({
           is_suspended: true,
