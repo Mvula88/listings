@@ -28,7 +28,7 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
   const supabase = await createClient()
 
   // Get moderator
-  const { data: moderator, error } = await supabase
+  const { data: moderator, error } = await (supabase as any)
     .from('admin_users')
     .select(`
       *,
@@ -46,7 +46,7 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
   }
 
   // Get recent audit logs for this moderator
-  const { data: auditLogs } = await supabase
+  const { data: auditLogs } = await (supabase as any)
     .from('audit_logs')
     .select('*')
     .eq('admin_id', id)
