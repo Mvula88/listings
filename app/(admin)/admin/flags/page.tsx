@@ -35,10 +35,10 @@ interface ContentFlag {
 export default async function AdminFlagsPage({
   searchParams,
 }: {
-  searchParams: { status?: string }
+  searchParams: Promise<{ status?: string }>
 }) {
+  const { status: statusFilter } = await searchParams
   const supabase = await createClient()
-  const statusFilter = searchParams.status
 
   // Build query
   let query = supabase

@@ -6,14 +6,12 @@ import { Input } from '@/components/ui/input'
 import {
   Scale,
   CheckCircle,
-  XCircle,
   Clock,
   Search,
   Mail,
   Phone,
   MapPin,
   Building,
-  ExternalLink,
 } from 'lucide-react'
 import Link from 'next/link'
 import { FadeIn } from '@/components/ui/fade-in'
@@ -44,11 +42,10 @@ interface Lawyer {
 export default async function AdminLawyersPage({
   searchParams,
 }: {
-  searchParams: { verified?: string; search?: string }
+  searchParams: Promise<{ verified?: string; search?: string }>
 }) {
+  const { verified: verifiedFilter, search: searchQuery } = await searchParams
   const supabase = await createClient()
-  const verifiedFilter = searchParams.verified
-  const searchQuery = searchParams.search
 
   // Build query
   let query = supabase
