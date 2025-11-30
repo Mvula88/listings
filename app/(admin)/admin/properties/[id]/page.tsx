@@ -31,7 +31,7 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
   const supabase = await createClient()
 
   // Get property details
-  const { data: property, error } = await supabase
+  const { data: property, error } = await (supabase as any)
     .from('properties')
     .select(`
       *,
@@ -51,20 +51,20 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
   }
 
   // Get property images
-  const { data: images } = await supabase
+  const { data: images } = await (supabase as any)
     .from('property_images')
     .select('*')
     .eq('property_id', id)
     .order('position')
 
   // Get inquiries count
-  const { count: inquiriesCount } = await supabase
+  const { count: inquiriesCount } = await (supabase as any)
     .from('inquiries')
     .select('*', { count: 'exact', head: true })
     .eq('property_id', id)
 
   // Get transactions
-  const { data: transactions } = await supabase
+  const { data: transactions } = await (supabase as any)
     .from('transactions')
     .select('id, status, created_at')
     .eq('property_id', id)
