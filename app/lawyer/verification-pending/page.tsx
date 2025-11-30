@@ -26,7 +26,7 @@ export default function VerificationPendingPage() {
         return
       }
 
-      const { data: lawyer } = await supabase
+      const { data: lawyer } = await (supabase as any)
         .from('lawyers')
         .select('verified')
         .eq('profile_id', user.id)
