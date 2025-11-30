@@ -53,9 +53,9 @@ export default async function DashboardLayout({
   const activeRole = (profile?.user_type || 'buyer') as UserRole
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Top Navigation */}
-      <header className="border-b">
+    <div className="h-screen overflow-hidden bg-background flex flex-col">
+      {/* Top Navigation - Fixed */}
+      <header className="border-b shrink-0">
         <div className="flex h-16 items-center px-4 gap-4">
           <a href="/" className="flex items-center">
             <Image
@@ -93,9 +93,9 @@ export default async function DashboardLayout({
         </div>
       </header>
 
-      <div className="flex">
-        {/* Sidebar Navigation */}
-        <aside className="w-64 border-r bg-muted/10 min-h-[calc(100vh-4rem)]">
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar Navigation - Fixed */}
+        <aside className="w-64 border-r bg-muted/10 overflow-y-auto shrink-0">
           {/* Role Switcher */}
           <div className="p-4 border-b bg-primary/10 border-l-4 border-l-primary">
             <p className="text-xs font-medium text-primary mb-2">Switch Role</p>
@@ -104,8 +104,8 @@ export default async function DashboardLayout({
           <DashboardNav userType={profile?.user_type} />
         </aside>
 
-        {/* Main Content */}
-        <main className="flex-1 p-6">
+        {/* Main Content - Scrollable */}
+        <main className="flex-1 overflow-y-auto p-6">
           {children}
         </main>
       </div>

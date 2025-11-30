@@ -11,6 +11,7 @@ import {
   Shield,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { createClient } from '@/lib/supabase/client'
 
 interface ModeratorSidebarProps {
   moderator: {
@@ -122,13 +123,17 @@ export function ModeratorSidebar({ moderator, pendingCount }: ModeratorSidebarPr
             </p>
           </div>
         </div>
-        <Link
-          href="/logout"
-          className="flex items-center gap-2 px-3 py-2 mt-2 text-sm text-muted-foreground hover:text-destructive rounded-lg hover:bg-destructive/10 transition-colors"
+        <button
+          onClick={async () => {
+            const supabase = createClient()
+            await supabase.auth.signOut()
+            window.location.href = '/login'
+          }}
+          className="flex items-center gap-2 px-3 py-2 mt-2 text-sm text-muted-foreground hover:text-destructive rounded-lg hover:bg-destructive/10 transition-colors w-full"
         >
           <LogOut className="h-4 w-4" />
           Sign Out
-        </Link>
+        </button>
       </div>
     </aside>
   )
