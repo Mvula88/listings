@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { FadeIn } from '@/components/ui/fade-in'
@@ -14,9 +14,6 @@ import {
   Heart,
   ArrowLeft,
   ExternalLink,
-  CheckCircle,
-  XCircle,
-  Clock,
   Bed,
   Bath,
   Square,
@@ -26,10 +23,11 @@ import Image from 'next/image'
 import { PropertyModerationActions } from '@/components/admin/property-moderation-actions'
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default async function AdminPropertyDetailPage({ params }: PageProps) {
+  const { id } = await params
   const supabase = await createClient()
 
   // Get property details
@@ -45,7 +43,7 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
       ),
       country:countries (name)
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !property) {
@@ -56,20 +54,20 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
   const { data: images } = await supabase
     .from('property_images')
     .select('*')
-    .eq('property_id', params.id)
+    .eq('property_id', id)
     .order('position')
 
   // Get inquiries count
   const { count: inquiriesCount } = await supabase
     .from('inquiries')
     .select('*', { count: 'exact', head: true })
-    .eq('property_id', params.id)
+    .eq('property_id', id)
 
   // Get transactions
   const { data: transactions } = await supabase
     .from('transactions')
     .select('id, status, created_at')
-    .eq('property_id', params.id)
+    .eq('property_id', id)
     .order('created_at', { ascending: false })
 
   const statusColors: Record<string, string> = {
@@ -111,7 +109,7 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
               </Link>
             </Button>
             <PropertyModerationActions
-              propertyId={params.id}
+              propertyId={id}
               currentStatus={property.moderation_status}
             />
           </div>

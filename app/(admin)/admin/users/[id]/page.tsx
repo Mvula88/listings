@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { FadeIn } from '@/components/ui/fade-in'
@@ -16,16 +16,16 @@ import {
   Shield,
   Ban,
   CheckCircle,
-  AlertTriangle,
 } from 'lucide-react'
 import Link from 'next/link'
 import { UserActions } from '@/components/admin/user-actions'
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default async function AdminUserDetailPage({ params }: PageProps) {
+  const { id } = await params
   const supabase = await createClient()
 
   // Get user profile
@@ -35,7 +35,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
       *,
       country:countries (name)
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !user) {
@@ -46,7 +46,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   const { data: properties } = await supabase
     .from('properties')
     .select('id, title, status, created_at')
-    .eq('seller_id', params.id)
+    .eq('seller_id', id)
     .order('created_at', { ascending: false })
     .limit(5)
 
@@ -54,7 +54,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
   const { data: transactions } = await supabase
     .from('transactions')
     .select('id, status, created_at, property:properties(title)')
-    .or(`buyer_id.eq.${params.id},seller_id.eq.${params.id}`)
+    .or(`buyer_id.eq.${id},seller_id.eq.${id}`)
     .order('created_at', { ascending: false })
     .limit(5)
 
@@ -64,7 +64,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
     const { data } = await supabase
       .from('lawyers')
       .select('*')
-      .eq('profile_id', params.id)
+      .eq('profile_id', id)
       .single()
     lawyer = data
   }
@@ -83,7 +83,7 @@ export default async function AdminUserDetailPage({ params }: PageProps) {
             <h1 className="text-3xl font-bold">{user.full_name || 'Unknown User'}</h1>
             <p className="text-muted-foreground">{user.email}</p>
           </div>
-          <UserActions userId={params.id} user={user} />
+          <UserActions userId={id} user={user} />
         </div>
       </FadeIn>
 

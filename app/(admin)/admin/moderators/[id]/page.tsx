@@ -20,10 +20,11 @@ import { ModeratorActions } from '@/components/admin/moderator-actions'
 // Note: ModeratorActions expects {moderatorId, status} interface
 
 interface PageProps {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }
 
 export default async function AdminModeratorDetailPage({ params }: PageProps) {
+  const { id } = await params
   const supabase = await createClient()
 
   // Get moderator
@@ -37,7 +38,7 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
         phone
       )
     `)
-    .eq('id', params.id)
+    .eq('id', id)
     .single()
 
   if (error || !moderator) {
@@ -48,7 +49,7 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
   const { data: auditLogs } = await supabase
     .from('audit_logs')
     .select('*')
-    .eq('admin_id', params.id)
+    .eq('admin_id', id)
     .order('created_at', { ascending: false })
     .limit(10)
 
@@ -91,7 +92,7 @@ export default async function AdminModeratorDetailPage({ params }: PageProps) {
             </h1>
             <p className="text-muted-foreground">{moderator.profile?.email}</p>
           </div>
-          <ModeratorActions moderatorId={params.id} status={moderator.is_active ? 'active' : 'suspended'} />
+          <ModeratorActions moderatorId={id} status={moderator.is_active ? 'active' : 'suspended'} />
         </div>
       </FadeIn>
 
