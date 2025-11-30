@@ -15,7 +15,7 @@ export function AuthHeader({ user, profile }: AuthHeaderProps) {
     <nav className="border-b backdrop-blur-xl bg-background/80 sticky top-0 z-50">
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="/" className="transition-transform hover:scale-105">
+          <Link href={user ? "/dashboard" : "/"} className="transition-transform hover:scale-105">
             <Image
               src="/logo.png"
               alt="PropLinka"

@@ -57,7 +57,7 @@ export default async function DashboardLayout({
       {/* Top Navigation - Fixed */}
       <header className="border-b shrink-0">
         <div className="flex h-16 items-center px-4 gap-4">
-          <a href="/" className="flex items-center">
+          <Link href="/dashboard" className="flex items-center">
             <Image
               src="/logo.png"
               alt="PropLinka"
@@ -66,7 +66,7 @@ export default async function DashboardLayout({
               className="h-8 w-auto"
               priority
             />
-          </a>
+          </Link>
           <div className="ml-auto flex items-center space-x-4">
             {profile?.user_type === 'buyer' && (
               <Button variant="outline" size="sm" asChild>

@@ -9,6 +9,7 @@ import { FadeIn } from "@/components/ui/fade-in"
 import { ScrollToTop } from "@/components/ui/scroll-to-top"
 import { SavingsSection } from "@/components/calculator/savings-section"
 import { FAQSection } from "@/components/faq/faq-section"
+import { PublicNav } from "@/components/layout/public-nav"
 
 export default async function HomePage() {
   // Fetch real featured properties from Supabase
@@ -17,36 +18,7 @@ export default async function HomePage() {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Sticky Navigation */}
-      <nav className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <Link href="/" className="transition-transform hover:scale-105">
-              <Image
-                src="/logo.png"
-                alt="PropLinka"
-                width={180}
-                height={50}
-                className="h-10 w-auto"
-                priority
-              />
-            </Link>
-            <div className="hidden md:flex items-center gap-6">
-              <Link href="/browse" className="text-sm font-medium hover:text-primary transition-colors">
-                Browse Properties
-              </Link>
-              <Link href="/how-it-works" className="text-sm font-medium hover:text-primary transition-colors">
-                How It Works
-              </Link>
-              <Link href="/login">
-                <Button variant="outline" size="sm" className="transition-transform hover:scale-105">Login</Button>
-              </Link>
-              <Link href="/register">
-                <Button size="sm" className="transition-transform hover:scale-105">Get Started</Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <PublicNav />
 
       {/* Hero Section - Find Your Dream Property */}
       <section className="relative min-h-[280px] md:min-h-[320px] overflow-hidden">
