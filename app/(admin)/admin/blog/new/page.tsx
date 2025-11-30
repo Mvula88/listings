@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-import { ArrowLeft, Loader2, Save, Eye } from 'lucide-react'
+import { ArrowLeft, Loader2, Save } from 'lucide-react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/lib/hooks/use-toast'
@@ -46,7 +46,7 @@ export default function NewBlogPostPage() {
     try {
       const { data: { user } } = await supabase.auth.getUser()
 
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('blog_posts')
         .insert({
           ...formData,
