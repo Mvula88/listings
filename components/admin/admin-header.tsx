@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { Bell, RefreshCw, LogOut, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { createClient } from '@/lib/supabase/client'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,8 +32,9 @@ export function AdminHeader({ admin }: AdminHeaderProps) {
   }
 
   const handleLogout = async () => {
-    // This will be handled by Supabase auth
-    window.location.href = '/logout'
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    window.location.href = '/login'
   }
 
   const unreadCount = notifications.filter((n) => !n.is_read).length
