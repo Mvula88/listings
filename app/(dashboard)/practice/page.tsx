@@ -43,7 +43,7 @@ export default async function PracticePage() {
     .from('lawyers')
     .select('*')
     .eq('profile_id', user.id)
-    .single<{ id: string; firm_name?: string; practice_areas?: string | string[]; years_of_experience?: number; bar_number?: string; office_phone?: string; office_address?: string; website?: string; verified?: boolean; [key: string]: any }>()
+    .single<{ id: string; firm_name?: string; practice_areas?: string | string[]; years_experience?: number; bar_number?: string; office_phone?: string; office_address?: string; website?: string; verified?: boolean; [key: string]: any }>()
 
   if (!lawyer) {
     redirect('/lawyers/onboarding')
@@ -167,10 +167,10 @@ export default async function PracticePage() {
                 </div>
               )}
 
-              {lawyer.years_of_experience && (
+              {lawyer.years_experience && (
                 <div className="flex items-center gap-2">
                   <Award className="h-4 w-4 text-muted-foreground" />
-                  <span>{lawyer.years_of_experience} years of experience</span>
+                  <span>{lawyer.years_experience} years of experience</span>
                 </div>
               )}
 

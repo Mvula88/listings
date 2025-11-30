@@ -86,7 +86,7 @@ export default function LawyerOnboardingPage() {
           registration_number: formData.registrationNumber,
           country_id: formData.country || null,
           city: formData.city,
-          years_of_experience: parseInt(formData.yearsExperience) || null,
+          years_experience: parseInt(formData.yearsExperience) || null,
           flat_fee_buyer: parseFloat(formData.flatFeeBuyer) || null,
           flat_fee_seller: parseFloat(formData.flatFeeSeller) || null,
           bio: formData.bio,

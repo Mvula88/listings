@@ -29,7 +29,7 @@ interface Lawyer {
   id: string
   firm_name: string | null
   bar_number: string | null
-  years_of_experience: number | null
+  years_experience: number | null
   practice_areas: string[] | null
   office_phone: string | null
   office_address: string | null
@@ -66,7 +66,7 @@ export default async function SettingsPage() {
   if (profile?.user_type === 'lawyer') {
     const { data: lawyerData } = await supabase
       .from('lawyers')
-      .select('id, firm_name, bar_number, years_of_experience, practice_areas, office_phone, office_address, website, bio')
+      .select('id, firm_name, bar_number, years_experience, practice_areas, office_phone, office_address, website, bio')
       .eq('profile_id', user.id)
       .single() as { data: Lawyer | null }
     lawyer = lawyerData

@@ -15,7 +15,7 @@ interface LawyerPracticeSettingsProps {
     id: string
     firm_name: string | null
     bar_number: string | null
-    years_of_experience: number | null
+    years_experience: number | null
     practice_areas: string[] | null
     office_phone: string | null
     office_address: string | null
@@ -48,7 +48,7 @@ export function LawyerPracticeSettings({ lawyer }: LawyerPracticeSettingsProps) 
         .update({
           firm_name: formData.get('firmName'),
           bar_number: formData.get('barNumber'),
-          years_of_experience: parseInt(formData.get('yearsOfExperience') as string) || null,
+          years_experience: parseInt(formData.get('yearsOfExperience') as string) || null,
           practice_areas: practiceAreas,
           office_phone: formData.get('officePhone'),
           office_address: formData.get('officeAddress'),
@@ -115,7 +115,7 @@ export function LawyerPracticeSettings({ lawyer }: LawyerPracticeSettingsProps) 
                 name="yearsOfExperience"
                 type="number"
                 min="0"
-                defaultValue={lawyer.years_of_experience || ''}
+                defaultValue={lawyer.years_experience || ''}
                 placeholder="e.g., 10"
               />
             </div>
