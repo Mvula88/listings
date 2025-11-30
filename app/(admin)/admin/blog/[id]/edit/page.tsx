@@ -47,7 +47,7 @@ export default function EditBlogPostPage() {
 
   useEffect(() => {
     async function fetchPost() {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('blog_posts')
         .select('*')
         .eq('id', params.id)
@@ -59,18 +59,17 @@ export default function EditBlogPostPage() {
         return
       }
 
-      const post = data as Record<string, any>
       setFormData({
-        title: post.title || '',
-        slug: post.slug || '',
-        excerpt: post.excerpt || '',
-        content: post.content || '',
-        category: post.category || '',
-        featured_image: post.featured_image || '',
-        status: post.status || 'draft',
-        is_featured: post.is_featured || false,
-        meta_title: post.meta_title || '',
-        meta_description: post.meta_description || '',
+        title: data.title || '',
+        slug: data.slug || '',
+        excerpt: data.excerpt || '',
+        content: data.content || '',
+        category: data.category || '',
+        featured_image: data.featured_image || '',
+        status: data.status || 'draft',
+        is_featured: data.is_featured || false,
+        meta_title: data.meta_title || '',
+        meta_description: data.meta_description || '',
       })
       setLoading(false)
     }
@@ -85,7 +84,7 @@ export default function EditBlogPostPage() {
     setSaving(true)
 
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('blog_posts')
         .update({
           ...formData,
@@ -108,7 +107,7 @@ export default function EditBlogPostPage() {
   async function handleDelete() {
     setSaving(true)
     try {
-      const { error } = await supabase
+      const { error } = await (supabase as any)
         .from('blog_posts')
         .delete()
         .eq('id', params.id)
