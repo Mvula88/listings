@@ -69,8 +69,8 @@ export default async function AdminDashboard() {
 
   const { data: completedDeals, error: dealsError } = await supabase
     .from('transactions')
-    .select('agreed_price')
-    .eq('status', 'completed') as { data: Array<{ agreed_price: number | null }> | null; error: Error | null }
+    .select('agreed_price, platform_fee_amount')
+    .eq('status', 'completed') as { data: Array<{ agreed_price: number | null; platform_fee_amount: number | null }> | null; error: Error | null }
 
   const { data: allTransactions, error: txError } = await supabase
     .from('transactions')
@@ -84,6 +84,7 @@ export default async function AdminDashboard() {
   // Calculate totals with safe fallbacks
   const totalListingValue = allListings?.reduce((sum, p) => sum + (p.price || 0), 0) || 0
   const totalDealsValue = completedDeals?.reduce((sum, t) => sum + (t.agreed_price || 0), 0) || 0
+  const totalPlatformFees = completedDeals?.reduce((sum, t) => sum + (t.platform_fee_amount || 0), 0) || 0
   const completedDealsCount = completedDeals?.length || 0
   const inProgressDeals = allTransactions?.filter(t => t.status === 'in_progress').length || 0
   const totalListingsCount = allListings?.length || 0
@@ -200,7 +201,7 @@ export default async function AdminDashboard() {
             <CardDescription>Key business metrics and transaction values</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
               {/* Total Active Listings */}
               <div className="p-4 rounded-lg bg-background border">
                 <div className="flex items-center justify-between mb-2">
@@ -238,7 +239,7 @@ export default async function AdminDashboard() {
               </div>
 
               {/* Total Transaction Value */}
-              <div className="p-4 rounded-lg bg-background border border-green-500/30">
+              <div className="p-4 rounded-lg bg-background border">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm text-muted-foreground">Transaction Value</span>
                   <Banknote className="h-4 w-4 text-green-600" />
@@ -248,6 +249,20 @@ export default async function AdminDashboard() {
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
                   from completed sales
+                </div>
+              </div>
+
+              {/* Platform Fees Earned */}
+              <div className="p-4 rounded-lg bg-background border border-primary/30 bg-primary/5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Platform Fees</span>
+                  <TrendingUp className="h-4 w-4 text-primary" />
+                </div>
+                <div className="text-2xl font-bold text-primary">
+                  R {new Intl.NumberFormat('en-ZA', { notation: 'compact', maximumFractionDigits: 1 }).format(totalPlatformFees)}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  revenue earned
                 </div>
               </div>
             </div>
