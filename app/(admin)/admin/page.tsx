@@ -81,10 +81,22 @@ export default async function AdminDashboard() {
   if (dealsError) console.error('Error fetching completed deals:', dealsError)
   if (txError) console.error('Error fetching transactions:', txError)
 
+  // Platform fee calculation based on tiered pricing
+  function calculatePlatformFee(price: number): number {
+    if (price <= 500000) return 4500
+    if (price <= 1000000) return 7500
+    if (price <= 1500000) return 9500
+    if (price <= 2500000) return 12500
+    if (price <= 5000000) return 18000
+    if (price <= 10000000) return 30000
+    return 45000
+  }
+
   // Calculate totals with safe fallbacks
   const totalListingValue = allListings?.reduce((sum, p) => sum + (p.price || 0), 0) || 0
   const totalDealsValue = completedDeals?.reduce((sum, t) => sum + (t.agreed_price || 0), 0) || 0
   const totalPlatformFees = completedDeals?.reduce((sum, t) => sum + (t.platform_fee_amount || 0), 0) || 0
+  const estimatedPlatformFees = allListings?.reduce((sum, p) => sum + calculatePlatformFee(p.price || 0), 0) || 0
   const completedDealsCount = completedDeals?.length || 0
   const inProgressDeals = allTransactions?.filter(t => t.status === 'in_progress').length || 0
   const totalListingsCount = allListings?.length || 0
@@ -201,7 +213,7 @@ export default async function AdminDashboard() {
             <CardDescription>Key business metrics and transaction values</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid gap-4 grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
               {/* Total Active Listings */}
               <div className="p-4 rounded-lg bg-background border">
                 <div className="flex items-center justify-between mb-2">
@@ -255,14 +267,28 @@ export default async function AdminDashboard() {
               {/* Platform Fees Earned */}
               <div className="p-4 rounded-lg bg-background border border-primary/30 bg-primary/5">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-muted-foreground">Platform Fees</span>
+                  <span className="text-sm text-muted-foreground">Fees Earned</span>
                   <TrendingUp className="h-4 w-4 text-primary" />
                 </div>
                 <div className="text-2xl font-bold text-primary">
                   R {new Intl.NumberFormat('en-ZA', { notation: 'compact', maximumFractionDigits: 1 }).format(totalPlatformFees)}
                 </div>
                 <div className="text-xs text-muted-foreground mt-1">
-                  revenue earned
+                  from {completedDealsCount} sales
+                </div>
+              </div>
+
+              {/* Estimated Platform Fees (Potential) */}
+              <div className="p-4 rounded-lg bg-background border border-amber-500/30 bg-amber-500/5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Est. Potential Fees</span>
+                  <BarChart3 className="h-4 w-4 text-amber-600" />
+                </div>
+                <div className="text-2xl font-bold text-amber-600">
+                  R {new Intl.NumberFormat('en-ZA', { notation: 'compact', maximumFractionDigits: 1 }).format(estimatedPlatformFees)}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  if all {totalListingsCount} listings sell
                 </div>
               </div>
             </div>
