@@ -97,7 +97,7 @@ export function ModeratorHeader({ moderator }: ModeratorHeaderProps) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/dashboard">
+              <Link href="/moderator">
                 <Home className="h-4 w-4 mr-2" />
                 My Dashboard
               </Link>
