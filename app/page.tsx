@@ -21,7 +21,7 @@ export default async function HomePage() {
       <PublicNav />
 
       {/* Hero Section - Find Your Dream Property */}
-      <section className="relative min-h-[280px] md:min-h-[320px] overflow-hidden">
+      <section className="relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -37,38 +37,38 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10" />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10 pt-12 md:pt-14 pb-8">
+        <div className="container mx-auto px-4 relative z-10 pt-8 md:pt-10 pb-6">
           <div className="max-w-4xl mx-auto">
             {/* Main Headline */}
             <FadeIn direction="down" duration={0.8}>
-              <div className="flex justify-center mb-4">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-500/20 backdrop-blur-sm rounded-full border border-emerald-400/30">
+              <div className="flex justify-center mb-3">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-emerald-500/20 backdrop-blur-sm rounded-full border border-emerald-400/30">
                   <span className="px-2 py-0.5 bg-emerald-400/20 rounded-full text-emerald-300 text-xs font-semibold uppercase tracking-wider">
                     No Agents
                   </span>
                   <span className="text-xs text-white/90">Sell your home with lawyers, not middlemen</span>
                 </div>
               </div>
-              <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white text-center mb-3 font-[family-name:var(--font-poppins)]">
+              <h1 className="text-2xl md:text-3xl font-bold text-white text-center mb-2 font-[family-name:var(--font-poppins)]">
                 Sell your home <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">directly</span>.<br />
                 Let lawyers handle the deal.
               </h1>
-              <p className="text-base md:text-lg text-white/90 text-center mb-4 max-w-3xl mx-auto font-[family-name:var(--font-poppins)]">
+              <p className="text-sm md:text-base text-white/90 text-center mb-3 max-w-3xl mx-auto font-[family-name:var(--font-poppins)]">
                 PropLinka connects you with real buyers and vetted property lawyers in one place.
                 No estate agents, no hidden commissions — just a clean, legal sale from listing to transfer.
               </p>
 
               {/* Benefit Pills */}
-              <div className="flex flex-wrap justify-center gap-2 mb-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
+              <div className="flex flex-wrap justify-center gap-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
                   <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
                   Keep more from your sale price
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
                   <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
                   Contracts drafted by real lawyers
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
                   <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
                   Transparent fees, fixed upfront
                 </div>
