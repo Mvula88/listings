@@ -102,7 +102,7 @@ export default async function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {featuredListings.map((listing, index) => (
                 <FadeIn key={listing.id} delay={index * 0.1}>
-                  <PropertyCard property={listing as any} />
+                  <PropertyCard property={listing as any} showSavings={false} />
                 </FadeIn>
               ))}
             </div>

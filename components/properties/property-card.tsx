@@ -28,12 +28,14 @@ interface PropertyCardProps {
   property: Property
   initialFavorited?: boolean
   variant?: 'default' | 'compact' | 'horizontal'
+  showSavings?: boolean
 }
 
 export function PropertyCard({
   property,
   initialFavorited = false,
-  variant = 'default'
+  variant = 'default',
+  showSavings = true
 }: PropertyCardProps) {
   const [imageError, setImageError] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
@@ -268,23 +270,25 @@ export function PropertyCard({
         </div>
 
         {/* Savings highlight */}
-        <div className="bg-green-50 border border-green-100 rounded-lg p-3 mb-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <TrendingDown className="h-4 w-4 text-green-600" />
+        {showSavings && (
+          <div className="bg-green-50 border border-green-100 rounded-lg p-3 mb-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                  <TrendingDown className="h-4 w-4 text-green-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-green-700">Save with PropLinka</p>
+                  <p className="text-sm font-bold text-green-700">{formatted.totalSavings}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-green-700">Save with PropLinka</p>
-                <p className="text-sm font-bold text-green-700">{formatted.totalSavings}</p>
+              <div className="text-right">
+                <p className="text-xs text-muted-foreground line-through">{formatted.traditionalAgentFee}</p>
+                <p className="text-xs text-green-600">Platform: {formatted.platformFee}</p>
               </div>
-            </div>
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground line-through">{formatted.traditionalAgentFee}</p>
-              <p className="text-xs text-green-600">Platform: {formatted.platformFee}</p>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Stats row */}
         <div className="flex items-center justify-between text-xs text-muted-foreground pt-3 border-t">
