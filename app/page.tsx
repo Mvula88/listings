@@ -50,8 +50,7 @@ export default async function HomePage() {
                 </div>
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-white text-center mb-2 font-[family-name:var(--font-poppins)]">
-                Sell your home <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">directly</span>.<br />
-                Let lawyers handle the deal.
+                Sell your home <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">directly</span>. Let lawyers handle the deal.
               </h1>
               <p className="text-sm md:text-base text-white/90 text-center mb-3 max-w-3xl mx-auto font-[family-name:var(--font-poppins)]">
                 PropLinka connects you with real buyers and vetted property lawyers in one place.
