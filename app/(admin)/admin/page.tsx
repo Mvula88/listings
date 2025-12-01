@@ -9,6 +9,10 @@ import {
   TrendingUp,
   Activity,
   AlertCircle,
+  DollarSign,
+  CheckCircle2,
+  BarChart3,
+  Banknote,
 } from 'lucide-react'
 import { AnimatedCounter } from '@/components/ui/animated-counter'
 import { FadeIn } from '@/components/ui/fade-in'
@@ -52,10 +56,32 @@ export default async function AdminDashboard() {
     .select('id')
     .eq('status', 'pending')
 
-  const { data: suspendedUsers } = await supabase
+  const { data: _suspendedUsers } = await supabase
     .from('profiles')
     .select('id')
     .eq('is_suspended', true)
+
+  // Get financial stats
+  const { data: allListings } = await supabase
+    .from('properties')
+    .select('price')
+    .eq('status', 'active') as { data: Array<{ price: number }> | null }
+
+  const { data: completedDeals } = await supabase
+    .from('transactions')
+    .select('agreed_price')
+    .eq('status', 'completed') as { data: Array<{ agreed_price: number }> | null }
+
+  const { data: allTransactions } = await supabase
+    .from('transactions')
+    .select('agreed_price, status') as { data: Array<{ agreed_price: number; status: string }> | null }
+
+  // Calculate totals
+  const totalListingValue = allListings?.reduce((sum, p) => sum + (p.price || 0), 0) || 0
+  const totalDealsValue = completedDeals?.reduce((sum, t) => sum + (t.agreed_price || 0), 0) || 0
+  const completedDealsCount = completedDeals?.length || 0
+  const inProgressDeals = allTransactions?.filter(t => t.status === 'in_progress').length || 0
+  const totalListingsCount = allListings?.length || 0
 
   // Get recent activity
   const { data: recentUsers } = await supabase
@@ -157,6 +183,72 @@ export default async function AdminDashboard() {
           </Card>
         </FadeIn>
       ) : null}
+
+      {/* Financial Overview - Key Business Metrics */}
+      <FadeIn delay={0.15}>
+        <Card className="border-green-500/30 bg-gradient-to-br from-green-500/5 to-emerald-500/5">
+          <CardHeader>
+            <div className="flex items-center gap-2">
+              <BarChart3 className="h-5 w-5 text-green-600" />
+              <CardTitle>Financial Overview</CardTitle>
+            </div>
+            <CardDescription>Key business metrics and transaction values</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+              {/* Total Active Listings */}
+              <div className="p-4 rounded-lg bg-background border">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Active Listings</span>
+                  <Building className="h-4 w-4 text-blue-500" />
+                </div>
+                <div className="text-2xl font-bold">{totalListingsCount}</div>
+                <div className="text-xs text-muted-foreground mt-1">properties on market</div>
+              </div>
+
+              {/* Total Listing Value */}
+              <div className="p-4 rounded-lg bg-background border">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Total Listing Value</span>
+                  <DollarSign className="h-4 w-4 text-green-500" />
+                </div>
+                <div className="text-2xl font-bold">
+                  R {new Intl.NumberFormat('en-ZA', { notation: 'compact', maximumFractionDigits: 1 }).format(totalListingValue)}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  combined property value
+                </div>
+              </div>
+
+              {/* Completed Deals */}
+              <div className="p-4 rounded-lg bg-background border">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Completed Deals</span>
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                </div>
+                <div className="text-2xl font-bold">{completedDealsCount}</div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  {inProgressDeals} in progress
+                </div>
+              </div>
+
+              {/* Total Transaction Value */}
+              <div className="p-4 rounded-lg bg-background border border-green-500/30">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-muted-foreground">Transaction Value</span>
+                  <Banknote className="h-4 w-4 text-green-600" />
+                </div>
+                <div className="text-2xl font-bold text-green-600">
+                  R {new Intl.NumberFormat('en-ZA', { notation: 'compact', maximumFractionDigits: 1 }).format(totalDealsValue)}
+                </div>
+                <div className="text-xs text-muted-foreground mt-1">
+                  from completed sales
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </FadeIn>
 
       {/* Key Metrics */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
