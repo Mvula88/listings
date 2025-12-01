@@ -14,23 +14,30 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
+import { Textarea } from '@/components/ui/textarea'
+import { Label } from '@/components/ui/label'
 import { CheckCircle, XCircle, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { useToast } from '@/lib/hooks/use-toast'
+import { toast } from 'sonner'
 
 interface LawyerVerificationActionsProps {
   lawyerId: string
   isVerified: boolean
+  lawyerEmail?: string
+  lawyerName?: string
 }
 
 export function LawyerVerificationActions({
   lawyerId,
   isVerified,
+  lawyerEmail,
+  lawyerName,
 }: LawyerVerificationActionsProps) {
   const [loading, setLoading] = useState(false)
+  const [rejectReason, setRejectReason] = useState('')
+  const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
   const router = useRouter()
   const supabase = createClient()
-  const { toast } = useToast()
 
   async function handleVerify() {
     setLoading(true)
@@ -74,6 +81,40 @@ export function LawyerVerificationActions({
     }
   }
 
+  async function handleReject() {
+    if (!rejectReason.trim()) {
+      toast.error('Please provide a reason for rejection')
+      return
+    }
+
+    setLoading(true)
+    try {
+      // Update lawyer status to rejected
+      const { error } = await (supabase as any)
+        .from('lawyers')
+        .update({
+          verified: false,
+          rejection_reason: rejectReason,
+          rejected_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .eq('id', lawyerId)
+
+      if (error) {
+        toast.error('Failed to reject application: ' + error.message)
+      } else {
+        toast.success('Application rejected')
+        setRejectDialogOpen(false)
+        setRejectReason('')
+        router.refresh()
+      }
+    } catch (error) {
+      toast.error('An error occurred')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   if (isVerified) {
     return (
       <AlertDialog>
@@ -93,8 +134,8 @@ export function LawyerVerificationActions({
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Verification?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will remove the lawyer's verified status. They will no longer appear
-              in the public lawyer directory and won't be able to accept new clients
+              This will remove the lawyer&apos;s verified status. They will no longer appear
+              in the public lawyer directory and won&apos;t be able to accept new clients
               until re-verified.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -130,7 +171,7 @@ export function LawyerVerificationActions({
           </>
         )}
       </Button>
-      <AlertDialog>
+      <AlertDialog open={rejectDialogOpen} onOpenChange={setRejectDialogOpen}>
         <AlertDialogTrigger asChild>
           <Button variant="outline" size="sm" disabled={loading}>
             <XCircle className="h-4 w-4 mr-1" />
@@ -141,16 +182,33 @@ export function LawyerVerificationActions({
           <AlertDialogHeader>
             <AlertDialogTitle>Reject Application?</AlertDialogTitle>
             <AlertDialogDescription>
-              This will reject the lawyer's application. They will need to re-apply
-              with correct credentials. Consider contacting them first if there are
-              minor issues that can be corrected.
+              This will reject the lawyer&apos;s application. They will need to re-apply
+              with correct credentials.
             </AlertDialogDescription>
           </AlertDialogHeader>
+          <div className="py-4">
+            <Label htmlFor="reject-reason">Reason for Rejection</Label>
+            <Textarea
+              id="reject-reason"
+              placeholder="Please provide a reason for the rejection..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              className="mt-2"
+              rows={3}
+            />
+          </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction className="bg-red-600 hover:bg-red-700">
+            <AlertDialogCancel onClick={() => setRejectReason('')}>Cancel</AlertDialogCancel>
+            <Button
+              onClick={handleReject}
+              disabled={loading || !rejectReason.trim()}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-1" />
+              ) : null}
               Reject Application
-            </AlertDialogAction>
+            </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

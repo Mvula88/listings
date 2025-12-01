@@ -2,7 +2,7 @@ import { Suspense } from 'react'
 import { getAnalyticsData, getPlatformStats } from '@/lib/admin/actions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { AnalyticsCharts } from '@/components/admin/analytics-charts'
-import { TrendingUp, Users, Home, DollarSign } from 'lucide-react'
+import { TrendingUp, Clock, Home, DollarSign } from 'lucide-react'
 
 export const dynamic = 'force-dynamic'
 
@@ -33,7 +33,7 @@ async function AnalyticsPageContent() {
               ${(stats?.total_revenue || 0).toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
-              +{stats?.new_users_month || 0}% from last month
+              Platform lifetime revenue
             </p>
           </CardContent>
         </Card>
@@ -71,7 +71,7 @@ async function AnalyticsPageContent() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Avg Days to Close</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">

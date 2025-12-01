@@ -160,12 +160,12 @@ export function TransactionsTable({ initialData }: { initialData: any }) {
           )}
         </div>
 
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
+        <Select value={statusFilter || "all"} onValueChange={(v) => setStatusFilter(v === "all" ? "" : v)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="All Statuses" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value=" ">All Statuses</SelectItem>
+            <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="initiated">Initiated</SelectItem>
             <SelectItem value="lawyers_selected">Lawyers Selected</SelectItem>
             <SelectItem value="in_progress">In Progress</SelectItem>

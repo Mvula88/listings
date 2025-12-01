@@ -32,6 +32,7 @@ import {
   unsuspendModerator,
   removeModerator,
 } from '@/lib/actions/admin-moderators'
+import { toast } from 'sonner'
 
 interface ModeratorActionsProps {
   moderatorId: string
@@ -48,26 +49,44 @@ export function ModeratorActions({ moderatorId, status }: ModeratorActionsProps)
   const handleSuspend = async () => {
     if (!suspendReason.trim()) return
     setLoading('suspend')
-    await suspendModerator(moderatorId, suspendReason)
-    setSuspendOpen(false)
-    setSuspendReason('')
-    setLoading(null)
-    router.refresh()
+    try {
+      await suspendModerator(moderatorId, suspendReason)
+      toast.success('Moderator suspended successfully')
+      setSuspendOpen(false)
+      setSuspendReason('')
+      router.refresh()
+    } catch (error) {
+      toast.error('Failed to suspend moderator')
+    } finally {
+      setLoading(null)
+    }
   }
 
   const handleUnsuspend = async () => {
     setLoading('unsuspend')
-    await unsuspendModerator(moderatorId)
-    setLoading(null)
-    router.refresh()
+    try {
+      await unsuspendModerator(moderatorId)
+      toast.success('Moderator unsuspended successfully')
+      router.refresh()
+    } catch (error) {
+      toast.error('Failed to unsuspend moderator')
+    } finally {
+      setLoading(null)
+    }
   }
 
   const handleRemove = async () => {
     setLoading('remove')
-    await removeModerator(moderatorId)
-    setRemoveOpen(false)
-    setLoading(null)
-    router.refresh()
+    try {
+      await removeModerator(moderatorId)
+      toast.success('Moderator removed successfully')
+      setRemoveOpen(false)
+      router.refresh()
+    } catch (error) {
+      toast.error('Failed to remove moderator')
+    } finally {
+      setLoading(null)
+    }
   }
 
   return (

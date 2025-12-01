@@ -592,11 +592,9 @@ export async function getTransactions(params: {
     .from('transactions')
     .select(`
       *,
-      property:properties(*),
-      buyer:profiles!buyer_id(*),
-      seller:profiles!seller_id(*),
-      lawyer_buyer:lawyers!lawyer_buyer_id(*),
-      lawyer_seller:lawyers!lawyer_seller_id(*)
+      property:properties(id, title, city, price, currency),
+      buyer:profiles!buyer_id(id, full_name, email),
+      seller:profiles!seller_id(id, full_name, email)
     `, { count: 'exact' })
     .order('created_at', { ascending: false })
     .range((page - 1) * pageSize, page * pageSize - 1)

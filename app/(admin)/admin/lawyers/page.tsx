@@ -47,7 +47,7 @@ export default async function AdminLawyersPage({
   const { verified: verifiedFilter, search: searchQuery } = await searchParams
   const supabase = await createClient()
 
-  // Build query
+  // Build query with server-side search
   let query = supabase
     .from('lawyers')
     .select(`
@@ -80,24 +80,25 @@ export default async function AdminLawyersPage({
     query = query.eq('verified', false)
   }
 
+  // Apply server-side search filter
+  if (searchQuery) {
+    query = query.or(`firm_name.ilike.%${searchQuery}%,registration_number.ilike.%${searchQuery}%,city.ilike.%${searchQuery}%`)
+  }
+
   const { data: lawyers, error } = await query
 
-  // Get stats
-  const { count: totalLawyers } = await supabase
-    .from('lawyers')
-    .select('*', { count: 'exact', head: true })
+  // Get stats in parallel for better performance
+  const [totalResult, verifiedResult, pendingResult] = await Promise.all([
+    supabase.from('lawyers').select('*', { count: 'exact', head: true }),
+    supabase.from('lawyers').select('*', { count: 'exact', head: true }).eq('verified', true),
+    supabase.from('lawyers').select('*', { count: 'exact', head: true }).eq('verified', false),
+  ])
 
-  const { count: verifiedLawyers } = await supabase
-    .from('lawyers')
-    .select('*', { count: 'exact', head: true })
-    .eq('verified', true)
+  const totalLawyers = totalResult.count
+  const verifiedLawyers = verifiedResult.count
+  const pendingLawyers = pendingResult.count
 
-  const { count: pendingLawyers } = await supabase
-    .from('lawyers')
-    .select('*', { count: 'exact', head: true })
-    .eq('verified', false)
-
-  // Filter by search if provided (client-side for now)
+  // Additional client-side filtering for profile fields (since they're joined)
   let filteredLawyers = lawyers as Lawyer[] | null
   if (searchQuery && filteredLawyers) {
     const search = searchQuery.toLowerCase()

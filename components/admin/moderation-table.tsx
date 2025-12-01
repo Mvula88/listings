@@ -118,24 +118,24 @@ export function ModerationTable({ initialData }: { initialData: any }) {
     <div className="space-y-4">
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
-        <Select value={resourceTypeFilter} onValueChange={setResourceTypeFilter}>
+        <Select value={resourceTypeFilter || "all"} onValueChange={(v) => setResourceTypeFilter(v === "all" ? "" : v)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="All Types" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value=" ">All Types</SelectItem>
+            <SelectItem value="all">All Types</SelectItem>
             <SelectItem value="property">Property</SelectItem>
             <SelectItem value="review">Review</SelectItem>
             <SelectItem value="message">Message</SelectItem>
           </SelectContent>
         </Select>
 
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
+        <Select value={statusFilter || "all"} onValueChange={(v) => setStatusFilter(v === "all" ? "" : v)}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="All Statuses" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value=" ">All Statuses</SelectItem>
+            <SelectItem value="all">All Statuses</SelectItem>
             <SelectItem value="pending">Pending</SelectItem>
             <SelectItem value="approved">Approved</SelectItem>
             <SelectItem value="rejected">Rejected</SelectItem>
