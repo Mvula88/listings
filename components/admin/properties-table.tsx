@@ -247,6 +247,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
               <TableHead>Price</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Moderation</TableHead>
+              <TableHead>Moderated By</TableHead>
               <TableHead>Views</TableHead>
               <TableHead>Created</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -255,7 +256,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
           <TableBody>
             {properties.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={9} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={10} className="text-center py-8 text-muted-foreground">
                   No properties found
                 </TableCell>
               </TableRow>
@@ -328,6 +329,20 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                     >
                       {property.moderation_status || 'pending'}
                     </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {property.moderator ? (
+                      <div className="text-sm">
+                        <div className="font-medium">{property.moderator.full_name}</div>
+                        {property.moderated_at && (
+                          <div className="text-xs text-muted-foreground">
+                            {new Date(property.moderated_at).toLocaleDateString()}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <span className="text-muted-foreground text-sm">-</span>
+                    )}
                   </TableCell>
                   <TableCell>{property.view_count || 0}</TableCell>
                   <TableCell>
