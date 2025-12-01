@@ -76,6 +76,7 @@ export async function getFeaturedProperties(limit: number = 8) {
     featured: p.featured,
     views: p.views,
     images: p.property_images || [],
+    property_images: p.property_images || [],
     country: p.country || { code: 'ZA', name: '', currency_symbol: 'R' }
   })) || []
 }
