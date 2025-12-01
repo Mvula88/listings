@@ -959,7 +959,7 @@ export async function updatePlatformSetting(key: string, value: any) {
     .from('platform_settings')
     .select('value')
     .eq('key', key)
-    .single()
+    .single() as { data: { value: unknown } | null }
 
   const { error } = await (supabase
     .from('platform_settings') as any)
