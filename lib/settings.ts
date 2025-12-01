@@ -139,7 +139,7 @@ export async function getAllSettings(): Promise<Map<string, any>> {
     const supabase = await createClient()
     const { data, error } = await supabase
       .from('platform_settings')
-      .select('key, value')
+      .select('key, value') as { data: Array<{ key: string; value: unknown }> | null; error: Error | null }
 
     if (error) {
       console.error('Error fetching platform settings:', error)
