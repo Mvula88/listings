@@ -1,6 +1,6 @@
--- Add missing profile for dwtnamibia@gmail.com
+-- Add missing profile for dwtnamibia@gmail.com (only if user exists in auth.users)
 INSERT INTO profiles (id, email, full_name, user_type, roles, created_at, updated_at)
-VALUES (
+SELECT
   'dfbbb6fd-d53a-48ad-aecb-dd47fabbcba0',
   'dwtnamibia@gmail.com',
   'Ismael Abraham Mvula',
@@ -8,7 +8,10 @@ VALUES (
   ARRAY['buyer']::TEXT[],
   NOW(),
   NOW()
-) ON CONFLICT (id) DO NOTHING;
+WHERE EXISTS (
+  SELECT 1 FROM auth.users WHERE id = 'dfbbb6fd-d53a-48ad-aecb-dd47fabbcba0'
+)
+ON CONFLICT (id) DO NOTHING;
 
 -- Ensure trigger exists and is enabled
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;

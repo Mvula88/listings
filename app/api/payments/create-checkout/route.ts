@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { isFeatureEnabled, isMaintenanceMode } from '@/lib/settings'
 import Stripe from 'stripe'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -27,6 +28,22 @@ const PLANS: Record<string, { priceId: string; days: number; name: string }> = {
 
 export async function POST(request: Request) {
   try {
+    // Check if platform is in maintenance mode
+    if (await isMaintenanceMode()) {
+      return NextResponse.json(
+        { error: 'Platform is currently under maintenance. Please try again later.' },
+        { status: 503 }
+      )
+    }
+
+    // Check if premium listings feature is enabled
+    if (!(await isFeatureEnabled('premium_listings'))) {
+      return NextResponse.json(
+        { error: 'Premium listings are currently not available' },
+        { status: 403 }
+      )
+    }
+
     const supabase = await createClient()
 
     // Check authentication

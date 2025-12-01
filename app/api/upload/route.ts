@@ -10,6 +10,7 @@ import {
   fileToBuffer,
   DEFAULT_IMAGE_CONFIG,
 } from '@/lib/utils/image-optimization'
+import { getImageSettings } from '@/lib/settings'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60 // 60 seconds for image processing
@@ -44,6 +45,9 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
       )
     }
 
+    // Get image settings from database
+    const imageSettings = await getImageSettings()
+
     // Get form data
     const formData = await request.formData()
     const file = formData.get('file') as File
@@ -57,8 +61,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<UploadRes
       )
     }
 
-    // Validate file
-    const validation = validateImageFile(file, 10) // Max 10MB
+    // Validate file using settings from database
+    const validation = validateImageFile(file, imageSettings.maxImageSizeMB)
     if (!validation.valid) {
       return NextResponse.json(
         { success: false, error: validation.error },

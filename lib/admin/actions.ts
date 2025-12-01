@@ -918,11 +918,31 @@ export async function getPlatformSettings() {
   const { data, error } = await supabase
     .from('platform_settings')
     .select('*')
+    .order('category')
     .order('key')
 
   if (error) throw error
 
-  return data
+  // Parse JSON values and ensure proper types
+  return (data || []).map(setting => ({
+    ...setting,
+    value: parseSettingValue(setting.value, setting.key),
+  }))
+}
+
+// Helper to parse setting values to proper types
+function parseSettingValue(value: any, key: string): any {
+  // If already parsed (JSONB)
+  if (typeof value !== 'string') return value
+
+  // Try JSON parse
+  try {
+    const parsed = JSON.parse(value)
+    return parsed
+  } catch {
+    // Return as-is if not valid JSON
+    return value
+  }
 }
 
 export async function updatePlatformSetting(key: string, value: any) {
@@ -930,6 +950,13 @@ export async function updatePlatformSetting(key: string, value: any) {
 
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
+
+  // Get old value for logging
+  const { data: oldSetting } = await supabase
+    .from('platform_settings')
+    .select('value')
+    .eq('key', key)
+    .single()
 
   const { error } = await (supabase
     .from('platform_settings') as any)
@@ -948,10 +975,15 @@ export async function updatePlatformSetting(key: string, value: any) {
     'settings.update',
     'platform_settings',
     key,
-    null,
+    { value: oldSetting?.value },
     { value }
   )
 
+  // Clear the settings cache so changes take effect immediately
+  const { clearSettingsCache } = await import('@/lib/settings')
+  clearSettingsCache()
+
   revalidatePath('/admin/settings')
+  revalidatePath('/') // Revalidate home page for maintenance mode etc.
   return { success: true }
 }
