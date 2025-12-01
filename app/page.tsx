@@ -59,14 +59,6 @@ export default async function HomePage() {
                 No estate agents, no hidden commissions — just a clean, legal sale from listing to transfer.
               </p>
 
-              {/* Free Listing Badge */}
-              <div className="flex justify-center mb-3">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-500/90 backdrop-blur-sm rounded-full text-white font-semibold text-sm shadow-lg">
-                  <span className="text-lg">🏠</span>
-                  List your property for FREE
-                </div>
-              </div>
-
               {/* Benefit Pills */}
               <div className="flex flex-wrap justify-center gap-2">
                 <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
