@@ -405,8 +405,7 @@ export async function acceptModeratorInvitation(
   const supabase = await createClient()
 
   // Call the database function that bypasses RLS
-  const { data, error } = await supabase
-    .rpc('accept_moderator_invitation', {
+  const { data, error } = await (supabase.rpc as any)('accept_moderator_invitation', {
       p_token: token,
       p_user_id: userId
     })
