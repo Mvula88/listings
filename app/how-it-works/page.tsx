@@ -24,7 +24,7 @@ export default function HowItWorksPage() {
       <AuthHeaderServer />
 
       {/* Hero Section with Background Image - Matching Landing Page Style */}
-      <section className="relative min-h-[400px] md:min-h-[500px] flex items-center overflow-hidden">
+      <section className="relative overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0">
           <Image
@@ -40,36 +40,36 @@ export default function HowItWorksPage() {
           <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10" />
         </div>
 
-        <div className="container mx-auto px-4 relative z-10 py-16">
+        <div className="container mx-auto px-4 relative z-10 pt-8 md:pt-10 pb-6">
           <FadeIn>
             <div className="max-w-4xl mx-auto text-center">
               {/* Premium badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl mb-8">
+              <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-xl rounded-full border border-white/20 shadow-2xl mb-3">
                 <Sparkles className="h-4 w-4 text-emerald-400 animate-pulse" />
-                <span className="text-sm font-semibold text-white tracking-wide">Simple & Transparent Process</span>
+                <span className="text-xs font-semibold text-white tracking-wide">Simple & Transparent Process</span>
               </div>
 
               {/* Main headline */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 font-[family-name:var(--font-poppins)]">
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-2 font-[family-name:var(--font-poppins)]">
                 How <span className="bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent">PropLinka</span> Works
               </h1>
 
               {/* Subheadline */}
-              <p className="text-xl md:text-2xl text-white/80 max-w-3xl mx-auto mb-8 font-[family-name:var(--font-poppins)]">
+              <p className="text-sm md:text-base text-white/80 max-w-3xl mx-auto mb-3 font-[family-name:var(--font-poppins)]">
                 Four simple steps to save <span className="text-emerald-400 font-semibold">thousands</span> on your property transaction
               </p>
 
               {/* Value props */}
-              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-sm text-white">
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
                   <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
                   No Agent Commissions
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-sm text-white">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
                   <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
                   No Hidden Fees
                 </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-sm text-white">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full border border-white/20 text-xs text-white">
                   <span className="w-2 h-2 bg-emerald-400 rounded-full"></span>
                   100% Transparent
                 </div>
