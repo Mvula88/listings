@@ -31,10 +31,12 @@ export default async function HomePage() {
             className="object-cover"
             priority
           />
-          {/* Glass effect overlay */}
-          <div className="absolute inset-0 backdrop-blur-[2px] bg-gradient-to-b from-black/70 via-black/60 to-black/40" />
-          {/* Additional glass shine effect */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/10" />
+          {/* Deep blue overlay that matches brand colors */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-950/90 via-blue-900/85 to-slate-900/90" />
+          {/* Subtle warm accent for depth */}
+          <div className="absolute inset-0 bg-gradient-to-t from-amber-900/10 via-transparent to-transparent" />
+          {/* Light shimmer effect */}
+          <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-blue-400/5 to-white/5" />
         </div>
 
         <div className="container mx-auto px-4 relative z-10 pt-8 md:pt-10 pb-6">
