@@ -61,22 +61,27 @@ export default async function AdminDashboard() {
     .select('id')
     .eq('is_suspended', true)
 
-  // Get financial stats
-  const { data: allListings } = await supabase
+  // Get financial stats with error handling
+  const { data: allListings, error: listingsError } = await supabase
     .from('properties')
     .select('price')
-    .eq('status', 'active') as { data: Array<{ price: number }> | null }
+    .eq('status', 'active') as { data: Array<{ price: number }> | null; error: Error | null }
 
-  const { data: completedDeals } = await supabase
+  const { data: completedDeals, error: dealsError } = await supabase
     .from('transactions')
     .select('agreed_price')
-    .eq('status', 'completed') as { data: Array<{ agreed_price: number }> | null }
+    .eq('status', 'completed') as { data: Array<{ agreed_price: number | null }> | null; error: Error | null }
 
-  const { data: allTransactions } = await supabase
+  const { data: allTransactions, error: txError } = await supabase
     .from('transactions')
-    .select('agreed_price, status') as { data: Array<{ agreed_price: number; status: string }> | null }
+    .select('agreed_price, status') as { data: Array<{ agreed_price: number | null; status: string }> | null; error: Error | null }
 
-  // Calculate totals
+  // Log errors but don't fail the page
+  if (listingsError) console.error('Error fetching listings:', listingsError)
+  if (dealsError) console.error('Error fetching completed deals:', dealsError)
+  if (txError) console.error('Error fetching transactions:', txError)
+
+  // Calculate totals with safe fallbacks
   const totalListingValue = allListings?.reduce((sum, p) => sum + (p.price || 0), 0) || 0
   const totalDealsValue = completedDeals?.reduce((sum, t) => sum + (t.agreed_price || 0), 0) || 0
   const completedDealsCount = completedDeals?.length || 0
