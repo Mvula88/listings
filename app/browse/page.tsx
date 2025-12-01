@@ -146,22 +146,22 @@ export default async function BrowsePropertiesPage({
       <AuthHeader user={user} profile={profile} />
 
       {/* Hero Section */}
-      <section className="relative py-16 bg-gradient-to-br from-primary/10 via-primary/5 to-background overflow-hidden">
+      <section className="relative py-8 bg-gradient-to-br from-primary/10 via-primary/5 to-background overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]" />
-        <div className="absolute top-10 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute top-5 right-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-5 left-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
 
         <div className="container mx-auto px-4 relative z-10">
           <FadeIn>
-            <div className="max-w-3xl mx-auto text-center mb-8">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+            <div className="max-w-3xl mx-auto text-center mb-5">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 rounded-full mb-4">
                 <Home className="h-4 w-4 text-primary" />
                 <span className="text-sm font-medium text-primary">Find Your Dream Home</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 font-[family-name:var(--font-poppins)]">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2 font-[family-name:var(--font-poppins)]">
                 Browse <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">Properties</span>
               </h1>
-              <p className="text-lg text-muted-foreground">
+              <p className="text-base text-muted-foreground">
                 Discover homes listed directly by owners - no agent fees
               </p>
             </div>
@@ -169,34 +169,34 @@ export default async function BrowsePropertiesPage({
 
           {/* Search Bar */}
           <FadeIn delay={0.1}>
-            <div className="max-w-4xl mx-auto bg-background/80 backdrop-blur-sm p-6 rounded-2xl border shadow-lg">
-              <form className="flex flex-col md:flex-row gap-3">
+            <div className="max-w-4xl mx-auto bg-background/80 backdrop-blur-sm p-4 rounded-xl border shadow-lg">
+              <form className="flex flex-col md:flex-row gap-2">
                 <div className="flex-1 relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     name="q"
                     placeholder="Search by location, property type, or keyword..."
                     defaultValue={params.q}
-                    className="pl-10 h-12"
+                    className="pl-10 h-10"
                   />
                 </div>
-                <div className="relative md:w-[200px]">
+                <div className="relative md:w-[180px]">
                   <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     name="city"
                     placeholder="City"
                     defaultValue={params.city}
-                    className="pl-10 h-12"
+                    className="pl-10 h-10"
                   />
                 </div>
-                <Button type="submit" size="lg" className="md:w-auto w-full">
+                <Button type="submit" className="md:w-auto w-full h-10">
                   <Search className="h-4 w-4 mr-2" />
                   Search
                 </Button>
               </form>
 
               {/* Mobile Filter Button */}
-              <div className="mt-4 md:hidden">
+              <div className="mt-3 md:hidden">
                 <FilterDrawer
                   countries={countries || []}
                   currentFilters={params}
