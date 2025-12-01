@@ -211,7 +211,6 @@ export async function getProperties(params: {
     .select(`
       *,
       seller:profiles!seller_id(*),
-      moderator:profiles!moderated_by(id, full_name, email),
       country:countries(*),
       property_images(*)
     `, { count: 'exact' })
