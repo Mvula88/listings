@@ -922,17 +922,18 @@ export async function getPlatformSettings() {
   if (error) throw error
 
   // Parse JSON values and ensure proper types
-  return (data || []).map((setting) => {
-    const { value, ...rest } = setting
-    return {
-      ...rest,
-      value: parseSettingValue(value, setting.key),
-    }
-  })
+  return (data || []).map((setting: { key: string; value: unknown; description: string | null; category: string | null; created_at: string; updated_at: string }) => ({
+    key: setting.key,
+    value: parseSettingValue(setting.value, setting.key),
+    description: setting.description,
+    category: setting.category,
+    created_at: setting.created_at,
+    updated_at: setting.updated_at,
+  }))
 }
 
 // Helper to parse setting values to proper types
-function parseSettingValue(value: any, key: string): any {
+function parseSettingValue(value: any, _key: string): any {
   // If already parsed (JSONB)
   if (typeof value !== 'string') return value
 
