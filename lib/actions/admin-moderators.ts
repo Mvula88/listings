@@ -404,37 +404,24 @@ export async function acceptModeratorInvitation(
 ): Promise<ActionResult> {
   const supabase = await createClient()
 
-  // Verify token is valid
-  const { data: invitation, error: fetchError } = await supabase
-    .from('moderator_invitations')
-    .select('*')
-    .eq('token', token)
-    .is('accepted_at', null)
-    .gt('expires_at', new Date().toISOString())
-    .single<{ id: string; email: string; token: string; expires_at: string }>()
-
-  if (fetchError || !invitation) {
-    return { success: false, error: 'Invalid or expired invitation' }
-  }
-
-  // Create admin profile for the user
-  const { error: insertError } = await (supabase
-    .from('admin_profiles') as any)
-    .insert({
-      id: userId,
-      role: 'moderator',
-      status: 'active'
+  // Call the database function that bypasses RLS
+  const { data, error } = await supabase
+    .rpc('accept_moderator_invitation', {
+      p_token: token,
+      p_user_id: userId
     })
 
-  if (insertError) {
-    return { success: false, error: 'Failed to create moderator profile' }
+  if (error) {
+    console.error('Error accepting moderator invitation:', error)
+    return { success: false, error: 'Failed to accept invitation' }
   }
 
-  // Mark invitation as accepted
-  await (supabase
-    .from('moderator_invitations') as any)
-    .update({ accepted_at: new Date().toISOString() })
-    .eq('id', invitation.id)
+  // The function returns a JSONB object with success and optional error
+  const result = data as { success: boolean; error?: string }
+
+  if (!result.success) {
+    return { success: false, error: result.error || 'Failed to create moderator profile' }
+  }
 
   return { success: true }
 }
