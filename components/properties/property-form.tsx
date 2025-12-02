@@ -50,9 +50,13 @@ export function PropertyForm({ countries }: PropertyFormProps) {
       if (images.length > 0 && propertyId) {
         toast.info('Uploading images...')
         await upload(propertyId, images)
-        toast.success(`Property created with ${images.length} images!`)
+        toast.success('Property submitted for review! Our team will review it shortly.', {
+          duration: 5000,
+        })
       } else {
-        toast.success('Property created successfully!')
+        toast.success('Property submitted for review! Our team will review it shortly.', {
+          duration: 5000,
+        })
       }
 
       // Redirect to dashboard/properties management page

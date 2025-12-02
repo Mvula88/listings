@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Building, Plus, Eye, Edit, MapPin, Star, AlertTriangle, XCircle } from 'lucide-react'
+import { Building, Plus, Eye, Edit, MapPin, Star, AlertTriangle, XCircle, Clock } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import Link from 'next/link'
 import { FadeIn } from '@/components/ui/fade-in'
@@ -42,6 +42,7 @@ export default async function ManagePropertiesPage() {
     .order('created_at', { ascending: false })
 
   const activeProperties = properties?.filter((p: any) => p.status === 'active' && p.moderation_status !== 'rejected') || []
+  const pendingReviewProperties = properties?.filter((p: any) => p.status === 'pending_review') || []
   const draftProperties = properties?.filter((p: any) => p.status === 'draft') || []
   const soldProperties = properties?.filter((p: any) => p.status === 'sold') || []
   const rejectedProperties = properties?.filter((p: any) => p.moderation_status === 'rejected') || []
@@ -79,6 +80,19 @@ export default async function ManagePropertiesPage() {
               <p className="text-xs text-muted-foreground">Currently published</p>
             </CardContent>
           </Card>
+
+          {pendingReviewProperties.length > 0 && (
+            <Card className="border-2 hover:shadow-lg transition-all border-blue-200 bg-blue-50/50">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Pending Review</CardTitle>
+                <Clock className="h-4 w-4 text-blue-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-blue-700">{pendingReviewProperties.length}</div>
+                <p className="text-xs text-muted-foreground">Awaiting moderation</p>
+              </CardContent>
+            </Card>
+          )}
 
           <Card className="border-2 hover:shadow-lg transition-all border-yellow-200 bg-yellow-50/50">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -206,6 +220,89 @@ export default async function ManagePropertiesPage() {
                         propertyId={property.id}
                         propertyTitle={property.title}
                       />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </FadeIn>
+      )}
+
+      {/* Pending Review Properties */}
+      {pendingReviewProperties.length > 0 && (
+        <FadeIn delay={0.17}>
+          <Card className="border-2 border-blue-200 bg-blue-50/30">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center gap-2 text-blue-700">
+                <Clock className="h-6 w-6" />
+                Pending Review
+              </CardTitle>
+              <CardDescription>
+                These listings are being reviewed by our moderation team. Once approved, they will become visible to buyers.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {pendingReviewProperties.map((property: any) => (
+                  <div
+                    key={property.id}
+                    className="flex flex-col md:flex-row gap-4 p-4 border-2 border-blue-200 rounded-lg bg-white"
+                  >
+                    {/* Image */}
+                    <div className="relative w-full md:w-48 h-48 rounded-lg overflow-hidden bg-muted shrink-0">
+                      {property.property_images?.[0] ? (
+                        <Image
+                          src={property.property_images[0].url}
+                          alt={property.title}
+                          fill
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full">
+                          <Building className="h-12 w-12 text-muted-foreground" />
+                        </div>
+                      )}
+                      <Badge className="absolute top-2 right-2 bg-blue-600">
+                        Pending Review
+                      </Badge>
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex-1 min-w-0 space-y-3">
+                      <h3 className="text-xl font-semibold line-clamp-1">{property.title}</h3>
+                      <div className="flex items-center gap-2 text-muted-foreground">
+                        <MapPin className="h-4 w-4" />
+                        <span className="text-sm">{property.city}, {property.province}</span>
+                      </div>
+                      <p className="text-2xl font-bold text-primary">
+                        {formatPrice(property.price, property.country?.currency || 'ZAR')}
+                      </p>
+
+                      {/* Status Message */}
+                      <Alert className="border-blue-200 bg-blue-50">
+                        <Clock className="h-4 w-4 text-blue-600" />
+                        <AlertTitle className="text-blue-800">Under Review</AlertTitle>
+                        <AlertDescription className="text-blue-700">
+                          Your listing is being reviewed. This usually takes 1-2 business days.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex md:flex-col gap-2 shrink-0">
+                      <Link href={`/properties/${property.id}`} className="flex-1 md:flex-initial">
+                        <Button variant="outline" className="w-full">
+                          <Eye className="h-4 w-4 mr-2" />
+                          Preview
+                        </Button>
+                      </Link>
+                      <Link href={`/properties/${property.id}/edit`} className="flex-1 md:flex-initial">
+                        <Button variant="outline" className="w-full">
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit
+                        </Button>
+                      </Link>
                     </div>
                   </div>
                 ))}
