@@ -21,7 +21,7 @@ export default async function ViewingsPage() {
     .from('profiles')
     .select('user_type')
     .eq('id', user.id)
-    .single()
+    .single<{ user_type: string }>()
 
   const userType = profile?.user_type || 'buyer'
 
