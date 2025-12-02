@@ -22,7 +22,7 @@ export function PropertyForm({ countries }: PropertyFormProps) {
   const router = useRouter()
   const [images, setImages] = useState<File[]>([])
   const [submitting, setSubmitting] = useState(false)
-  const { upload, uploading } = useImageUpload()
+  const { upload, uploading, progress } = useImageUpload()
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -321,7 +321,11 @@ export function PropertyForm({ countries }: PropertyFormProps) {
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {uploading ? 'Uploading Images...' : 'Creating...'}
+                {uploading && progress
+                  ? `Uploading ${progress.loaded}/${progress.total}...`
+                  : uploading
+                  ? 'Uploading Images...'
+                  : 'Creating...'}
               </>
             ) : (
               'Create Listing'

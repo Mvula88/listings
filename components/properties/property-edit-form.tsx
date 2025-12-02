@@ -49,7 +49,7 @@ export function PropertyEditForm({ property, countries }: PropertyEditFormProps)
   )
   const [imagesToDelete, setImagesToDelete] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
-  const { upload, uploading } = useImageUpload()
+  const { upload, uploading, progress } = useImageUpload()
 
   const handleRemoveExistingImage = (imageId: string) => {
     setExistingImages(prev => prev.filter(img => img.id !== imageId))
@@ -419,7 +419,11 @@ export function PropertyEditForm({ property, countries }: PropertyEditFormProps)
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {uploading ? 'Uploading Images...' : 'Saving...'}
+                {uploading && progress
+                  ? `Uploading ${progress.loaded}/${progress.total}...`
+                  : uploading
+                  ? 'Uploading Images...'
+                  : 'Saving...'}
               </>
             ) : (
               'Save Changes'
