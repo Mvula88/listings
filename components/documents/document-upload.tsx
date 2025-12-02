@@ -22,7 +22,8 @@ import {
   DialogFooter,
 } from '@/components/ui/dialog'
 import { Upload, Loader2, FileText, X } from 'lucide-react'
-import { uploadDocument, DocumentType, documentTypeLabels, buyerDocumentTypes, sellerDocumentTypes } from '@/lib/actions/documents'
+import { uploadDocument } from '@/lib/actions/documents'
+import { DocumentType, documentTypeLabels, buyerDocumentTypes, sellerDocumentTypes } from '@/lib/types/documents'
 import { toast } from 'sonner'
 
 interface DocumentUploadProps {

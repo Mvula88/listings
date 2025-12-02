@@ -2,54 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-
-export type DocumentType =
-  | 'fica_id'
-  | 'fica_proof_of_address'
-  | 'fica_proof_of_income'
-  | 'pre_approval_letter'
-  | 'offer_to_purchase'
-  | 'deed_of_sale'
-  | 'compliance_certificate'
-  | 'rates_clearance'
-  | 'levy_clearance'
-  | 'electrical_certificate'
-  | 'plumbing_certificate'
-  | 'other'
-
-export const documentTypeLabels: Record<DocumentType, string> = {
-  fica_id: 'FICA - ID Document',
-  fica_proof_of_address: 'FICA - Proof of Address',
-  fica_proof_of_income: 'FICA - Proof of Income',
-  pre_approval_letter: 'Pre-Approval Letter',
-  offer_to_purchase: 'Offer to Purchase',
-  deed_of_sale: 'Deed of Sale',
-  compliance_certificate: 'Compliance Certificate',
-  rates_clearance: 'Rates Clearance Certificate',
-  levy_clearance: 'Levy Clearance Certificate',
-  electrical_certificate: 'Electrical Certificate (CoC)',
-  plumbing_certificate: 'Plumbing Certificate',
-  other: 'Other Document',
-}
-
-// Document types required from buyer
-export const buyerDocumentTypes: DocumentType[] = [
-  'fica_id',
-  'fica_proof_of_address',
-  'fica_proof_of_income',
-  'pre_approval_letter',
-]
-
-// Document types required from seller
-export const sellerDocumentTypes: DocumentType[] = [
-  'fica_id',
-  'fica_proof_of_address',
-  'compliance_certificate',
-  'rates_clearance',
-  'levy_clearance',
-  'electrical_certificate',
-  'plumbing_certificate',
-]
+import type { DocumentType } from '@/lib/types/documents'
 
 export async function uploadDocument(
   transactionId: string,
@@ -69,7 +22,7 @@ export async function uploadDocument(
     .from('transactions')
     .select('buyer_id, seller_id')
     .eq('id', transactionId)
-    .single()
+    .single<{ buyer_id: string; seller_id: string }>()
 
   if (!transaction) {
     return { success: false, error: 'Transaction not found' }
@@ -106,7 +59,7 @@ export async function uploadDocument(
     .getPublicUrl(fileName)
 
   // Create document record
-  const { data: document, error: docError } = await supabase
+  const { data: document, error: docError } = await (supabase as any)
     .from('transaction_documents')
     .insert({
       transaction_id: transactionId,
@@ -142,7 +95,7 @@ export async function deleteDocument(documentId: string) {
   }
 
   // Get document to verify ownership
-  const { data: document } = await supabase
+  const { data: document } = await (supabase as any)
     .from('transaction_documents')
     .select('*, transaction:transactions(buyer_id, seller_id)')
     .eq('id', documentId)
@@ -170,7 +123,7 @@ export async function deleteDocument(documentId: string) {
   }
 
   // Delete document record
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('transaction_documents')
     .delete()
     .eq('id', documentId)
@@ -191,7 +144,7 @@ export async function getTransactionDocuments(transactionId: string) {
     return { documents: [], error: 'Not authenticated' }
   }
 
-  const { data: documents, error } = await supabase
+  const { data: documents, error } = await (supabase as any)
     .from('transaction_documents')
     .select(`
       *,
@@ -218,7 +171,7 @@ export async function verifyDocument(documentId: string) {
   }
 
   // Check if user is admin or lawyer for this transaction
-  const { data: document } = await supabase
+  const { data: document } = await (supabase as any)
     .from('transaction_documents')
     .select('transaction_id')
     .eq('id', documentId)
@@ -232,7 +185,7 @@ export async function verifyDocument(documentId: string) {
     .from('transactions')
     .select('lawyer_buyer_id, lawyer_seller_id')
     .eq('id', document.transaction_id)
-    .single()
+    .single<{ lawyer_buyer_id: string | null; lawyer_seller_id: string | null }>()
 
   // Check if user is admin
   const { data: adminProfile } = await supabase
@@ -249,7 +202,7 @@ export async function verifyDocument(documentId: string) {
     return { success: false, error: 'Not authorized to verify documents' }
   }
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('transaction_documents')
     .update({
       verified: true,
@@ -274,7 +227,7 @@ export async function getMyTransactions() {
     return { transactions: [], error: 'Not authenticated' }
   }
 
-  const { data: transactions, error } = await supabase
+  const { data: transactions, error } = await (supabase as any)
     .from('transactions')
     .select(`
       *,
@@ -306,7 +259,7 @@ export async function getTransaction(transactionId: string) {
     return { transaction: null, error: 'Not authenticated' }
   }
 
-  const { data: transaction, error } = await supabase
+  const { data: transaction, error } = await (supabase as any)
     .from('transactions')
     .select(`
       *,
@@ -345,7 +298,7 @@ export async function createTransactionFromOffer(offerId: string) {
   }
 
   // Get the offer details
-  const { data: offer, error: offerError } = await supabase
+  const { data: offer, error: offerError } = await (supabase as any)
     .from('property_offers')
     .select('*')
     .eq('id', offerId)
@@ -367,7 +320,7 @@ export async function createTransactionFromOffer(offerId: string) {
   }
 
   // Create the transaction
-  const { data: transaction, error: txError } = await supabase
+  const { data: transaction, error: txError } = await (supabase as any)
     .from('transactions')
     .insert({
       property_id: offer.property_id,
@@ -385,7 +338,7 @@ export async function createTransactionFromOffer(offerId: string) {
   }
 
   // Link transaction to offer
-  await supabase
+  await (supabase as any)
     .from('property_offers')
     .update({ transaction_id: transaction.id })
     .eq('id', offerId)

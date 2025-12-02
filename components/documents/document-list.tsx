@@ -26,7 +26,8 @@ import {
   Loader2,
   ExternalLink,
 } from 'lucide-react'
-import { deleteDocument, documentTypeLabels, DocumentType } from '@/lib/actions/documents'
+import { deleteDocument } from '@/lib/actions/documents'
+import { documentTypeLabels, DocumentType } from '@/lib/types/documents'
 import { toast } from 'sonner'
 import { formatDistanceToNow } from 'date-fns'
 

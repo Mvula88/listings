@@ -56,8 +56,8 @@ export async function requestViewing(data: RequestViewingData): Promise<ActionRe
   }
 
   // Check for existing viewing request on the same date
-  const { data: existingViewing } = await supabase
-    .from('property_viewings')
+  const { data: existingViewing } = await (supabase
+    .from('property_viewings') as any)
     .select('id')
     .eq('property_id', data.propertyId)
     .eq('buyer_id', user.id)
@@ -127,8 +127,8 @@ export async function confirmViewing(
   }
 
   // Get viewing and verify seller
-  const { data: viewing } = await supabase
-    .from('property_viewings')
+  const { data: viewing } = await (supabase
+    .from('property_viewings') as any)
     .select(`
       id, seller_id, buyer_id, property_id, status,
       property:properties(title)
@@ -199,8 +199,8 @@ export async function cancelViewing(
   }
 
   // Get viewing
-  const { data: viewing } = await supabase
-    .from('property_viewings')
+  const { data: viewing } = await (supabase
+    .from('property_viewings') as any)
     .select(`
       id, seller_id, buyer_id, property_id, status,
       property:properties(title)
@@ -267,8 +267,8 @@ export async function completeViewing(viewingId: string): Promise<ActionResult> 
   }
 
   // Get viewing
-  const { data: viewing } = await supabase
-    .from('property_viewings')
+  const { data: viewing } = await (supabase
+    .from('property_viewings') as any)
     .select('id, seller_id, status')
     .eq('id', viewingId)
     .single()
@@ -315,8 +315,8 @@ export async function markViewingNoShow(viewingId: string): Promise<ActionResult
   }
 
   // Get viewing
-  const { data: viewing } = await supabase
-    .from('property_viewings')
+  const { data: viewing } = await (supabase
+    .from('property_viewings') as any)
     .select('id, seller_id, status')
     .eq('id', viewingId)
     .single()
@@ -406,14 +406,14 @@ export async function getPropertyViewings(propertyId: string) {
     .from('properties')
     .select('seller_id')
     .eq('id', propertyId)
-    .single()
+    .single() as { data: { seller_id: string } | null; error: any }
 
   if (!property || property.seller_id !== user.id) {
     return { viewings: [], error: 'Not authorized' }
   }
 
-  const { data: viewings, error } = await supabase
-    .from('property_viewings')
+  const { data: viewings, error } = await (supabase
+    .from('property_viewings') as any)
     .select(`
       *,
       buyer:profiles!buyer_id(id, full_name, email, phone, avatar_url)
@@ -437,8 +437,8 @@ export async function hasActiveViewing(propertyId: string): Promise<boolean> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return false
 
-  const { data } = await supabase
-    .from('property_viewings')
+  const { data } = await (supabase
+    .from('property_viewings') as any)
     .select('id')
     .eq('property_id', propertyId)
     .eq('buyer_id', user.id)
@@ -460,8 +460,8 @@ export async function getViewing(viewingId: string) {
     return { viewing: null, error: 'Not authenticated' }
   }
 
-  const { data: viewing, error } = await supabase
-    .from('property_viewings')
+  const { data: viewing, error } = await (supabase
+    .from('property_viewings') as any)
     .select(`
       *,
       property:properties(

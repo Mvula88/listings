@@ -493,8 +493,8 @@ export async function withdrawOffer(offerId: string): Promise<ActionResult> {
   }
 
   // Get offer
-  const { data: offer } = await supabase
-    .from('property_offers')
+  const { data: offer } = await (supabase
+    .from('property_offers') as any)
     .select('id, buyer_id, seller_id, property_id, status')
     .eq('id', offerId)
     .single()
@@ -540,8 +540,8 @@ export async function getMyOffers(role: 'buyer' | 'seller', status?: OfferStatus
     return { offers: [], error: 'Not authenticated' }
   }
 
-  let query = supabase
-    .from('property_offers')
+  let query = (supabase
+    .from('property_offers') as any)
     .select(`
       *,
       property:properties(
@@ -586,14 +586,14 @@ export async function getPropertyOffers(propertyId: string) {
     .from('properties')
     .select('seller_id')
     .eq('id', propertyId)
-    .single()
+    .single() as { data: { seller_id: string } | null; error: any }
 
   if (!property || property.seller_id !== user.id) {
     return { offers: [], error: 'Not authorized' }
   }
 
-  const { data: offers, error } = await supabase
-    .from('property_offers')
+  const { data: offers, error } = await (supabase
+    .from('property_offers') as any)
     .select(`
       *,
       buyer:profiles!buyer_id(id, full_name, email, phone, avatar_url),
@@ -620,8 +620,8 @@ export async function getOffer(offerId: string) {
     return { offer: null, error: 'Not authenticated' }
   }
 
-  const { data: offer, error } = await supabase
-    .from('property_offers')
+  const { data: offer, error } = await (supabase
+    .from('property_offers') as any)
     .select(`
       *,
       property:properties(
@@ -658,8 +658,8 @@ export async function hasActiveOffer(propertyId: string): Promise<{ hasOffer: bo
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { hasOffer: false }
 
-  const { data } = await supabase
-    .from('property_offers')
+  const { data } = await (supabase
+    .from('property_offers') as any)
     .select('id, status, offer_amount, counter_amount')
     .eq('property_id', propertyId)
     .eq('buyer_id', user.id)

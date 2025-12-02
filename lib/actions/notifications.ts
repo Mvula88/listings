@@ -34,6 +34,14 @@ export type NotificationType =
   | 'fee_remittance_reminder'
   | 'remittance_overdue'
   | 'transaction'
+  | 'offer_received'
+  | 'offer_accepted'
+  | 'offer_rejected'
+  | 'offer_countered'
+  | 'counter_offer_accepted'
+  | 'viewing_requested'
+  | 'viewing_confirmed'
+  | 'viewing_cancelled'
 
 interface CreateNotificationData {
   userId: string
