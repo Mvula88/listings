@@ -14,7 +14,9 @@ import {
   PlusCircle,
   Star,
   Heart,
-  Search
+  Search,
+  Calendar,
+  DollarSign,
 } from 'lucide-react'
 
 interface NavItem {
@@ -59,6 +61,16 @@ const navItems: NavItem[] = [
     href: '/properties/new',
     icon: PlusCircle,
     userTypes: ['seller']
+  },
+  {
+    title: 'Viewings',
+    href: '/viewings',
+    icon: Calendar,
+  },
+  {
+    title: 'Offers',
+    href: '/offers',
+    icon: DollarSign,
   },
   {
     title: 'Transactions',

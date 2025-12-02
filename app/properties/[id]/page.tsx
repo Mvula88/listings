@@ -12,6 +12,8 @@ import { FavoriteButton } from '@/components/properties/favorite-button'
 import { ReviewForm } from '@/components/reviews/review-form'
 import { ReviewList } from '@/components/reviews/review-list'
 import { RatingSummary } from '@/components/reviews/rating-summary'
+import { RequestViewingForm } from '@/components/properties/request-viewing-form'
+import { MakeOfferForm } from '@/components/properties/make-offer-form'
 import { Button } from '@/components/ui/button'
 import { BackButton } from '@/components/ui/back-button'
 import { Share2 } from 'lucide-react'
@@ -20,6 +22,8 @@ import Image from 'next/image'
 import { calculateSavings, formatSavingsDisplay } from '@/lib/utils/savings-calculator'
 import { checkIfFavorited } from '@/lib/actions/favorites'
 import { getPropertyReviews, checkUserReview } from '@/lib/actions/reviews'
+import { hasActiveViewing } from '@/lib/actions/viewings'
+import { hasActiveOffer } from '@/lib/actions/offers'
 import type { Metadata } from 'next'
 
 // Generate metadata for SEO
@@ -138,6 +142,13 @@ export default async function PropertyDetailPage({
 
   // Check if user has already reviewed
   const { hasReviewed, review: userReview } = user ? await checkUserReview(property.id) as { hasReviewed: boolean; review: { status: string; title: string; [key: string]: any } | null } : { hasReviewed: false, review: null }
+
+  // Check for active viewing and offer (only if logged in and not the seller)
+  const isOwner = user?.id === property.seller_id
+  const activeViewing = user && !isOwner ? await hasActiveViewing(property.id) : false
+  const { hasOffer: hasExistingOffer, offer: existingOffer } = user && !isOwner
+    ? await hasActiveOffer(property.id)
+    : { hasOffer: false, offer: undefined }
 
   // Calculate rating distribution
   const ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
@@ -341,6 +352,31 @@ export default async function PropertyDetailPage({
 
           {/* Right Column - Contact & Seller Info */}
           <div className="space-y-6">
+            {/* Viewing & Offer Buttons - Only show for logged-in users who are not the owner */}
+            {user && !isOwner && (
+              <div className="bg-white border rounded-lg p-4 space-y-3">
+                <h3 className="font-semibold text-lg">Interested in this property?</h3>
+                <div className="space-y-2">
+                  <RequestViewingForm
+                    propertyId={property.id}
+                    propertyTitle={property.title}
+                    hasActiveViewing={activeViewing}
+                  />
+                  <MakeOfferForm
+                    propertyId={property.id}
+                    propertyTitle={property.title}
+                    askingPrice={property.price}
+                    currencySymbol={property.country?.currency_symbol || 'N$'}
+                    hasActiveOffer={hasExistingOffer}
+                    activeOffer={existingOffer}
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground text-center">
+                  Schedule a viewing first, or make an offer directly
+                </p>
+              </div>
+            )}
+
             {/* Inquiry Card */}
             <PropertyInquiry
               property={property as any}
