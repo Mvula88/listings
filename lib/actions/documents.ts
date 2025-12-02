@@ -144,6 +144,28 @@ export async function getTransactionDocuments(transactionId: string) {
     return { documents: [], error: 'Not authenticated' }
   }
 
+  // Verify user is part of this transaction (security fix)
+  const { data: transaction } = await supabase
+    .from('transactions')
+    .select('buyer_id, seller_id, lawyer_buyer_id, lawyer_seller_id')
+    .eq('id', transactionId)
+    .single<{ buyer_id: string; seller_id: string; lawyer_buyer_id: string | null; lawyer_seller_id: string | null }>()
+
+  if (!transaction) {
+    return { documents: [], error: 'Transaction not found' }
+  }
+
+  // Only allow access to transaction participants (buyer, seller, or their lawyers)
+  const isParticipant =
+    transaction.buyer_id === user.id ||
+    transaction.seller_id === user.id ||
+    transaction.lawyer_buyer_id === user.id ||
+    transaction.lawyer_seller_id === user.id
+
+  if (!isParticipant) {
+    return { documents: [], error: 'Not authorized to view these documents' }
+  }
+
   const { data: documents, error } = await (supabase as any)
     .from('transaction_documents')
     .select(`

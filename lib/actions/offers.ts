@@ -208,12 +208,22 @@ export async function acceptOffer(offerId: string, response?: string): Promise<A
     .select('id')
     .single()
 
-  if (!txError && transaction) {
+  if (txError) {
+    console.error('Transaction creation error:', txError)
+    // Offer is accepted but transaction creation failed - log but don't fail the whole operation
+    // The transaction can be created later via createTransactionFromOffer
+  }
+
+  if (transaction) {
     // Link offer to transaction
-    await (supabase
+    const { error: linkError } = await (supabase
       .from('property_offers') as any)
       .update({ transaction_id: transaction.id })
       .eq('id', offerId)
+
+    if (linkError) {
+      console.error('Failed to link transaction to offer:', linkError)
+    }
   }
 
   // Notify buyer
@@ -443,7 +453,7 @@ export async function acceptCounterOffer(offerId: string): Promise<ActionResult>
     .in('status', ['pending', 'countered'])
 
   // Create transaction
-  const { data: transaction } = await (supabase
+  const { data: transaction, error: txError } = await (supabase
     .from('transactions') as any)
     .insert({
       property_id: offer.property_id,
@@ -455,11 +465,20 @@ export async function acceptCounterOffer(offerId: string): Promise<ActionResult>
     .select('id')
     .single()
 
+  if (txError) {
+    console.error('Transaction creation error:', txError)
+    // Offer is accepted but transaction creation failed - log but don't fail the whole operation
+  }
+
   if (transaction) {
-    await (supabase
+    const { error: linkError } = await (supabase
       .from('property_offers') as any)
       .update({ transaction_id: transaction.id })
       .eq('id', offerId)
+
+    if (linkError) {
+      console.error('Failed to link transaction to offer:', linkError)
+    }
   }
 
   // Notify seller
