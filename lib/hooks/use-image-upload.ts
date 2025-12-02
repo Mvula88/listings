@@ -32,10 +32,8 @@ export function useImageUpload(): UseImageUploadReturn {
     const uploadedImages: any[] = []
     const errors: any[] = []
 
-    // Upload images ONE AT A TIME to avoid timeout on Vercel Hobby plan
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
-
+    // Upload a single image
+    const uploadSingleImage = async (file: File, index: number) => {
       try {
         const formData = new FormData()
         formData.append('images', file)
@@ -51,20 +49,40 @@ export function useImageUpload(): UseImageUploadReturn {
         }
 
         const data = await response.json()
-        if (data.images) {
-          uploadedImages.push(...data.images)
-        }
-
-        // Update progress after each successful upload
-        setProgress({
-          loaded: i + 1,
-          total: files.length,
-          percentage: Math.round(((i + 1) / files.length) * 100)
-        })
+        return { success: true, data, index }
       } catch (err: any) {
-        console.error(`Error uploading image ${i + 1}:`, err)
-        errors.push({ index: i, filename: file.name, error: err.message })
+        console.error(`Error uploading image ${index + 1}:`, err)
+        return { success: false, index, filename: file.name, error: err.message }
       }
+    }
+
+    // Upload in batches of 3 for faster performance while staying under timeout
+    const BATCH_SIZE = 3
+    let completed = 0
+
+    for (let i = 0; i < files.length; i += BATCH_SIZE) {
+      const batch = files.slice(i, i + BATCH_SIZE)
+      const batchPromises = batch.map((file, batchIndex) =>
+        uploadSingleImage(file, i + batchIndex)
+      )
+
+      const results = await Promise.all(batchPromises)
+
+      for (const result of results) {
+        if (result.success && result.data?.images) {
+          uploadedImages.push(...result.data.images)
+        } else if (!result.success) {
+          errors.push({ index: result.index, filename: result.filename, error: result.error })
+        }
+        completed++
+      }
+
+      // Update progress after each batch
+      setProgress({
+        loaded: completed,
+        total: files.length,
+        percentage: Math.round((completed / files.length) * 100)
+      })
     }
 
     setUploading(false)
