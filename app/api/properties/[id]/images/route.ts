@@ -1,6 +1,10 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+// Increase timeout for image uploads
+export const runtime = 'nodejs'
+export const maxDuration = 60 // 60 seconds
+
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -44,18 +48,14 @@ export async function POST(
       )
     }
 
-    // Upload images to Supabase Storage and create records
-    const uploadedImages: any[] = []
-    const errors: any[] = []
-
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i]
+    // Upload images to Supabase Storage in parallel for better performance
+    const uploadPromises = files.map(async (file, i) => {
       const fileExt = file.name.split('.').pop()
-      const fileName = `${propertyId}/${Date.now()}-${i}.${fileExt}`
+      const fileName = `${propertyId}/${Date.now()}-${Math.random().toString(36).substring(7)}-${i}.${fileExt}`
 
       try {
         // Upload to Supabase Storage
-        const { data: uploadData, error: uploadError } = await supabase.storage
+        const { error: uploadError } = await supabase.storage
           .from('property-images')
           .upload(fileName, file, {
             contentType: file.type,
@@ -84,12 +84,18 @@ export async function POST(
 
         if (dbError) throw dbError
 
-        uploadedImages.push(imageRecord)
+        return { success: true, data: imageRecord }
       } catch (error: any) {
         console.error(`Error uploading image ${i}:`, error)
-        errors.push({ index: i, filename: file.name, error: error.message })
+        return { success: false, index: i, filename: file.name, error: error.message }
       }
-    }
+    })
+
+    // Wait for all uploads to complete
+    const results = await Promise.all(uploadPromises)
+
+    const uploadedImages = results.filter(r => r.success).map(r => r.data)
+    const errors = results.filter(r => !r.success)
 
     if (errors.length > 0 && uploadedImages.length === 0) {
       return NextResponse.json(
