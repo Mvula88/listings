@@ -109,14 +109,17 @@ export function OfferCard({ offer, role }: OfferCardProps) {
     const result = await acceptOffer(offer.id)
     if (result.success) {
       toast.success('Offer accepted! Transaction has been initiated.')
-      router.refresh()
+      // Redirect immediately to the transaction select-lawyers page
       if (result.data?.transactionId) {
         router.push(`/transactions/${result.data.transactionId}/select-lawyers`)
+      } else {
+        // Fallback: go to transactions list if no ID returned
+        router.push('/transactions')
       }
     } else {
       toast.error(result.error || 'Failed to accept offer')
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const handleReject = async () => {
@@ -156,14 +159,17 @@ export function OfferCard({ offer, role }: OfferCardProps) {
     const result = await acceptCounterOffer(offer.id)
     if (result.success) {
       toast.success('Counter offer accepted! Transaction has been initiated.')
-      router.refresh()
+      // Redirect immediately to the transaction select-lawyers page
       if (result.data?.transactionId) {
         router.push(`/transactions/${result.data.transactionId}/select-lawyers`)
+      } else {
+        // Fallback: go to transactions list if no ID returned
+        router.push('/transactions')
       }
     } else {
       toast.error(result.error || 'Failed to accept counter offer')
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   const handleWithdraw = async () => {
@@ -323,12 +329,44 @@ export function OfferCard({ offer, role }: OfferCardProps) {
                 </div>
               </div>
 
+              {/* Accepted Offer Success Banner */}
+              {offer.status === 'accepted' && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 space-y-3">
+                  <div className="flex items-center gap-2 text-green-800">
+                    <CheckCircle className="h-5 w-5" />
+                    <span className="font-semibold">Offer Accepted!</span>
+                  </div>
+                  <p className="text-sm text-green-700">
+                    {role === 'seller'
+                      ? "You've accepted this offer. The next step is to select a lawyer to handle the transaction."
+                      : "Great news! Your offer was accepted. Please select a lawyer to proceed with the transaction."
+                    }
+                  </p>
+                  {offer.transaction?.id ? (
+                    <Button asChild className="w-full bg-green-600 hover:bg-green-700">
+                      <Link href={`/transactions/${offer.transaction.id}/select-lawyers`}>
+                        Continue to Select Lawyer
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Link>
+                    </Button>
+                  ) : (
+                    <Button asChild className="w-full">
+                      <Link href="/transactions">
+                        View My Transactions
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+              )}
+
               {/* Actions */}
               <div className="flex flex-wrap gap-2 pt-2 border-t">
                 {/* Seller Actions */}
                 {role === 'seller' && offer.status === 'pending' && (
                   <>
                     <Button onClick={handleAccept} disabled={loading}>
+                      {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                       <CheckCircle className="h-4 w-4 mr-2" />
                       Accept
                     </Button>
@@ -359,16 +397,6 @@ export function OfferCard({ offer, role }: OfferCardProps) {
                 {role === 'buyer' && offer.status === 'pending' && (
                   <Button variant="outline" onClick={() => setShowWithdrawDialog(true)} disabled={loading}>
                     Withdraw Offer
-                  </Button>
-                )}
-
-                {/* Transaction Link */}
-                {offer.status === 'accepted' && offer.transaction?.id && (
-                  <Button asChild>
-                    <Link href={`/transactions/${offer.transaction.id}`}>
-                      Go to Transaction
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Link>
                   </Button>
                 )}
 
