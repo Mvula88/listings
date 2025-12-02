@@ -460,7 +460,7 @@ export async function deletePropertyImage(propertyId: string, imageId: string): 
     .select('url')
     .eq('id', imageId)
     .eq('property_id', propertyId)
-    .single()
+    .single() as { data: { url: string } | null; error: any }
 
   if (!image) {
     return { success: false, error: 'Image not found' }
