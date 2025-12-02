@@ -56,8 +56,8 @@ export function useImageUpload(): UseImageUploadReturn {
       }
     }
 
-    // Upload in batches of 3 for faster performance while staying under timeout
-    const BATCH_SIZE = 3
+    // Upload in batches of 5 for faster performance (images are compressed on client)
+    const BATCH_SIZE = 5
     let completed = 0
 
     for (let i = 0; i < files.length; i += BATCH_SIZE) {

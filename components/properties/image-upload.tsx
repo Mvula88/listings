@@ -21,6 +21,59 @@ interface ImagePreview {
   error?: string
 }
 
+// Compress image on client side before upload
+async function compressImage(file: File, maxWidth = 1920, quality = 0.85): Promise<File> {
+  return new Promise((resolve) => {
+    // If file is already small (under 500KB), don't compress
+    if (file.size < 500 * 1024) {
+      resolve(file)
+      return
+    }
+
+    const img = document.createElement('img')
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+
+    img.onload = () => {
+      // Calculate new dimensions (maintain aspect ratio)
+      let { width, height } = img
+      if (width > maxWidth) {
+        height = (height * maxWidth) / width
+        width = maxWidth
+      }
+
+      canvas.width = width
+      canvas.height = height
+
+      // Draw and compress
+      ctx?.drawImage(img, 0, 0, width, height)
+
+      canvas.toBlob(
+        (blob) => {
+          if (blob) {
+            // Create new file with compressed data
+            const compressedFile = new File([blob], file.name, {
+              type: 'image/jpeg',
+              lastModified: Date.now(),
+            })
+            resolve(compressedFile)
+          } else {
+            resolve(file) // Fallback to original
+          }
+        },
+        'image/jpeg',
+        quality
+      )
+
+      // Clean up
+      URL.revokeObjectURL(img.src)
+    }
+
+    img.onerror = () => resolve(file) // Fallback to original on error
+    img.src = URL.createObjectURL(file)
+  })
+}
+
 export function ImageUpload({
   maxImages = 15,
   maxSizeMB = 10,
@@ -30,6 +83,7 @@ export function ImageUpload({
   const [images, setImages] = useState<ImagePreview[]>([])
   const [dragActive, setDragActive] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [compressing, setCompressing] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   // Notify parent when images change
@@ -52,7 +106,7 @@ export function ImageUpload({
     return null
   }
 
-  const handleFiles = useCallback((files: FileList | null) => {
+  const handleFiles = useCallback(async (files: FileList | null) => {
     if (!files) return
 
     setError(null)
@@ -75,13 +129,27 @@ export function ImageUpload({
       validFiles.push(file)
     }
 
-    // Create previews
-    const newImages: ImagePreview[] = validFiles.map(file => ({
-      file,
-      preview: URL.createObjectURL(file)
-    }))
+    // Compress images before adding (shows loading state)
+    setCompressing(true)
 
-    setImages(prev => [...prev, ...newImages])
+    try {
+      // Compress all images in parallel
+      const compressedFiles = await Promise.all(
+        validFiles.map(file => compressImage(file))
+      )
+
+      // Create previews with compressed files
+      const newImages: ImagePreview[] = compressedFiles.map(file => ({
+        file,
+        preview: URL.createObjectURL(file)
+      }))
+
+      setImages(prev => [...prev, ...newImages])
+    } catch (err) {
+      setError('Failed to process images')
+    } finally {
+      setCompressing(false)
+    }
   }, [images.length, maxImages, maxSizeMB])
 
   const handleDrag = useCallback((e: React.DragEvent) => {
@@ -145,17 +213,25 @@ export function ImageUpload({
 
         <div className="flex flex-col items-center gap-2">
           <div className="p-4 rounded-full bg-primary/10">
-            <Upload className="h-8 w-8 text-primary" />
+            {compressing ? (
+              <Loader2 className="h-8 w-8 text-primary animate-spin" />
+            ) : (
+              <Upload className="h-8 w-8 text-primary" />
+            )}
           </div>
           <div>
             <p className="text-lg font-medium">
-              {images.length >= maxImages
+              {compressing
+                ? 'Compressing images...'
+                : images.length >= maxImages
                 ? `Maximum ${maxImages} images reached`
                 : 'Drop images here or click to browse'
               }
             </p>
             <p className="text-sm text-muted-foreground mt-1">
               PNG, JPG, WEBP up to {maxSizeMB}MB • {images.length}/{maxImages} images
+              <br />
+              <span className="text-green-600">Images auto-compressed for faster upload</span>
             </p>
           </div>
         </div>
