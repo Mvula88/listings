@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { ReviewActions } from '@/components/moderator/review-actions'
+import { ImageManagement } from '@/components/moderator/image-management'
+import { EditPropertyForm } from '@/components/moderator/edit-property-form'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -40,8 +42,13 @@ export default async function ModeratorListingDetailPage({ params }: Props) {
   const property = propertyResult.property
   const reviews = historyResult.reviews || []
 
-  const getStatusBadge = (status: string | null) => {
-    switch (status) {
+  const getStatusBadge = () => {
+    // Check if listing is awaiting first review
+    if (property.status === 'pending_review') {
+      return <Badge className="bg-blue-500/10 text-blue-600 text-sm">Awaiting First Review</Badge>
+    }
+
+    switch (property.moderation_status) {
       case 'approved':
         return <Badge className="bg-green-500/10 text-green-600 text-sm">Approved</Badge>
       case 'rejected':
@@ -81,7 +88,7 @@ export default async function ModeratorListingDetailPage({ params }: Props) {
         <div className="flex-1">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold">{property.title}</h1>
-            {getStatusBadge(property.moderation_status)}
+            {getStatusBadge()}
           </div>
           <p className="text-muted-foreground">Review this listing</p>
         </div>
@@ -121,34 +128,14 @@ export default async function ModeratorListingDetailPage({ params }: Props) {
             <CardHeader>
               <CardTitle>Property Images</CardTitle>
               <CardDescription>
-                Review images for inappropriate content
+                Review images for inappropriate content. Hover over images to delete them.
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {property.property_images?.length > 0 ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {property.property_images
-                    .sort((a: any, b: any) => a.order_index - b.order_index)
-                    .map((image: any, index: number) => (
-                      <div
-                        key={image.id}
-                        className="relative aspect-video rounded-lg overflow-hidden border"
-                      >
-                        <Image
-                          src={image.url}
-                          alt={image.alt_text || `Image ${index + 1}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
-                </div>
-              ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <Building className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                  <p>No images uploaded</p>
-                </div>
-              )}
+              <ImageManagement
+                propertyId={property.id}
+                images={property.property_images || []}
+              />
             </CardContent>
           </Card>
 
@@ -225,11 +212,16 @@ export default async function ModeratorListingDetailPage({ params }: Props) {
                 Take action on this listing
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-4">
               <ReviewActions
                 propertyId={property.id}
                 currentStatus={property.moderation_status}
               />
+
+              {/* Edit Listing Button */}
+              <div className="pt-4 border-t">
+                <EditPropertyForm property={property} />
+              </div>
             </CardContent>
           </Card>
 

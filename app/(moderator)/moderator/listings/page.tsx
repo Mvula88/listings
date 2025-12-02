@@ -33,8 +33,13 @@ export default async function ModeratorListingsPage({ searchParams }: Props) {
     { value: 'flagged', label: 'Flagged', icon: <Flag className="h-4 w-4" /> },
   ]
 
-  const getStatusBadge = (status: string | null) => {
-    switch (status) {
+  const getStatusBadge = (listing: any) => {
+    // Check if listing is awaiting first review (pending_review status)
+    if (listing.status === 'pending_review') {
+      return <Badge className="bg-blue-500/10 text-blue-600">Awaiting Review</Badge>
+    }
+
+    switch (listing.moderation_status) {
       case 'approved':
         return <Badge className="bg-green-500/10 text-green-600">Approved</Badge>
       case 'rejected':
@@ -115,7 +120,7 @@ export default async function ModeratorListingsPage({ searchParams }: Props) {
                   </div>
                 )}
                 <div className="absolute top-2 right-2">
-                  {getStatusBadge(listing.moderation_status)}
+                  {getStatusBadge(listing)}
                 </div>
               </div>
 

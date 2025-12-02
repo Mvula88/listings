@@ -61,10 +61,11 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
     .eq('id', propertyId)
     .single()
 
-  // Update property moderation status
+  // Update property moderation status AND set status to active (makes it visible)
   const { error: updateError } = await (supabase
     .from('properties') as any)
     .update({
+      status: 'active', // Make listing visible to public
       moderation_status: 'approved',
       moderation_notes: null,
       moderated_by: access.userId,
@@ -311,14 +312,15 @@ export async function getListingsForReview(filter: ModerationFilter = 'all') {
         currency_symbol
       )
     `)
-    .eq('status', 'active')
+    // Include both active and pending_review status properties
+    .in('status', ['active', 'pending_review'])
     .order('created_at', { ascending: false })
 
   // Apply filter
   if (filter !== 'all') {
     if (filter === 'pending') {
-      // Pending = approved but not yet reviewed OR newly listed
-      query = query.or('moderation_status.is.null,moderation_status.eq.pending')
+      // Pending = newly listed awaiting first review OR status is pending_review
+      query = query.or('moderation_status.is.null,moderation_status.eq.pending,status.eq.pending_review')
     } else {
       query = query.eq('moderation_status', filter)
     }
@@ -439,6 +441,123 @@ export async function getMyReviews(limit = 50) {
   }
 
   return { reviews: reviews || [] }
+}
+
+/**
+ * Delete a specific image from a property (moderator action)
+ */
+export async function deletePropertyImage(propertyId: string, imageId: string): Promise<ActionResult> {
+  const access = await checkModeratorAccess()
+  if ('error' in access) {
+    return { success: false, error: access.error }
+  }
+
+  const supabase = await createClient()
+
+  // Get image to delete from storage
+  const { data: image } = await supabase
+    .from('property_images')
+    .select('url')
+    .eq('id', imageId)
+    .eq('property_id', propertyId)
+    .single()
+
+  if (!image) {
+    return { success: false, error: 'Image not found' }
+  }
+
+  // Delete from storage (best effort)
+  try {
+    const urlObj = new URL(image.url)
+    const pathParts = urlObj.pathname.split('/')
+    const filePath = pathParts.slice(-2).join('/')
+    await supabase.storage.from('property-images').remove([filePath])
+  } catch (e) {
+    console.error('Storage delete error:', e)
+  }
+
+  // Delete from database
+  const { error: deleteError } = await supabase
+    .from('property_images')
+    .delete()
+    .eq('id', imageId)
+    .eq('property_id', propertyId)
+
+  if (deleteError) {
+    return { success: false, error: 'Failed to delete image' }
+  }
+
+  // Log the action
+  await (supabase.from('property_reviews') as any).insert({
+    property_id: propertyId,
+    reviewer_id: access.userId,
+    action: 'image_deleted',
+    notes: `Deleted image ${imageId}`
+  })
+
+  revalidatePath(`/moderator/listings/${propertyId}`)
+
+  return { success: true }
+}
+
+/**
+ * Update property details (moderator action)
+ */
+export async function updatePropertyAsModerator(
+  propertyId: string,
+  updates: {
+    title?: string
+    description?: string
+    price?: number
+    bedrooms?: number
+    bathrooms?: number
+    square_meters?: number
+    city?: string
+    province?: string
+    address_line1?: string
+    property_type?: string
+  }
+): Promise<ActionResult> {
+  const access = await checkModeratorAccess()
+  if ('error' in access) {
+    return { success: false, error: access.error }
+  }
+
+  const supabase = await createClient()
+
+  // Get original property for comparison
+  const { data: original } = await supabase
+    .from('properties')
+    .select('title')
+    .eq('id', propertyId)
+    .single()
+
+  // Update property
+  const { error: updateError } = await (supabase
+    .from('properties') as any)
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', propertyId)
+
+  if (updateError) {
+    return { success: false, error: 'Failed to update property' }
+  }
+
+  // Log the changes
+  const changedFields = Object.keys(updates).join(', ')
+  await (supabase.from('property_reviews') as any).insert({
+    property_id: propertyId,
+    reviewer_id: access.userId,
+    action: 'edited',
+    notes: `Modified fields: ${changedFields}`
+  })
+
+  revalidatePath(`/moderator/listings/${propertyId}`)
+  revalidatePath('/moderator/listings')
+
+  return { success: true }
 }
 
 /**

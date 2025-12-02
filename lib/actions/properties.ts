@@ -79,7 +79,7 @@ export async function createProperty(data: PropertyData): Promise<CreateProperty
       .insert({
         ...validatedData,
         seller_id: user.id,
-        status: 'active', // Set to active for now
+        status: 'pending_review', // Requires moderator approval before going live
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
