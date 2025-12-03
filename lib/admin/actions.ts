@@ -7,7 +7,6 @@
 
 import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import { logAdminAction, createAdminNotification } from '@/lib/supabase/admin-middleware'
 
 // ============================================================================
@@ -71,11 +70,11 @@ export async function suspendUser(
   if (!admin) throw new Error('Not authenticated')
 
   // Verify admin has permission (check admin_profiles)
-  const { data: adminProfile } = await supabase
-    .from('admin_profiles')
+  const { data: adminProfile } = await (supabase
+    .from('admin_profiles') as any)
     .select('role')
     .eq('user_id', admin.id)
-    .single()
+    .single() as { data: { role: string } | null }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
     throw new Error('Not authorized to suspend users')
@@ -145,11 +144,11 @@ export async function unsuspendUser(userId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Verify admin has permission
-  const { data: adminProfile } = await supabase
-    .from('admin_profiles')
+  const { data: adminProfile } = await (supabase
+    .from('admin_profiles') as any)
     .select('role')
     .eq('user_id', admin.id)
-    .single()
+    .single() as { data: { role: string } | null }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
     throw new Error('Not authorized to unsuspend users')
@@ -208,11 +207,11 @@ export async function deleteUser(userId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Verify admin has permission
-  const { data: adminProfile } = await supabase
-    .from('admin_profiles')
+  const { data: adminProfile } = await (supabase
+    .from('admin_profiles') as any)
     .select('role')
     .eq('user_id', admin.id)
-    .single()
+    .single() as { data: { role: string } | null }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
     throw new Error('Not authorized to delete users')
