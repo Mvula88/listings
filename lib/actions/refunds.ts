@@ -242,7 +242,7 @@ export async function processRefund(
         id: refund.id,
         amount: refundAmount,
         currency: payment.currency,
-        status: refund.status,
+        status: refund.status || 'pending',
         isPartial: isPartialRefund,
       },
     }
