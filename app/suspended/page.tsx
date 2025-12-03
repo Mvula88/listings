@@ -30,7 +30,7 @@ export default function SuspendedPage() {
         .from('profiles')
         .select('is_suspended')
         .eq('id', user.id)
-        .single()
+        .single() as { data: { is_suspended: boolean } | null }
 
       // If user is not suspended, redirect to dashboard
       if (!profile?.is_suspended) {
