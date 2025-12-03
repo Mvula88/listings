@@ -387,10 +387,10 @@ export async function getMyViewings(role: 'buyer' | 'seller', status?: ViewingSt
             .from('properties')
             .select('id, title, price, city, province, country_id')
             .eq('id', viewing.property_id)
-            .single()
+            .single() as { data: { id: string; title: string; price: number; city: string; province: string; country_id: string | null } | null }
 
           if (property) {
-            viewing.property = property
+            viewing.property = { ...property, property_images: [] as any[], country: null as any }
 
             // Get property image
             const { data: images } = await supabase
