@@ -5,7 +5,7 @@
 
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { logAdminAction, createAdminNotification } from '@/lib/supabase/admin-middleware'
@@ -64,13 +64,25 @@ export async function suspendUser(
   expiresAt?: string
 ) {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   // Get admin user
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
+  // Verify admin has permission (check admin_profiles)
+  const { data: adminProfile } = await supabase
+    .from('admin_profiles')
+    .select('role')
+    .eq('user_id', admin.id)
+    .single()
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    throw new Error('Not authorized to suspend users')
+  }
+
   // Get user details before suspension
-  const { data: userBefore } = await supabase
+  const { data: userBefore } = await serviceClient
     .from('profiles')
     .select('*')
     .eq('id', userId)
@@ -78,7 +90,7 @@ export async function suspendUser(
 
   // Try to create suspension record (optional - table may not exist)
   try {
-    await (supabase
+    await (serviceClient
       .from('user_suspensions') as any)
       .insert({
         user_id: userId,
@@ -92,16 +104,18 @@ export async function suspendUser(
     console.warn('Could not create suspension record:', err)
   }
 
-  // Update profile - this is required
-  const { error: updateError } = await (supabase
+  // Update profile using service client (bypasses RLS)
+  const { error: updateError } = await (serviceClient
     .from('profiles') as any)
     .update({
       is_suspended: true,
-      suspended_until: expiresAt || null,
     })
     .eq('id', userId)
 
-  if (updateError) throw updateError
+  if (updateError) {
+    console.error('Failed to suspend user:', updateError)
+    throw new Error(`Failed to suspend user: ${updateError.message}`)
+  }
 
   // Log action (optional)
   try {
@@ -125,13 +139,25 @@ export async function suspendUser(
 
 export async function unsuspendUser(userId: string) {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
+  // Verify admin has permission
+  const { data: adminProfile } = await supabase
+    .from('admin_profiles')
+    .select('role')
+    .eq('user_id', admin.id)
+    .single()
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    throw new Error('Not authorized to unsuspend users')
+  }
+
   // Try to deactivate suspension records (optional - table may not exist)
   try {
-    await (supabase
+    await (serviceClient
       .from('user_suspensions') as any)
       .update({
         is_active: false,
@@ -144,16 +170,18 @@ export async function unsuspendUser(userId: string) {
     console.warn('Could not update suspension records:', err)
   }
 
-  // Update profile - this is required
-  const { error } = await (supabase
+  // Update profile using service client (bypasses RLS)
+  const { error } = await (serviceClient
     .from('profiles') as any)
     .update({
       is_suspended: false,
-      suspended_until: null,
     })
     .eq('id', userId)
 
-  if (error) throw error
+  if (error) {
+    console.error('Failed to unsuspend user:', error)
+    throw new Error(`Failed to unsuspend user: ${error.message}`)
+  }
 
   // Log action (optional)
   try {
@@ -174,12 +202,24 @@ export async function unsuspendUser(userId: string) {
 
 export async function deleteUser(userId: string) {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
+  // Verify admin has permission
+  const { data: adminProfile } = await supabase
+    .from('admin_profiles')
+    .select('role')
+    .eq('user_id', admin.id)
+    .single()
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    throw new Error('Not authorized to delete users')
+  }
+
   // Get user data before deletion
-  const { data: user } = await supabase
+  const { data: user } = await serviceClient
     .from('profiles')
     .select('*')
     .eq('id', userId)
@@ -188,17 +228,18 @@ export async function deleteUser(userId: string) {
   // Soft delete - mark as deleted rather than hard delete
   // This preserves data integrity with foreign keys
   // Only update columns that are guaranteed to exist
-  const { error } = await (supabase
+  const { error } = await (serviceClient
     .from('profiles') as any)
     .update({
       is_suspended: true,
       full_name: '[Deleted User]',
-      phone: null,
-      avatar_url: null,
     })
     .eq('id', userId)
 
-  if (error) throw error
+  if (error) {
+    console.error('Failed to delete user:', error)
+    throw new Error(`Failed to delete user: ${error.message}`)
+  }
 
   // Log action (optional)
   try {
