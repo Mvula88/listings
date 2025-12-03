@@ -362,54 +362,78 @@ export async function getMyViewings(role: 'buyer' | 'seller', status?: ViewingSt
   }
 
   try {
-    // Simple query first - get viewings with basic property and profile data
-    let query = (supabase
+    // Very simple query - just get the viewings first
+    const { data: viewings, error } = await (supabase
       .from('property_viewings') as any)
-      .select(`
-        *,
-        property:properties(id, title, price, city, province, country_id),
-        buyer:profiles!buyer_id(id, full_name, email, avatar_url),
-        seller:profiles!seller_id(id, full_name, email, avatar_url)
-      `)
+      .select('*')
       .eq(role === 'buyer' ? 'buyer_id' : 'seller_id', user.id)
       .order('requested_date', { ascending: true })
-
-    if (status) {
-      query = query.eq('status', status)
-    }
-
-    const { data: viewings, error } = await query
 
     if (error) {
       console.error('Error fetching viewings:', error)
       return { viewings: [], error: 'Failed to fetch viewings' }
     }
 
-    // Enrich viewings with property images and currency
-    const enrichedViewings = await Promise.all(
-      (viewings || []).map(async (viewing: any) => {
-        // Get property images
-        if (viewing.property?.id) {
-          const { data: images } = await supabase
-            .from('property_images')
-            .select('url, order_index')
-            .eq('property_id', viewing.property.id)
-            .order('order_index', { ascending: true })
-            .limit(1)
+    if (!viewings || viewings.length === 0) {
+      return { viewings: [] }
+    }
 
-          viewing.property.property_images = images || []
+    // Enrich each viewing with related data
+    const enrichedViewings = await Promise.all(
+      viewings.map(async (viewing: any) => {
+        // Get property
+        if (viewing.property_id) {
+          const { data: property } = await supabase
+            .from('properties')
+            .select('id, title, price, city, province, country_id')
+            .eq('id', viewing.property_id)
+            .single()
+
+          if (property) {
+            viewing.property = property
+
+            // Get property image
+            const { data: images } = await supabase
+              .from('property_images')
+              .select('url, order_index')
+              .eq('property_id', property.id)
+              .order('order_index', { ascending: true })
+              .limit(1)
+
+            viewing.property.property_images = images || []
+
+            // Get currency
+            if (property.country_id) {
+              const { data: country } = await supabase
+                .from('countries')
+                .select('currency_symbol')
+                .eq('id', property.country_id)
+                .single()
+              if (country) {
+                viewing.property.country = country
+              }
+            }
+          }
         }
 
-        // Get currency symbol
-        if (viewing.property?.country_id) {
-          const { data: country } = await supabase
-            .from('countries')
-            .select('currency_symbol')
-            .eq('id', viewing.property.country_id)
+        // Get buyer profile
+        if (viewing.buyer_id) {
+          const { data: buyer } = await supabase
+            .from('profiles')
+            .select('id, full_name, email, avatar_url')
+            .eq('id', viewing.buyer_id)
             .single()
-          if (country) {
-            viewing.property.country = country
-          }
+          viewing.buyer = buyer
+        }
+
+        // Get seller profile
+        if (viewing.seller_id) {
+          const { data: seller } = await supabase
+            .from('profiles')
+            .select('id, full_name, email, avatar_url')
+            .eq('id', viewing.seller_id)
+            .single()
+          viewing.seller = seller
         }
 
         return viewing
