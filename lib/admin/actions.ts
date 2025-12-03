@@ -187,15 +187,14 @@ export async function deleteUser(userId: string) {
 
   // Soft delete - mark as deleted rather than hard delete
   // This preserves data integrity with foreign keys
+  // Only update columns that are guaranteed to exist
   const { error } = await (supabase
     .from('profiles') as any)
     .update({
       is_suspended: true,
       full_name: '[Deleted User]',
-      email: `deleted_${userId}@deleted.local`,
       phone: null,
       avatar_url: null,
-      bio: null,
     })
     .eq('id', userId)
 
