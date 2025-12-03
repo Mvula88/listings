@@ -1,12 +1,54 @@
-export function formatPrice(amount: number, currency: string = 'ZAR'): string {
-  const formatter = new Intl.NumberFormat('en-ZA', {
-    style: 'currency',
-    currency: currency,
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  })
-  
-  return formatter.format(amount)
+// Map currency symbols to ISO currency codes
+const currencySymbolToCode: Record<string, string> = {
+  'R': 'ZAR',
+  '$': 'USD',
+  '€': 'EUR',
+  '£': 'GBP',
+  '¥': 'JPY',
+  'N$': 'NAD',
+  'P': 'BWP',
+  'K': 'ZMW',
+  'MT': 'MZN',
+}
+
+export function formatPrice(amount: number | null | undefined, currencyOrSymbol: string = 'ZAR'): string {
+  // Handle null/undefined amount
+  if (amount == null) {
+    return 'Price not available'
+  }
+
+  // Convert symbol to ISO code if needed
+  let currency = currencyOrSymbol
+  if (currencySymbolToCode[currencyOrSymbol]) {
+    currency = currencySymbolToCode[currencyOrSymbol]
+  }
+
+  // Validate it's a proper 3-letter ISO code
+  if (currency.length !== 3) {
+    // Fallback to manual formatting with the symbol
+    const formatted = new Intl.NumberFormat('en-ZA', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount)
+    return `${currencyOrSymbol}${formatted}`
+  }
+
+  try {
+    const formatter = new Intl.NumberFormat('en-ZA', {
+      style: 'currency',
+      currency: currency,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })
+    return formatter.format(amount)
+  } catch {
+    // Fallback if currency code is invalid
+    const formatted = new Intl.NumberFormat('en-ZA', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(amount)
+    return `${currencyOrSymbol}${formatted}`
+  }
 }
 
 export function formatDate(date: string | Date): string {
