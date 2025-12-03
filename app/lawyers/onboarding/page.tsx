@@ -122,14 +122,14 @@ export default function LawyerOnboardingPage() {
     }))
   }
 
-  // Upload file to Supabase Storage
+  // Upload file to Supabase Storage - returns file path (not URL) for secure storage
   async function uploadDocument(file: File, userId: string, docType: string): Promise<string | null> {
     const fileExt = file.name.split('.').pop()
-    const fileName = `${userId}/${docType}_${Date.now()}.${fileExt}`
+    const filePath = `${userId}/${docType}_${Date.now()}.${fileExt}`
 
     const { data, error } = await supabase.storage
       .from('lawyer-documents')
-      .upload(fileName, file, {
+      .upload(filePath, file, {
         cacheControl: '3600',
         upsert: false
       })
@@ -139,12 +139,8 @@ export default function LawyerOnboardingPage() {
       return null
     }
 
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('lawyer-documents')
-      .getPublicUrl(fileName)
-
-    return urlData?.publicUrl || null
+    // Return file path (not public URL) - signed URLs will be generated on-demand
+    return filePath
   }
 
   async function handleSubmit() {

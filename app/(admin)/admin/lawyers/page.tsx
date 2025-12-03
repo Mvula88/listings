@@ -45,6 +45,13 @@ interface Lawyer {
   } | null
 }
 
+// Extended type with signed URLs for display
+interface LawyerWithSignedUrls extends Lawyer {
+  practicing_certificate_signed_url?: string | null
+  id_document_signed_url?: string | null
+  insurance_certificate_signed_url?: string | null
+}
+
 export default async function AdminLawyersPage({
   searchParams,
 }: {
@@ -119,6 +126,38 @@ export default async function AdminLawyersPage({
         l.profile?.email?.toLowerCase().includes(search) ||
         l.registration_number?.toLowerCase().includes(search) ||
         l.city?.toLowerCase().includes(search)
+    )
+  }
+
+  // Generate signed URLs for document viewing (1 hour expiry)
+  async function getSignedUrl(filePath: string | null): Promise<string | null> {
+    if (!filePath) return null
+    // Check if it's already a full URL (legacy data) vs file path
+    if (filePath.startsWith('http')) {
+      // Legacy full URL - try to extract path
+      const match = filePath.match(/lawyer-documents\/(.+)$/)
+      if (match) {
+        filePath = match[1]
+      } else {
+        return filePath // Return as-is if can't parse
+      }
+    }
+    const { data, error } = await supabase.storage
+      .from('lawyer-documents')
+      .createSignedUrl(filePath, 3600) // 1 hour expiry
+    return data?.signedUrl || null
+  }
+
+  // Add signed URLs to lawyers
+  let lawyersWithSignedUrls: LawyerWithSignedUrls[] = []
+  if (filteredLawyers) {
+    lawyersWithSignedUrls = await Promise.all(
+      filteredLawyers.map(async (lawyer) => ({
+        ...lawyer,
+        practicing_certificate_signed_url: await getSignedUrl(lawyer.practicing_certificate_url),
+        id_document_signed_url: await getSignedUrl(lawyer.id_document_url),
+        insurance_certificate_signed_url: await getSignedUrl(lawyer.insurance_certificate_url),
+      }))
     )
   }
 
@@ -236,7 +275,7 @@ export default async function AdminLawyersPage({
                   : 'All Lawyers'}
             </CardTitle>
             <CardDescription>
-              {filteredLawyers?.length || 0} lawyer(s) found
+              {lawyersWithSignedUrls?.length || 0} lawyer(s) found
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -244,7 +283,7 @@ export default async function AdminLawyersPage({
               <div className="text-center py-8 text-red-500">
                 Error loading lawyers: {error.message}
               </div>
-            ) : !filteredLawyers || filteredLawyers.length === 0 ? (
+            ) : !lawyersWithSignedUrls || lawyersWithSignedUrls.length === 0 ? (
               <div className="text-center py-12">
                 <Scale className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-semibold">No lawyers found</h3>
@@ -256,7 +295,7 @@ export default async function AdminLawyersPage({
               </div>
             ) : (
               <div className="space-y-4">
-                {filteredLawyers.map((lawyer) => (
+                {lawyersWithSignedUrls.map((lawyer) => (
                   <div
                     key={lawyer.id}
                     className={`border rounded-lg p-4 ${
@@ -342,16 +381,16 @@ export default async function AdminLawyersPage({
                         )}
 
                         {/* Verification Documents */}
-                        {(lawyer.practicing_certificate_url || lawyer.id_document_url || lawyer.insurance_certificate_url) && (
+                        {(lawyer.practicing_certificate_signed_url || lawyer.id_document_signed_url || lawyer.insurance_certificate_signed_url) && (
                           <div className="space-y-2">
                             <p className="text-sm font-medium flex items-center gap-2">
                               <FileText className="h-4 w-4" />
                               Verification Documents
                             </p>
                             <div className="flex flex-wrap gap-2">
-                              {lawyer.practicing_certificate_url && (
+                              {lawyer.practicing_certificate_signed_url && (
                                 <a
-                                  href={lawyer.practicing_certificate_url}
+                                  href={lawyer.practicing_certificate_signed_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
@@ -361,9 +400,9 @@ export default async function AdminLawyersPage({
                                   <ExternalLink className="h-3 w-3" />
                                 </a>
                               )}
-                              {lawyer.id_document_url && (
+                              {lawyer.id_document_signed_url && (
                                 <a
-                                  href={lawyer.id_document_url}
+                                  href={lawyer.id_document_signed_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
@@ -373,9 +412,9 @@ export default async function AdminLawyersPage({
                                   <ExternalLink className="h-3 w-3" />
                                 </a>
                               )}
-                              {lawyer.insurance_certificate_url && (
+                              {lawyer.insurance_certificate_signed_url && (
                                 <a
-                                  href={lawyer.insurance_certificate_url}
+                                  href={lawyer.insurance_certificate_signed_url}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition-colors"
