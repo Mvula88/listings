@@ -361,33 +361,54 @@ export async function getMyViewings(role: 'buyer' | 'seller', status?: ViewingSt
     return { viewings: [], error: 'Not authenticated' }
   }
 
-  let query = supabase
-    .from('property_viewings')
-    .select(`
-      *,
-      property:properties(
-        id, title, price, city, province,
-        property_images(url, order_index),
-        country:countries(currency_symbol)
-      ),
-      buyer:profiles!buyer_id(id, full_name, email, avatar_url),
-      seller:profiles!seller_id(id, full_name, email, avatar_url)
-    `)
-    .eq(role === 'buyer' ? 'buyer_id' : 'seller_id', user.id)
-    .order('requested_date', { ascending: true })
+  try {
+    let query = (supabase
+      .from('property_viewings') as any)
+      .select(`
+        *,
+        property:properties(
+          id, title, price, city, province, country_id,
+          property_images(url, order_index)
+        ),
+        buyer:profiles!buyer_id(id, full_name, email, avatar_url),
+        seller:profiles!seller_id(id, full_name, email, avatar_url)
+      `)
+      .eq(role === 'buyer' ? 'buyer_id' : 'seller_id', user.id)
+      .order('requested_date', { ascending: true })
 
-  if (status) {
-    query = query.eq('status', status)
-  }
+    if (status) {
+      query = query.eq('status', status)
+    }
 
-  const { data: viewings, error } = await query
+    const { data: viewings, error } = await query
 
-  if (error) {
-    console.error('Error fetching viewings:', error)
+    if (error) {
+      console.error('Error fetching viewings:', error)
+      return { viewings: [], error: 'Failed to fetch viewings' }
+    }
+
+    // Get currency symbols for properties if they have country_id
+    const viewingsWithCurrency = await Promise.all(
+      (viewings || []).map(async (viewing: any) => {
+        if (viewing.property?.country_id) {
+          const { data: country } = await supabase
+            .from('countries')
+            .select('currency_symbol')
+            .eq('id', viewing.property.country_id)
+            .single()
+          if (country) {
+            viewing.property.country = country
+          }
+        }
+        return viewing
+      })
+    )
+
+    return { viewings: viewingsWithCurrency }
+  } catch (err) {
+    console.error('Error in getMyViewings:', err)
     return { viewings: [], error: 'Failed to fetch viewings' }
   }
-
-  return { viewings: viewings || [] }
 }
 
 /**
