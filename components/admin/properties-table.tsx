@@ -238,7 +238,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
 
       {/* Table */}
       <div className="border rounded-lg overflow-x-auto">
-        <Table>
+        <Table className="min-w-[1000px]">
           <TableHeader>
             <TableRow>
               <TableHead className="w-[80px]">Image</TableHead>
