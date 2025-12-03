@@ -12,6 +12,8 @@ import {
   Phone,
   MapPin,
   Building,
+  FileText,
+  ExternalLink,
 } from 'lucide-react'
 import Link from 'next/link'
 import { FadeIn } from '@/components/ui/fade-in'
@@ -29,6 +31,10 @@ interface Lawyer {
   verified: boolean
   available: boolean
   created_at: string
+  practicing_certificate_url: string | null
+  id_document_url: string | null
+  insurance_certificate_url: string | null
+  verification_submitted_at: string | null
   profile: {
     full_name: string | null
     email: string
@@ -62,6 +68,10 @@ export default async function AdminLawyersPage({
       verified,
       available,
       created_at,
+      practicing_certificate_url,
+      id_document_url,
+      insurance_certificate_url,
+      verification_submitted_at,
       profile:profiles!lawyers_profile_id_fkey (
         full_name,
         email,
@@ -331,6 +341,61 @@ export default async function AdminLawyersPage({
                           </div>
                         )}
 
+                        {/* Verification Documents */}
+                        {(lawyer.practicing_certificate_url || lawyer.id_document_url || lawyer.insurance_certificate_url) && (
+                          <div className="space-y-2">
+                            <p className="text-sm font-medium flex items-center gap-2">
+                              <FileText className="h-4 w-4" />
+                              Verification Documents
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                              {lawyer.practicing_certificate_url && (
+                                <a
+                                  href={lawyer.practicing_certificate_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                                >
+                                  <FileText className="h-3 w-3" />
+                                  Practicing Certificate
+                                  <ExternalLink className="h-3 w-3" />
+                                </a>
+                              )}
+                              {lawyer.id_document_url && (
+                                <a
+                                  href={lawyer.id_document_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-md hover:bg-blue-200 transition-colors"
+                                >
+                                  <FileText className="h-3 w-3" />
+                                  ID Document
+                                  <ExternalLink className="h-3 w-3" />
+                                </a>
+                              )}
+                              {lawyer.insurance_certificate_url && (
+                                <a
+                                  href={lawyer.insurance_certificate_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-xs px-2 py-1 bg-green-100 text-green-700 rounded-md hover:bg-green-200 transition-colors"
+                                >
+                                  <FileText className="h-3 w-3" />
+                                  Insurance
+                                  <ExternalLink className="h-3 w-3" />
+                                </a>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* No Documents Warning */}
+                        {!lawyer.verified && !lawyer.practicing_certificate_url && !lawyer.id_document_url && (
+                          <div className="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded inline-block">
+                            No verification documents uploaded
+                          </div>
+                        )}
+
                         {/* Applied Date */}
                         <p className="text-xs text-muted-foreground">
                           Applied: {new Date(lawyer.created_at).toLocaleDateString('en-ZA', {
@@ -338,6 +403,13 @@ export default async function AdminLawyersPage({
                             month: 'long',
                             day: 'numeric',
                           })}
+                          {lawyer.verification_submitted_at && (
+                            <> | Documents submitted: {new Date(lawyer.verification_submitted_at).toLocaleDateString('en-ZA', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}</>
+                          )}
                         </p>
                       </div>
 
