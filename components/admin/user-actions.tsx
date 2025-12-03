@@ -21,8 +21,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { MoreHorizontal, Ban, CheckCircle, Trash2, Mail, Loader2 } from 'lucide-react'
-import { createClient } from '@/lib/supabase/client'
 import { useToast } from '@/lib/hooks/use-toast'
+import { suspendUser, unsuspendUser, deleteUser } from '@/lib/admin/actions'
 
 interface UserActionsProps {
   userId: string
@@ -38,24 +38,22 @@ export function UserActions({ userId, user }: UserActionsProps) {
   const [showSuspendDialog, setShowSuspendDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
   const { toast } = useToast()
 
   async function handleSuspend() {
     setLoading(true)
     try {
-      const newStatus = !user.is_suspended
-      const { error } = await (supabase as any)
-        .from('profiles')
-        .update({ is_suspended: newStatus })
-        .eq('id', userId)
-
-      if (error) throw error
-
-      toast.success(newStatus ? 'User suspended' : 'User unsuspended')
+      if (user.is_suspended) {
+        await unsuspendUser(userId)
+        toast.success('User unsuspended')
+      } else {
+        await suspendUser(userId, 'Suspended by admin')
+        toast.success('User suspended')
+      }
       router.refresh()
     } catch (error: any) {
-      toast.error('Failed: ' + error.message)
+      console.error('Suspend error:', error)
+      toast.error('Failed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
       setShowSuspendDialog(false)
@@ -65,23 +63,12 @@ export function UserActions({ userId, user }: UserActionsProps) {
   async function handleDelete() {
     setLoading(true)
     try {
-      // Note: This soft-deletes by updating the profile
-      // Full deletion would require admin API access
-      const { error } = await (supabase as any)
-        .from('profiles')
-        .update({
-          is_suspended: true,
-          full_name: '[Deleted User]',
-          phone: null,
-        })
-        .eq('id', userId)
-
-      if (error) throw error
-
+      await deleteUser(userId)
       toast.success('User account deleted')
       router.push('/admin/users')
     } catch (error: any) {
-      toast.error('Failed: ' + error.message)
+      console.error('Delete error:', error)
+      toast.error('Failed: ' + (error.message || 'Unknown error'))
     } finally {
       setLoading(false)
       setShowDeleteDialog(false)

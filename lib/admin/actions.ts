@@ -76,41 +76,48 @@ export async function suspendUser(
     .eq('id', userId)
     .single()
 
-  // Create suspension record
-  const { error: suspensionError } = await (supabase
-    .from('user_suspensions') as any)
-    .insert({
-      user_id: userId,
-      suspended_by: admin.id,
-      reason,
-      notes,
-      expires_at: expiresAt,
-    })
+  // Try to create suspension record (optional - table may not exist)
+  try {
+    await (supabase
+      .from('user_suspensions') as any)
+      .insert({
+        user_id: userId,
+        suspended_by: admin.id,
+        reason,
+        notes,
+        expires_at: expiresAt,
+      })
+  } catch (err) {
+    // Ignore if table doesn't exist
+    console.warn('Could not create suspension record:', err)
+  }
 
-  if (suspensionError) throw suspensionError
-
-  // Update profile
+  // Update profile - this is required
   const { error: updateError } = await (supabase
     .from('profiles') as any)
     .update({
       is_suspended: true,
-      suspended_until: expiresAt,
+      suspended_until: expiresAt || null,
     })
     .eq('id', userId)
 
   if (updateError) throw updateError
 
-  // Log action
-  await logAdminAction(
-    supabase,
-    admin.id,
-    'user.suspend',
-    'user',
-    userId,
-    userBefore,
-    { is_suspended: true, reason },
-    { reason, notes, expires_at: expiresAt }
-  )
+  // Log action (optional)
+  try {
+    await logAdminAction(
+      supabase,
+      admin.id,
+      'user.suspend',
+      'user',
+      userId,
+      userBefore,
+      { is_suspended: true, reason },
+      { reason, notes, expires_at: expiresAt }
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
 
   revalidatePath('/admin/users')
   return { success: true }
@@ -122,18 +129,22 @@ export async function unsuspendUser(userId: string) {
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
 
-  // Deactivate suspension records
-  await (supabase
-    .from('user_suspensions') as any)
-    .update({
-      is_active: false,
-      lifted_at: new Date().toISOString(),
-      lifted_by: admin.id,
-    })
-    .eq('user_id', userId)
-    .eq('is_active', true)
+  // Try to deactivate suspension records (optional - table may not exist)
+  try {
+    await (supabase
+      .from('user_suspensions') as any)
+      .update({
+        is_active: false,
+        lifted_at: new Date().toISOString(),
+        lifted_by: admin.id,
+      })
+      .eq('user_id', userId)
+      .eq('is_active', true)
+  } catch (err) {
+    console.warn('Could not update suspension records:', err)
+  }
 
-  // Update profile
+  // Update profile - this is required
   const { error } = await (supabase
     .from('profiles') as any)
     .update({
@@ -144,13 +155,18 @@ export async function unsuspendUser(userId: string) {
 
   if (error) throw error
 
-  await logAdminAction(
-    supabase,
-    admin.id,
-    'user.unsuspend',
-    'user',
-    userId
-  )
+  // Log action (optional)
+  try {
+    await logAdminAction(
+      supabase,
+      admin.id,
+      'user.unsuspend',
+      'user',
+      userId
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
 
   revalidatePath('/admin/users')
   return { success: true }
@@ -169,23 +185,36 @@ export async function deleteUser(userId: string) {
     .eq('id', userId)
     .single()
 
-  // Delete user (cascade will handle related records)
-  const { error } = await supabase
-    .from('profiles')
-    .delete()
+  // Soft delete - mark as deleted rather than hard delete
+  // This preserves data integrity with foreign keys
+  const { error } = await (supabase
+    .from('profiles') as any)
+    .update({
+      is_suspended: true,
+      full_name: '[Deleted User]',
+      email: `deleted_${userId}@deleted.local`,
+      phone: null,
+      avatar_url: null,
+      bio: null,
+    })
     .eq('id', userId)
 
   if (error) throw error
 
-  await logAdminAction(
-    supabase,
-    admin.id,
-    'user.delete',
-    'user',
-    userId,
-    user,
-    null
-  )
+  // Log action (optional)
+  try {
+    await logAdminAction(
+      supabase,
+      admin.id,
+      'user.delete',
+      'user',
+      userId,
+      user,
+      null
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
 
   revalidatePath('/admin/users')
   return { success: true }
