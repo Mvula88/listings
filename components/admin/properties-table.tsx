@@ -237,7 +237,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
       </div>
 
       {/* Table */}
-      <div className="border rounded-lg">
+      <div className="border rounded-lg overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
