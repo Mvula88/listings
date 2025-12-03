@@ -362,14 +362,12 @@ export async function getMyViewings(role: 'buyer' | 'seller', status?: ViewingSt
   }
 
   try {
+    // Simple query first - get viewings with basic property and profile data
     let query = (supabase
       .from('property_viewings') as any)
       .select(`
         *,
-        property:properties(
-          id, title, price, city, province, country_id,
-          property_images(url, order_index)
-        ),
+        property:properties(id, title, price, city, province, country_id),
         buyer:profiles!buyer_id(id, full_name, email, avatar_url),
         seller:profiles!seller_id(id, full_name, email, avatar_url)
       `)
@@ -387,9 +385,22 @@ export async function getMyViewings(role: 'buyer' | 'seller', status?: ViewingSt
       return { viewings: [], error: 'Failed to fetch viewings' }
     }
 
-    // Get currency symbols for properties if they have country_id
-    const viewingsWithCurrency = await Promise.all(
+    // Enrich viewings with property images and currency
+    const enrichedViewings = await Promise.all(
       (viewings || []).map(async (viewing: any) => {
+        // Get property images
+        if (viewing.property?.id) {
+          const { data: images } = await supabase
+            .from('property_images')
+            .select('url, order_index')
+            .eq('property_id', viewing.property.id)
+            .order('order_index', { ascending: true })
+            .limit(1)
+
+          viewing.property.property_images = images || []
+        }
+
+        // Get currency symbol
         if (viewing.property?.country_id) {
           const { data: country } = await supabase
             .from('countries')
@@ -400,11 +411,12 @@ export async function getMyViewings(role: 'buyer' | 'seller', status?: ViewingSt
             viewing.property.country = country
           }
         }
+
         return viewing
       })
     )
 
-    return { viewings: viewingsWithCurrency }
+    return { viewings: enrichedViewings }
   } catch (err) {
     console.error('Error in getMyViewings:', err)
     return { viewings: [], error: 'Failed to fetch viewings' }
