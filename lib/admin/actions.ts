@@ -70,10 +70,12 @@ export async function suspendUser(
   if (!admin) throw new Error('Not authenticated')
 
   // Verify admin has permission (check admin_profiles)
+  // Note: admin_profiles uses 'id' as the user ID, not 'user_id'
   const { data: adminProfile } = await (supabase
     .from('admin_profiles') as any)
     .select('role')
-    .eq('user_id', admin.id)
+    .eq('id', admin.id)
+    .eq('is_active', true)
     .single() as { data: { role: string } | null }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
@@ -144,10 +146,12 @@ export async function unsuspendUser(userId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Verify admin has permission
+  // Note: admin_profiles uses 'id' as the user ID, not 'user_id'
   const { data: adminProfile } = await (supabase
     .from('admin_profiles') as any)
     .select('role')
-    .eq('user_id', admin.id)
+    .eq('id', admin.id)
+    .eq('is_active', true)
     .single() as { data: { role: string } | null }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
@@ -207,10 +211,12 @@ export async function deleteUser(userId: string) {
   if (!admin) throw new Error('Not authenticated')
 
   // Verify admin has permission
+  // Note: admin_profiles uses 'id' as the user ID, not 'user_id'
   const { data: adminProfile } = await (supabase
     .from('admin_profiles') as any)
     .select('role')
-    .eq('user_id', admin.id)
+    .eq('id', admin.id)
+    .eq('is_active', true)
     .single() as { data: { role: string } | null }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
