@@ -27,7 +27,12 @@ export default async function DashboardLayout({
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single<{ user_type: string; roles: string[] | null; [key: string]: any }>()
+    .single<{ user_type: string; roles: string[] | null; is_suspended?: boolean; [key: string]: any }>()
+
+  // Check if user is suspended or deleted
+  if (profile?.is_suspended) {
+    redirect('/suspended')
+  }
 
   // Check if user is a lawyer and verify their status
   if (profile?.user_type === 'lawyer') {

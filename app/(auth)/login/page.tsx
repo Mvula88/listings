@@ -26,12 +26,27 @@ export default function LoginPage() {
     setError(null)
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
       if (error) throw error
+
+      // Check if user is suspended
+      if (data.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('is_suspended')
+          .eq('id', data.user.id)
+          .single()
+
+        if (profile?.is_suspended) {
+          router.push('/suspended')
+          router.refresh()
+          return
+        }
+      }
 
       router.push('/dashboard')
       router.refresh()
