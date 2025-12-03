@@ -25,9 +25,23 @@ export default async function ViewingsPage() {
 
   const userType = profile?.user_type || 'buyer'
 
-  // Get viewings as buyer and seller
-  const { viewings: buyerViewings } = await getMyViewings('buyer')
-  const { viewings: sellerViewings } = await getMyViewings('seller')
+  // Get viewings as buyer and seller with error handling
+  let buyerViewings: any[] = []
+  let sellerViewings: any[] = []
+
+  try {
+    const buyerResult = await getMyViewings('buyer')
+    buyerViewings = buyerResult.viewings || []
+  } catch (err) {
+    console.error('Error fetching buyer viewings:', err)
+  }
+
+  try {
+    const sellerResult = await getMyViewings('seller')
+    sellerViewings = sellerResult.viewings || []
+  } catch (err) {
+    console.error('Error fetching seller viewings:', err)
+  }
 
   // Count by status
   const buyerPending = buyerViewings.filter((v: any) => v.status === 'pending').length
