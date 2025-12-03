@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { withRateLimit, uploadRateLimit } from '@/lib/security/rate-limit'
 
 // Increase timeout for image uploads
 export const runtime = 'nodejs'
@@ -10,6 +11,10 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Apply rate limiting for uploads
+    const rateLimitResponse = await withRateLimit(request, uploadRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     const supabase = await createClient()
     const { id: propertyId } = await params
 

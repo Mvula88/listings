@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createProperty } from '@/lib/actions/properties'
+import { withRateLimit, apiRateLimit } from '@/lib/security/rate-limit'
 
 // Next.js API route handler
 export async function POST(request: Request) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = await withRateLimit(request, apiRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     // Check content type and parse accordingly
     const contentType = request.headers.get('content-type') || ''
     let body: any

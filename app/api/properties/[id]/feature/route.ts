@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { isFeatureEnabled } from '@/lib/settings'
+import { withRateLimit, apiRateLimit } from '@/lib/security/rate-limit'
 
 // Manual endpoint to feature a property (for admin/testing)
 // In production, this would be protected by admin auth
@@ -9,6 +10,10 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = await withRateLimit(request, apiRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     // Check if premium listings feature is enabled
     const premiumEnabled = await isFeatureEnabled('premium_listings')
     if (!premiumEnabled) {

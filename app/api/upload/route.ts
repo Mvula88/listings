@@ -11,6 +11,7 @@ import {
   DEFAULT_IMAGE_CONFIG,
 } from '@/lib/utils/image-optimization'
 import { getImageSettings } from '@/lib/settings'
+import { withRateLimit, uploadRateLimit } from '@/lib/security/rate-limit'
 
 export const runtime = 'nodejs'
 export const maxDuration = 60 // 60 seconds for image processing
@@ -31,6 +32,10 @@ interface UploadResponse {
 
 export async function POST(request: NextRequest): Promise<NextResponse<UploadResponse>> {
   try {
+    // Apply rate limiting for uploads
+    const rateLimitResponse = await withRateLimit(request, uploadRateLimit, true)
+    if (rateLimitResponse) return rateLimitResponse as NextResponse<UploadResponse>
+
     // Authenticate user
     const supabase = await createClient()
     const {

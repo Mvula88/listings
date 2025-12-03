@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Calendar, Clock, User, ArrowLeft, Share2 } from 'lucide-react'
 import type { Metadata } from 'next'
+import { sanitizeHTML } from '@/lib/utils/sanitize'
 
 export async function generateMetadata({
   params,
@@ -240,10 +241,10 @@ export default async function BlogPostPage({
           </div>
         )}
 
-        {/* Content */}
+        {/* Content - Sanitized to prevent XSS attacks */}
         <div
           className="prose prose-lg max-w-none"
-          dangerouslySetInnerHTML={{ __html: post.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHTML(post.content) }}
         />
 
         {/* Related Posts */}

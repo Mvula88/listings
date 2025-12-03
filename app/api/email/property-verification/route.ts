@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { withRateLimit, emailRateLimit } from '@/lib/security/rate-limit'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 export async function POST(request: NextRequest) {
   try {
+    // Apply rate limiting for email endpoints
+    const rateLimitResponse = await withRateLimit(request, emailRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     const { to, propertyTitle, status, reason } = await request.json()
 
     if (!to || !propertyTitle || !status) {

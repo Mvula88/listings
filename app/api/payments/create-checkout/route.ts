@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { isFeatureEnabled, isMaintenanceMode } from '@/lib/settings'
 import Stripe from 'stripe'
+import { withRateLimit, apiRateLimit } from '@/lib/security/rate-limit'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: '2025-10-29.clover',
@@ -28,6 +29,10 @@ const PLANS: Record<string, { priceId: string; days: number; name: string }> = {
 
 export async function POST(request: Request) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = await withRateLimit(request, apiRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     // Check if platform is in maintenance mode
     if (await isMaintenanceMode()) {
       return NextResponse.json(

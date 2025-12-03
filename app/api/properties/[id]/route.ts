@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
+import { withRateLimit, apiRateLimit } from '@/lib/security/rate-limit'
 
 interface RouteParams {
   params: Promise<{ id: string }>
@@ -9,6 +10,10 @@ interface RouteParams {
 // GET a single property
 export async function GET(request: Request, { params }: RouteParams) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = await withRateLimit(request, apiRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     const { id } = await params
     const supabase = await createClient()
 
@@ -52,6 +57,10 @@ export async function GET(request: Request, { params }: RouteParams) {
 // PATCH update a property
 export async function PATCH(request: Request, { params }: RouteParams) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = await withRateLimit(request, apiRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     const { id } = await params
     const supabase = await createClient()
 
@@ -118,6 +127,10 @@ export async function PATCH(request: Request, { params }: RouteParams) {
 // DELETE a property (soft delete)
 export async function DELETE(request: Request, { params }: RouteParams) {
   try {
+    // Apply rate limiting
+    const rateLimitResponse = await withRateLimit(request, apiRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     const { id } = await params
     const supabase = await createClient()
 

@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { sendInquiryReceivedEmail } from '@/lib/email/send-emails'
+import { withRateLimit, inquiryRateLimit } from '@/lib/security/rate-limit'
 
 export async function POST(request: Request) {
   try {
+    // Apply rate limiting to prevent spam
+    const rateLimitResponse = await withRateLimit(request, inquiryRateLimit)
+    if (rateLimitResponse) return rateLimitResponse
+
     const supabase = await createClient()
     const { inquiryId, conversationId } = await request.json()
 
