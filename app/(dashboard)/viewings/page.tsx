@@ -1,67 +1,71 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { FadeIn } from '@/components/ui/fade-in'
 import { getMyViewings } from '@/lib/actions/viewings'
 import { ViewingCard } from '@/components/viewings/viewing-card'
-import { Calendar, Clock, CheckCircle, XCircle, Eye } from 'lucide-react'
+import { Calendar, Clock, CheckCircle, Eye } from 'lucide-react'
 
 export default async function ViewingsPage() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Get user profile to determine role
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('user_type')
-    .eq('id', user.id)
-    .single<{ user_type: string }>()
-
-  const userType = profile?.user_type || 'buyer'
-
-  // Get viewings as buyer and seller with error handling
-  let buyerViewings: any[] = []
-  let sellerViewings: any[] = []
-
   try {
-    const buyerResult = await getMyViewings('buyer')
-    buyerViewings = buyerResult.viewings || []
-  } catch (err) {
-    console.error('Error fetching buyer viewings:', err)
-  }
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-  try {
-    const sellerResult = await getMyViewings('seller')
-    sellerViewings = sellerResult.viewings || []
-  } catch (err) {
-    console.error('Error fetching seller viewings:', err)
-  }
+    if (authError) {
+      console.error('Auth error:', authError)
+    }
 
-  // Count by status
-  const buyerPending = buyerViewings.filter((v: any) => v.status === 'pending').length
-  const buyerConfirmed = buyerViewings.filter((v: any) => v.status === 'confirmed').length
-  const sellerPending = sellerViewings.filter((v: any) => v.status === 'pending').length
-  const sellerConfirmed = sellerViewings.filter((v: any) => v.status === 'confirmed').length
+    if (!user) {
+      redirect('/login')
+    }
 
-  return (
-    <div className="space-y-6">
-      <FadeIn>
+    // Get user profile to determine role
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('user_type')
+      .eq('id', user.id)
+      .single<{ user_type: string }>()
+
+    if (profileError) {
+      console.error('Profile error:', profileError)
+    }
+
+    const userType = profile?.user_type || 'buyer'
+
+    // Get viewings as buyer and seller with error handling
+    let buyerViewings: any[] = []
+    let sellerViewings: any[] = []
+
+    try {
+      const buyerResult = await getMyViewings('buyer')
+      buyerViewings = buyerResult.viewings || []
+    } catch (err) {
+      console.error('Error fetching buyer viewings:', err)
+    }
+
+    try {
+      const sellerResult = await getMyViewings('seller')
+      sellerViewings = sellerResult.viewings || []
+    } catch (err) {
+      console.error('Error fetching seller viewings:', err)
+    }
+
+    // Count by status
+    const buyerPending = buyerViewings.filter((v: any) => v.status === 'pending').length
+    const buyerConfirmed = buyerViewings.filter((v: any) => v.status === 'confirmed').length
+    const sellerPending = sellerViewings.filter((v: any) => v.status === 'pending').length
+    const sellerConfirmed = sellerViewings.filter((v: any) => v.status === 'confirmed').length
+
+    return (
+      <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Property Viewings</h1>
           <p className="text-muted-foreground mt-1">
             Manage your scheduled property viewings
           </p>
         </div>
-      </FadeIn>
 
-      {/* Stats */}
-      <FadeIn delay={0.1}>
+        {/* Stats */}
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -113,10 +117,8 @@ export default async function ViewingsPage() {
             </CardContent>
           </Card>
         </div>
-      </FadeIn>
 
-      {/* Viewings Tabs */}
-      <FadeIn delay={0.2}>
+        {/* Viewings Tabs */}
         <Tabs defaultValue={userType === 'seller' ? 'seller' : 'buyer'}>
           <TabsList>
             <TabsTrigger value="buyer" className="gap-2">
@@ -171,7 +173,19 @@ export default async function ViewingsPage() {
             )}
           </TabsContent>
         </Tabs>
-      </FadeIn>
-    </div>
-  )
+      </div>
+    )
+  } catch (error) {
+    console.error('ViewingsPage error:', error)
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-bold">Property Viewings</h1>
+        <Card>
+          <CardContent className="py-12 text-center">
+            <p className="text-muted-foreground">Unable to load viewings. Please try again later.</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 }
