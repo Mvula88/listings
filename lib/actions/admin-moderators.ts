@@ -188,9 +188,9 @@ export async function revokeInvitation(invitationId: string): Promise<ActionResu
 }
 
 /**
- * Get list of all moderators
+ * Get list of all moderators (and optionally all admin staff)
  */
-export async function getModeratorsList() {
+export async function getModeratorsList(includeAllAdmins: boolean = false) {
   const access = await checkAdminAccess()
   if ('error' in access) {
     return { moderators: [], error: access.error }
@@ -198,26 +198,38 @@ export async function getModeratorsList() {
 
   const supabase = await createClient()
 
-  const { data: moderators, error } = await supabase
-    .from('admin_profiles')
-    .select(`
-      *,
-      profile:profiles!id (
-        id,
-        full_name,
-        email,
-        avatar_url,
-        created_at
-      )
-    `)
-    .eq('role', 'moderator')
-    .order('created_at', { ascending: false })
+  try {
+    let query = supabase
+      .from('admin_profiles')
+      .select(`
+        *,
+        profile:profiles!id (
+          id,
+          full_name,
+          email,
+          avatar_url,
+          created_at
+        )
+      `)
+      .order('created_at', { ascending: false })
 
-  if (error) {
+    // Only filter by moderator role if not including all admins
+    if (!includeAllAdmins) {
+      query = query.eq('role', 'moderator')
+    }
+
+    const { data: moderators, error } = await query
+
+    if (error) {
+      console.error('Error fetching moderators:', error)
+      return { moderators: [], error: 'Failed to fetch moderators' }
+    }
+
+    return { moderators: moderators || [] }
+  } catch (err) {
+    console.error('Moderators list error:', err)
     return { moderators: [], error: 'Failed to fetch moderators' }
   }
-
-  return { moderators: moderators || [] }
 }
 
 /**

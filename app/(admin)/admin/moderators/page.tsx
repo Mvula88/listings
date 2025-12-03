@@ -14,21 +14,39 @@ import {
   XCircle,
   Eye,
   Shield,
+  ShieldCheck,
+  Crown,
 } from 'lucide-react'
 import { ModeratorActions } from '@/components/admin/moderator-actions'
 
 export default async function AdminModeratorsPage() {
-  const [moderatorsResult, invitationsResult] = await Promise.all([
-    getModeratorsList(),
+  const [moderatorsResult, allAdminsResult, invitationsResult] = await Promise.all([
+    getModeratorsList(false),  // Only moderators
+    getModeratorsList(true),   // All admin staff
     getModeratorInvitations()
   ])
 
-  const moderators = moderatorsResult.moderators
-  const invitations = invitationsResult.invitations
+  const moderators = moderatorsResult.moderators || []
+  const allAdmins = allAdminsResult.moderators || []
+  const invitations = invitationsResult.invitations || []
 
   const pendingInvitations = invitations.filter(
     (inv: any) => !inv.accepted_at && new Date(inv.expires_at) > new Date()
   )
+
+  // Get role badge color
+  const getRoleBadge = (role: string) => {
+    switch (role) {
+      case 'super_admin':
+        return <Badge className="bg-purple-500/10 text-purple-600"><Crown className="h-3 w-3 mr-1" />Super Admin</Badge>
+      case 'admin':
+        return <Badge className="bg-blue-500/10 text-blue-600"><ShieldCheck className="h-3 w-3 mr-1" />Admin</Badge>
+      case 'moderator':
+        return <Badge className="bg-green-500/10 text-green-600"><Shield className="h-3 w-3 mr-1" />Moderator</Badge>
+      default:
+        return <Badge variant="secondary">{role}</Badge>
+    }
+  }
 
   return (
     <div className="space-y-6">
@@ -52,13 +70,29 @@ export default async function AdminModeratorsPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-4">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground">
+              Total Admin Staff
+            </CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{allAdmins.length}</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              {allAdmins.filter((a: any) => a.role === 'super_admin').length} super admins,{' '}
+              {allAdmins.filter((a: any) => a.role === 'admin').length} admins,{' '}
+              {allAdmins.filter((a: any) => a.role === 'moderator').length} moderators
+            </p>
+          </CardContent>
+        </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
               Total Moderators
             </CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{moderators.length}</div>
@@ -67,13 +101,13 @@ export default async function AdminModeratorsPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Active Moderators
+              Active Staff
             </CardTitle>
             <CheckCircle className="h-4 w-4 text-green-500" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {moderators.filter((m: any) => m.status !== 'suspended').length}
+              {allAdmins.filter((m: any) => m.status !== 'suspended').length}
             </div>
           </CardContent>
         </Card>
@@ -91,8 +125,11 @@ export default async function AdminModeratorsPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="moderators">
+      <Tabs defaultValue="all-staff">
         <TabsList>
+          <TabsTrigger value="all-staff">
+            All Admin Staff ({allAdmins.length})
+          </TabsTrigger>
           <TabsTrigger value="moderators">
             Moderators ({moderators.length})
           </TabsTrigger>
@@ -100,6 +137,92 @@ export default async function AdminModeratorsPage() {
             Invitations ({invitations.length})
           </TabsTrigger>
         </TabsList>
+
+        {/* All Admin Staff Tab */}
+        <TabsContent value="all-staff" className="mt-6">
+          {allAdmins.length === 0 ? (
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <Users className="h-12 w-12 text-muted-foreground mb-4" />
+                <h3 className="text-lg font-medium">No admin staff yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Invite your first moderator to get started.
+                </p>
+                <Button asChild>
+                  <Link href="/admin/moderators/invite">Invite Moderator</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card>
+              <CardHeader>
+                <CardTitle>All Admin Staff</CardTitle>
+                <CardDescription>
+                  View all admins and moderators on the platform
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {allAdmins.map((admin: any) => (
+                    <div
+                      key={admin.id}
+                      className="flex items-center justify-between p-4 rounded-lg border bg-card"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="h-10 w-10 rounded-full bg-blue-600/10 flex items-center justify-center">
+                          <span className="text-sm font-bold text-blue-600">
+                            {admin.profile?.full_name?.[0] || admin.profile?.email?.[0] || 'A'}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">
+                              {admin.profile?.full_name || 'Unknown'}
+                            </span>
+                            {getRoleBadge(admin.role)}
+                            {admin.status === 'suspended' && (
+                              <Badge variant="destructive">Suspended</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground">
+                            {admin.profile?.email}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4">
+                        <div className="text-right text-sm text-muted-foreground">
+                          <div className="flex items-center gap-1">
+                            <Calendar className="h-3 w-3" />
+                            Joined {new Date(admin.created_at).toLocaleDateString()}
+                          </div>
+                          {admin.last_active && (
+                            <div className="flex items-center gap-1">
+                              <Clock className="h-3 w-3" />
+                              Last active {new Date(admin.last_active).toLocaleDateString()}
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Button variant="ghost" size="sm" asChild>
+                            <Link href={`/admin/moderators/${admin.id}`}>
+                              <Eye className="h-4 w-4" />
+                            </Link>
+                          </Button>
+                          {admin.role === 'moderator' && (
+                            <ModeratorActions
+                              moderatorId={admin.id}
+                              status={admin.status}
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
 
         {/* Moderators Tab */}
         <TabsContent value="moderators" className="mt-6">

@@ -753,18 +753,65 @@ export async function getPlatformStats(): Promise<{
   active_listings?: number
   pending_verifications?: number
   total_transactions?: number
+  avg_property_price?: number
+  avg_days_to_close?: number
   [key: string]: any
 } | null> {
   const supabase = await createClient()
 
+  // First try to get cached stats
   const { data, error } = await supabase
     .from('platform_stats_cache')
     .select('*')
     .order('stat_date', { ascending: false })
     .limit(1)
-    .single()
+    .maybeSingle()
 
-  if (error) throw error
+  // If cache is empty or error, compute stats directly
+  if (error || !data) {
+    // Compute real-time stats from source tables
+    const [
+      { count: totalUsers },
+      { count: totalProperties },
+      { count: activeProperties },
+      { count: totalTransactions },
+      { count: completedTransactions },
+      { count: totalLawyers },
+      { count: verifiedLawyers },
+      { data: avgPrice },
+    ] = await Promise.all([
+      supabase.from('profiles').select('*', { count: 'exact', head: true }),
+      supabase.from('properties').select('*', { count: 'exact', head: true }),
+      supabase.from('properties').select('*', { count: 'exact', head: true }).eq('status', 'active'),
+      supabase.from('transactions').select('*', { count: 'exact', head: true }),
+      supabase.from('transactions').select('*', { count: 'exact', head: true }).eq('status', 'completed'),
+      supabase.from('lawyers').select('*', { count: 'exact', head: true }),
+      supabase.from('lawyers').select('*', { count: 'exact', head: true }).eq('verified', true),
+      supabase.from('properties').select('price').eq('status', 'active'),
+    ])
+
+    const avgPropertyPrice = avgPrice && avgPrice.length > 0
+      ? avgPrice.reduce((sum: number, p: any) => sum + (p.price || 0), 0) / avgPrice.length
+      : 0
+
+    const conversionRate = totalTransactions && totalTransactions > 0
+      ? ((completedTransactions || 0) / totalTransactions)
+      : 0
+
+    return {
+      total_users: totalUsers || 0,
+      total_properties: totalProperties || 0,
+      active_listings: activeProperties || 0,
+      total_transactions: totalTransactions || 0,
+      completed_transactions: completedTransactions || 0,
+      total_lawyers: totalLawyers || 0,
+      verified_lawyers: verifiedLawyers || 0,
+      avg_property_price: avgPropertyPrice,
+      conversion_rate: conversionRate,
+      total_revenue: 0,
+      avg_days_to_close: 0,
+    }
+  }
 
   return data
 }
@@ -851,36 +898,50 @@ export async function getContentFlags(params: {
   const supabase = await createClient()
   const { page = 1, pageSize = 20, resourceType, status } = params
 
-  let query = supabase
-    .from('content_flags')
-    .select(`
-      *,
-      flagged_by_user:profiles!flagged_by(*),
-      reviewed_by_user:profiles!reviewed_by(*)
-    `, { count: 'exact' })
-    .order('created_at', { ascending: false })
-    .range((page - 1) * pageSize, page * pageSize - 1)
+  try {
+    let query = supabase
+      .from('content_flags')
+      .select(`
+        *,
+        flagged_by_user:profiles!flagged_by(*),
+        reviewed_by_user:profiles!reviewed_by(*)
+      `, { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range((page - 1) * pageSize, page * pageSize - 1)
 
-  if (resourceType) {
-    query = query.eq('resource_type', resourceType)
-  }
+    if (resourceType) {
+      query = query.eq('resource_type', resourceType)
+    }
 
-  if (status) {
-    query = query.eq('status', status)
-  }
+    if (status) {
+      query = query.eq('status', status)
+    }
 
-  const { data, error, count } = await query
+    const { data, error, count } = await query
 
-  if (error) throw error
+    if (error) {
+      console.error('Error fetching content flags:', error)
+      return {
+        flags: [],
+        pagination: { page, pageSize, totalCount: 0, totalPages: 0 },
+      }
+    }
 
-  return {
-    flags: data,
-    pagination: {
-      page,
-      pageSize,
-      totalCount: count || 0,
-      totalPages: Math.ceil((count || 0) / pageSize),
-    },
+    return {
+      flags: data || [],
+      pagination: {
+        page,
+        pageSize,
+        totalCount: count || 0,
+        totalPages: Math.ceil((count || 0) / pageSize),
+      },
+    }
+  } catch (err) {
+    console.error('Content flags error:', err)
+    return {
+      flags: [],
+      pagination: { page, pageSize, totalCount: 0, totalPages: 0 },
+    }
   }
 }
 
@@ -936,47 +997,61 @@ export async function getAuditLogs(params: {
   const supabase = await createClient()
   const { page = 1, pageSize = 50, adminId, action, resourceType, startDate, endDate } = params
 
-  let query = supabase
-    .from('audit_logs')
-    .select(`
-      *,
-      admin:profiles!admin_id(*)
-    `, { count: 'exact' })
-    .order('created_at', { ascending: false })
-    .range((page - 1) * pageSize, page * pageSize - 1)
+  try {
+    let query = supabase
+      .from('audit_logs')
+      .select(`
+        *,
+        admin:profiles!admin_id(*)
+      `, { count: 'exact' })
+      .order('created_at', { ascending: false })
+      .range((page - 1) * pageSize, page * pageSize - 1)
 
-  if (adminId) {
-    query = query.eq('admin_id', adminId)
-  }
+    if (adminId) {
+      query = query.eq('admin_id', adminId)
+    }
 
-  if (action) {
-    query = query.eq('action', action)
-  }
+    if (action && action.trim()) {
+      query = query.eq('action', action.trim())
+    }
 
-  if (resourceType) {
-    query = query.eq('resource_type', resourceType)
-  }
+    if (resourceType && resourceType.trim()) {
+      query = query.eq('resource_type', resourceType.trim())
+    }
 
-  if (startDate) {
-    query = query.gte('created_at', startDate)
-  }
+    if (startDate) {
+      query = query.gte('created_at', startDate)
+    }
 
-  if (endDate) {
-    query = query.lte('created_at', endDate)
-  }
+    if (endDate) {
+      query = query.lte('created_at', endDate)
+    }
 
-  const { data, error, count } = await query
+    const { data, error, count } = await query
 
-  if (error) throw error
+    if (error) {
+      console.error('Error fetching audit logs:', error)
+      return {
+        logs: [],
+        pagination: { page, pageSize, totalCount: 0, totalPages: 0 },
+      }
+    }
 
-  return {
-    logs: data,
-    pagination: {
-      page,
-      pageSize,
-      totalCount: count || 0,
-      totalPages: Math.ceil((count || 0) / pageSize),
-    },
+    return {
+      logs: data || [],
+      pagination: {
+        page,
+        pageSize,
+        totalCount: count || 0,
+        totalPages: Math.ceil((count || 0) / pageSize),
+      },
+    }
+  } catch (err) {
+    console.error('Audit logs error:', err)
+    return {
+      logs: [],
+      pagination: { page, pageSize, totalCount: 0, totalPages: 0 },
+    }
   }
 }
 
