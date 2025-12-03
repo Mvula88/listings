@@ -39,7 +39,7 @@ export default function LoginPage() {
           .from('profiles')
           .select('is_suspended')
           .eq('id', data.user.id)
-          .single()
+          .single() as { data: { is_suspended: boolean } | null }
 
         if (profile?.is_suspended) {
           router.push('/suspended')
