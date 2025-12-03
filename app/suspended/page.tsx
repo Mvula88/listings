@@ -1,31 +1,61 @@
-import { createClient } from '@/lib/supabase/server'
-import { redirect } from 'next/navigation'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { AlertTriangle, Mail, LogOut } from 'lucide-react'
+import { AlertTriangle, Mail, LogOut, Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
 
-export default async function SuspendedPage() {
-  const supabase = await createClient()
+export default function SuspendedPage() {
+  const [loading, setLoading] = useState(true)
+  const [signingOut, setSigningOut] = useState(false)
+  const router = useRouter()
+  const supabase = createClient()
 
-  const { data: { user } } = await supabase.auth.getUser()
+  useEffect(() => {
+    async function checkStatus() {
+      const { data: { user } } = await supabase.auth.getUser()
 
-  // If not logged in, redirect to login
-  if (!user) {
-    redirect('/login')
+      // If not logged in, redirect to login
+      if (!user) {
+        router.push('/login')
+        return
+      }
+
+      // Get profile to check suspension status
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_suspended')
+        .eq('id', user.id)
+        .single()
+
+      // If user is not suspended, redirect to dashboard
+      if (!profile?.is_suspended) {
+        router.push('/dashboard')
+        return
+      }
+
+      setLoading(false)
+    }
+
+    checkStatus()
+  }, [router, supabase])
+
+  async function handleSignOut() {
+    setSigningOut(true)
+    await supabase.auth.signOut()
+    router.push('/login')
   }
 
-  // Get profile to check suspension status
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_suspended, full_name')
-    .eq('id', user.id)
-    .single() as { data: { is_suspended: boolean; full_name: string } | null }
-
-  // If user is not suspended, redirect to dashboard
-  if (!profile?.is_suspended) {
-    redirect('/dashboard')
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+      </div>
+    )
   }
 
   return (
@@ -67,12 +97,19 @@ export default async function SuspendedPage() {
               </a>
             </Button>
 
-            <form action="/auth/signout" method="post">
-              <Button type="submit" variant="ghost" className="w-full text-muted-foreground">
+            <Button
+              variant="ghost"
+              className="w-full text-muted-foreground"
+              onClick={handleSignOut}
+              disabled={signingOut}
+            >
+              {signingOut ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
                 <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
-              </Button>
-            </form>
+              )}
+              Sign Out
+            </Button>
           </div>
         </CardContent>
       </Card>
