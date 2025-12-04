@@ -444,7 +444,7 @@ export async function restoreUser(userId: string) {
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single()
+    .single() as { data: { original_name: string | null; full_name: string | null } | null }
 
   // Restore user - undelete and unsuspend
   const { error } = await (serviceClient
