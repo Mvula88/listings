@@ -125,7 +125,7 @@ export async function submitLawyerOnboarding(data: {
     }
 
     // Create lawyer profile
-    const { data: lawyer, error: lawyerError } = await supabase
+    const { data: lawyer, error: lawyerError } = await (supabase as any)
       .from('lawyers')
       .insert({
         profile_id: user.id,
