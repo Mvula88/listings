@@ -13,18 +13,46 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { User, Settings, LogOut } from 'lucide-react'
+import { User, Settings, LogOut, Shield, Crown, ShieldCheck } from 'lucide-react'
 import { NotificationDropdown } from './notification-dropdown'
 
 interface UserMenuProps {
   user: any
   profile: any
+  adminRole?: string | null
 }
 
-export function UserMenu({ user, profile }: UserMenuProps) {
+export function UserMenu({ user, profile, adminRole }: UserMenuProps) {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
   const supabase = createClient()
+
+  // Get admin icon based on role
+  const getAdminIcon = () => {
+    switch (adminRole) {
+      case 'super_admin':
+        return <Crown className="mr-2 h-4 w-4 text-purple-600" />
+      case 'admin':
+        return <ShieldCheck className="mr-2 h-4 w-4 text-blue-600" />
+      case 'moderator':
+        return <Shield className="mr-2 h-4 w-4 text-green-600" />
+      default:
+        return <Shield className="mr-2 h-4 w-4" />
+    }
+  }
+
+  const getAdminLabel = () => {
+    switch (adminRole) {
+      case 'super_admin':
+        return 'Super Admin Panel'
+      case 'admin':
+        return 'Admin Panel'
+      case 'moderator':
+        return 'Moderator Panel'
+      default:
+        return 'Admin Panel'
+    }
+  }
 
   async function handleSignOut() {
     setLoading(true)
@@ -64,6 +92,18 @@ export function UserMenu({ user, profile }: UserMenuProps) {
               </p>
             </div>
           </DropdownMenuLabel>
+          {adminRole && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() => router.push('/admin')}
+                className="bg-gradient-to-r from-primary/10 to-transparent"
+              >
+                {getAdminIcon()}
+                <span className="font-medium">{getAdminLabel()}</span>
+              </DropdownMenuItem>
+            </>
+          )}
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => router.push('/settings')}>
             <User className="mr-2 h-4 w-4" />

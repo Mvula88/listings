@@ -57,6 +57,16 @@ export default async function DashboardLayout({
   const roles = (profile?.roles || (profile?.user_type ? [profile.user_type] : ['buyer'])) as UserRole[]
   const activeRole = (profile?.user_type || 'buyer') as UserRole
 
+  // Check if user is an admin (for showing admin panel link)
+  const { data: adminProfile } = await supabase
+    .from('admin_profiles')
+    .select('role, is_active')
+    .eq('id', user.id)
+    .eq('is_active', true)
+    .single<{ role: string; is_active: boolean }>()
+
+  const adminRole = adminProfile?.role || null
+
   return (
     <div className="h-screen overflow-hidden bg-background flex flex-col">
       {/* Top Navigation - Fixed */}
@@ -93,7 +103,7 @@ export default async function DashboardLayout({
             {(profile?.user_type === 'buyer' || profile?.user_type === 'seller') && (
               <ListPropertyButton userType={profile?.user_type || 'buyer'} />
             )}
-            <UserMenu user={user} profile={profile} />
+            <UserMenu user={user} profile={profile} adminRole={adminRole} />
           </div>
         </div>
       </header>
