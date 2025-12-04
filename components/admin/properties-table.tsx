@@ -152,11 +152,17 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
   const handleFeature = async (propertyId: string) => {
     setIsLoading(true)
     try {
-      await featureProperty(propertyId)
-      toast.success('Property featured successfully')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to feature property')
+      const result = await featureProperty(propertyId)
+      if (result?.success) {
+        toast.success('Property featured successfully')
+        router.refresh()
+      } else if (result?.error) {
+        toast.error(result.error)
+      } else {
+        toast.error('Failed to feature property')
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to feature property')
       console.error(error)
     } finally {
       setIsLoading(false)
@@ -166,11 +172,17 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
   const handleUnfeature = async (propertyId: string) => {
     setIsLoading(true)
     try {
-      await unfeatureProperty(propertyId)
-      toast.success('Property unfeatured')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to unfeature property')
+      const result = await unfeatureProperty(propertyId)
+      if (result?.success) {
+        toast.success('Property unfeatured')
+        router.refresh()
+      } else if (result?.error) {
+        toast.error(result.error)
+      } else {
+        toast.error('Failed to unfeature property')
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to unfeature property')
       console.error(error)
     } finally {
       setIsLoading(false)
@@ -180,11 +192,17 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
   const handleDelete = async (propertyId: string) => {
     setIsLoading(true)
     try {
-      await deleteProperty(propertyId)
-      toast.success('Property deleted successfully')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to delete property')
+      const result = await deleteProperty(propertyId)
+      if (result?.success) {
+        toast.success('Property deleted successfully')
+        router.refresh()
+      } else if (result?.error) {
+        toast.error(result.error)
+      } else {
+        toast.error('Failed to delete property')
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to delete property')
       console.error(error)
     } finally {
       setIsLoading(false)
@@ -352,14 +370,18 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                         {property.moderation_status === 'pending' && (
                           <>
                             <DropdownMenuItem
-                              onClick={() => handleApprove(property.id)}
+                              onSelect={(e) => {
+                                e.preventDefault()
+                                handleApprove(property.id)
+                              }}
                               disabled={isLoading}
                             >
                               <CheckCircle className="h-4 w-4 mr-2" />
                               Approve
                             </DropdownMenuItem>
                             <DropdownMenuItem
-                              onClick={() => {
+                              onSelect={(e) => {
+                                e.preventDefault()
                                 setSelectedProperty(property)
                                 setRejectDialogOpen(true)
                               }}
@@ -373,7 +395,10 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                         <DropdownMenuSeparator />
                         {property.featured ? (
                           <DropdownMenuItem
-                            onClick={() => handleUnfeature(property.id)}
+                            onSelect={(e) => {
+                              e.preventDefault()
+                              handleUnfeature(property.id)
+                            }}
                             disabled={isLoading}
                           >
                             <StarOff className="h-4 w-4 mr-2" />
@@ -381,7 +406,10 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                           </DropdownMenuItem>
                         ) : (
                           <DropdownMenuItem
-                            onClick={() => handleFeature(property.id)}
+                            onSelect={(e) => {
+                              e.preventDefault()
+                              handleFeature(property.id)
+                            }}
                             disabled={isLoading}
                           >
                             <Star className="h-4 w-4 mr-2" />
@@ -390,7 +418,8 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                         )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                          onClick={() => {
+                          onSelect={(e) => {
+                            e.preventDefault()
                             setSelectedProperty(property)
                             setDeleteDialogOpen(true)
                           }}

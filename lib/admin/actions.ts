@@ -676,13 +676,14 @@ export async function rejectProperty(propertyId: string, reason: string) {
   return { success: true }
 }
 
-export async function featureProperty(propertyId: string, featuredUntil?: string) {
+export async function featureProperty(propertyId: string, featuredUntil?: string): Promise<{ success?: boolean; error?: string }> {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
-  if (!admin) throw new Error('Not authenticated')
+  if (!admin) return { error: 'Not authenticated' }
 
-  const { error } = await (supabase
+  const { error } = await (serviceClient
     .from('properties') as any)
     .update({
       featured: true,
@@ -690,28 +691,36 @@ export async function featureProperty(propertyId: string, featuredUntil?: string
     })
     .eq('id', propertyId)
 
-  if (error) throw error
+  if (error) {
+    console.error('Failed to feature property:', error)
+    return { error: error.message }
+  }
 
-  await logAdminAction(
-    supabase,
-    admin.id,
-    'property.feature',
-    'property',
-    propertyId
-  )
+  try {
+    await logAdminAction(
+      serviceClient,
+      admin.id,
+      'property.feature',
+      'property',
+      propertyId
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
 
   revalidatePath('/admin/properties')
   revalidatePath('/browse')
   return { success: true }
 }
 
-export async function unfeatureProperty(propertyId: string) {
+export async function unfeatureProperty(propertyId: string): Promise<{ success?: boolean; error?: string }> {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
-  if (!admin) throw new Error('Not authenticated')
+  if (!admin) return { error: 'Not authenticated' }
 
-  const { error } = await (supabase
+  const { error } = await (serviceClient
     .from('properties') as any)
     .update({
       featured: false,
@@ -719,49 +728,64 @@ export async function unfeatureProperty(propertyId: string) {
     })
     .eq('id', propertyId)
 
-  if (error) throw error
+  if (error) {
+    console.error('Failed to unfeature property:', error)
+    return { error: error.message }
+  }
 
-  await logAdminAction(
-    supabase,
-    admin.id,
-    'property.unfeature',
-    'property',
-    propertyId
-  )
+  try {
+    await logAdminAction(
+      serviceClient,
+      admin.id,
+      'property.unfeature',
+      'property',
+      propertyId
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
 
   revalidatePath('/admin/properties')
   revalidatePath('/browse')
   return { success: true }
 }
 
-export async function deleteProperty(propertyId: string) {
+export async function deleteProperty(propertyId: string): Promise<{ success?: boolean; error?: string }> {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
-  if (!admin) throw new Error('Not authenticated')
+  if (!admin) return { error: 'Not authenticated' }
 
-  const { data: property } = await supabase
+  const { data: property } = await serviceClient
     .from('properties')
     .select('*')
     .eq('id', propertyId)
     .single()
 
-  const { error } = await supabase
-    .from('properties')
+  const { error } = await (serviceClient
+    .from('properties') as any)
     .delete()
     .eq('id', propertyId)
 
-  if (error) throw error
+  if (error) {
+    console.error('Failed to delete property:', error)
+    return { error: error.message }
+  }
 
-  await logAdminAction(
-    supabase,
-    admin.id,
-    'property.delete',
-    'property',
-    propertyId,
-    property,
-    null
-  )
+  try {
+    await logAdminAction(
+      serviceClient,
+      admin.id,
+      'property.delete',
+      'property',
+      propertyId,
+      property,
+      null
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
 
   revalidatePath('/admin/properties')
   return { success: true }
