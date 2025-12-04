@@ -342,9 +342,16 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                         {property.city}, {property.country?.name}
                       </div>
                       {property.featured && (
-                        <Badge variant="secondary" className="mt-1">
-                          <Star className="h-3 w-3 mr-1" />
-                          Featured
+                        <Badge
+                          variant="secondary"
+                          className={`mt-1 ${property.is_premium ? 'bg-yellow-100 text-yellow-800 border-yellow-300' : ''}`}
+                        >
+                          {property.is_premium ? (
+                            <Zap className="h-3 w-3 mr-1" />
+                          ) : (
+                            <Star className="h-3 w-3 mr-1" />
+                          )}
+                          {property.is_premium ? 'Premium' : 'Featured'}
                         </Badge>
                       )}
                     </div>
