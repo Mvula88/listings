@@ -56,17 +56,18 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
     return { success: false, error: access.error }
   }
 
-  const supabase = await createClient()
+  // Use service client to bypass RLS for moderator updates
+  const serviceClient = createServiceClient()
 
   // Get property details for notification
-  const { data: property } = await (supabase
+  const { data: property } = await (serviceClient
     .from('properties') as any)
     .select('title, seller_id')
     .eq('id', propertyId)
     .single()
 
   // Update property moderation status AND set status to active (makes it visible)
-  const { error: updateError } = await (supabase
+  const { error: updateError } = await (serviceClient
     .from('properties') as any)
     .update({
       status: 'active', // Make listing visible to public
@@ -78,11 +79,12 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
     .eq('id', propertyId)
 
   if (updateError) {
+    console.error('Approve property error:', updateError)
     return { success: false, error: 'Failed to approve property' }
   }
 
   // Create review record
-  await (supabase.from('property_reviews') as any).insert({
+  await (serviceClient.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'approved',
@@ -127,17 +129,18 @@ export async function rejectProperty(
     return { success: false, error: 'Rejection reason is required' }
   }
 
-  const supabase = await createClient()
+  // Use service client to bypass RLS for moderator updates
+  const serviceClient = createServiceClient()
 
   // Get property details for notification
-  const { data: property } = await (supabase
+  const { data: property } = await (serviceClient
     .from('properties') as any)
     .select('title, seller_id')
     .eq('id', propertyId)
     .single()
 
   // Update property moderation status
-  const { error: updateError } = await (supabase
+  const { error: updateError } = await (serviceClient
     .from('properties') as any)
     .update({
       moderation_status: 'rejected',
@@ -148,11 +151,12 @@ export async function rejectProperty(
     .eq('id', propertyId)
 
   if (updateError) {
+    console.error('Reject property error:', updateError)
     return { success: false, error: 'Failed to reject property' }
   }
 
   // Create review record
-  await (supabase.from('property_reviews') as any).insert({
+  await (serviceClient.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'rejected',
@@ -191,17 +195,18 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
     return { success: false, error: access.error }
   }
 
-  const supabase = await createClient()
+  // Use service client to bypass RLS for moderator updates
+  const serviceClient = createServiceClient()
 
   // Get property details for notification
-  const { data: property } = await (supabase
+  const { data: property } = await (serviceClient
     .from('properties') as any)
     .select('title, seller_id')
     .eq('id', propertyId)
     .single()
 
   // Update property moderation status
-  const { error: updateError } = await (supabase
+  const { error: updateError } = await (serviceClient
     .from('properties') as any)
     .update({
       moderation_status: 'flagged',
@@ -212,11 +217,12 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
     .eq('id', propertyId)
 
   if (updateError) {
+    console.error('Flag property error:', updateError)
     return { success: false, error: 'Failed to flag property' }
   }
 
   // Create review record
-  await (supabase.from('property_reviews') as any).insert({
+  await (serviceClient.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'flagged',
@@ -253,10 +259,11 @@ export async function unflagProperty(propertyId: string): Promise<ActionResult> 
     return { success: false, error: access.error }
   }
 
-  const supabase = await createClient()
+  // Use service client to bypass RLS for moderator updates
+  const serviceClient = createServiceClient()
 
   // Update property moderation status back to approved
-  const { error: updateError } = await (supabase
+  const { error: updateError } = await (serviceClient
     .from('properties') as any)
     .update({
       moderation_status: 'approved',
@@ -267,11 +274,12 @@ export async function unflagProperty(propertyId: string): Promise<ActionResult> 
     .eq('id', propertyId)
 
   if (updateError) {
+    console.error('Unflag property error:', updateError)
     return { success: false, error: 'Failed to unflag property' }
   }
 
   // Create review record
-  await (supabase.from('property_reviews') as any).insert({
+  await (serviceClient.from('property_reviews') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'unflagged'
