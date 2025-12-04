@@ -56,6 +56,88 @@ export async function getUsers(params: {
   }
 }
 
+export async function createUser(params: {
+  email: string
+  full_name: string
+  phone?: string
+  user_type: string
+  password: string
+}): Promise<{ success?: boolean; userId?: string; error?: string }> {
+  const supabase = await createClient()
+  const serviceClient = createServiceClient()
+
+  // Get admin user
+  const { data: { user: admin } } = await supabase.auth.getUser()
+  if (!admin) return { error: 'Not authenticated' }
+
+  // Verify admin has permission
+  const { data: adminProfile } = await (supabase
+    .from('admin_profiles') as any)
+    .select('role')
+    .eq('id', admin.id)
+    .eq('is_active', true)
+    .single() as { data: { role: string } | null }
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    return { error: 'Not authorized to create users' }
+  }
+
+  // Create auth user using Supabase Admin API
+  const { data: authData, error: authError } = await serviceClient.auth.admin.createUser({
+    email: params.email,
+    password: params.password,
+    email_confirm: true, // Auto-confirm email for admin-created users
+    user_metadata: {
+      full_name: params.full_name,
+    },
+  })
+
+  if (authError) {
+    console.error('Failed to create auth user:', authError)
+    return { error: authError.message }
+  }
+
+  if (!authData.user) {
+    return { error: 'Failed to create user' }
+  }
+
+  // Create profile
+  const { error: profileError } = await (serviceClient
+    .from('profiles') as any)
+    .insert({
+      id: authData.user.id,
+      email: params.email,
+      full_name: params.full_name,
+      phone: params.phone || null,
+      user_type: params.user_type,
+    })
+
+  if (profileError) {
+    console.error('Failed to create profile:', profileError)
+    // Try to clean up auth user if profile creation fails
+    await serviceClient.auth.admin.deleteUser(authData.user.id)
+    return { error: profileError.message }
+  }
+
+  // Log action (optional)
+  try {
+    await logAdminAction(
+      supabase,
+      admin.id,
+      'user.create',
+      'user',
+      authData.user.id,
+      null,
+      { email: params.email, full_name: params.full_name, user_type: params.user_type }
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
+
+  revalidatePath('/admin/users')
+  return { success: true, userId: authData.user.id }
+}
+
 export async function suspendUser(
   userId: string,
   reason: string,
