@@ -433,7 +433,7 @@ export async function restoreUser(userId: string): Promise<{ success?: boolean; 
     .select('role')
     .eq('id', admin.id)
     .eq('is_active', true)
-    .single()
+    .single() as { data: { role: string } | null; error: any }
 
   if (adminError) {
     console.error('Failed to get admin profile:', adminError)
