@@ -37,10 +37,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { MoreHorizontal, Search, Ban, CheckCircle, Trash, Eye, RotateCcw } from 'lucide-react'
+import { MoreHorizontal, Search, Ban, CheckCircle, Trash, Eye, RotateCcw, Pencil } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { suspendUser, unsuspendUser, deleteUser, restoreUser } from '@/lib/admin/actions'
+import { suspendUser, unsuspendUser, deleteUser, restoreUser, updateUser } from '@/lib/admin/actions'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 
 interface UsersTableProps {
@@ -60,6 +69,12 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [suspendDialogOpen, setSuspendDialogOpen] = useState(false)
   const [selectedUser, setSelectedUser] = useState<any>(null)
+  const [editDialogOpen, setEditDialogOpen] = useState(false)
+  const [editForm, setEditForm] = useState({
+    full_name: '',
+    phone: '',
+    user_type: '',
+  })
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '')
   const [userTypeFilter, setUserTypeFilter] = useState(
     searchParams.get('userType') || 'all'
@@ -154,6 +169,36 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
       router.refresh()
     } catch (error) {
       toast.error('Failed to restore user')
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const openEditDialog = (user: any) => {
+    setSelectedUser(user)
+    setEditForm({
+      full_name: user.full_name || '',
+      phone: user.phone || '',
+      user_type: user.user_type || 'buyer',
+    })
+    setEditDialogOpen(true)
+  }
+
+  const handleUpdate = async () => {
+    if (!selectedUser) return
+    setIsLoading(true)
+    try {
+      const result = await updateUser(selectedUser.id, editForm)
+      if (result.error) {
+        toast.error(result.error)
+      } else {
+        toast.success('User updated successfully')
+        router.refresh()
+        setEditDialogOpen(false)
+      }
+    } catch (error) {
+      toast.error('Failed to update user')
       console.error(error)
     } finally {
       setIsLoading(false)
@@ -268,6 +313,15 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                             View Details
                           </Link>
                         </DropdownMenuItem>
+                        {!isUserDeleted(user) && (
+                          <DropdownMenuItem
+                            onClick={() => openEditDialog(user)}
+                            disabled={isLoading}
+                          >
+                            <Pencil className="h-4 w-4 mr-2" />
+                            Edit User
+                          </DropdownMenuItem>
+                        )}
                         {isUserDeleted(user) ? (
                           <DropdownMenuItem
                             onClick={() => handleRestore(user.id)}
@@ -401,6 +455,68 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Edit Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+            <DialogDescription>
+              Update user details for {selectedUser?.email}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="full_name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="full_name"
+                value={editForm.full_name}
+                onChange={(e) => setEditForm({ ...editForm, full_name: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="phone" className="text-right">
+                Phone
+              </Label>
+              <Input
+                id="phone"
+                value={editForm.phone}
+                onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                className="col-span-3"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="user_type" className="text-right">
+                User Type
+              </Label>
+              <Select
+                value={editForm.user_type}
+                onValueChange={(v) => setEditForm({ ...editForm, user_type: v })}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select user type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="buyer">Buyer</SelectItem>
+                  <SelectItem value="seller">Seller</SelectItem>
+                  <SelectItem value="lawyer">Lawyer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleUpdate} disabled={isLoading}>
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

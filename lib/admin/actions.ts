@@ -351,6 +351,75 @@ export async function deleteUser(userId: string) {
   return { success: true }
 }
 
+export async function updateUser(
+  userId: string,
+  updates: {
+    full_name?: string
+    phone?: string
+    user_type?: string
+    country_id?: string
+  }
+): Promise<{ success?: boolean; error?: string }> {
+  const supabase = await createClient()
+  const serviceClient = createServiceClient()
+
+  // Get admin user
+  const { data: { user: admin } } = await supabase.auth.getUser()
+  if (!admin) return { error: 'Not authenticated' }
+
+  // Verify admin has permission
+  const { data: adminProfile } = await (supabase
+    .from('admin_profiles') as any)
+    .select('role')
+    .eq('id', admin.id)
+    .eq('is_active', true)
+    .single() as { data: { role: string } | null }
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    return { error: 'Not authorized to update users' }
+  }
+
+  // Get user data before update for logging
+  const { data: userBefore } = await serviceClient
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single()
+
+  // Update profile using service client (bypasses RLS)
+  const { error: updateError } = await (serviceClient
+    .from('profiles') as any)
+    .update({
+      ...updates,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', userId)
+
+  if (updateError) {
+    console.error('Failed to update user:', updateError)
+    return { error: updateError.message }
+  }
+
+  // Log action (optional)
+  try {
+    await logAdminAction(
+      supabase,
+      admin.id,
+      'user.update',
+      'user',
+      userId,
+      userBefore,
+      updates
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
+
+  revalidatePath('/admin/users')
+  revalidatePath(`/admin/users/${userId}`)
+  return { success: true }
+}
+
 export async function restoreUser(userId: string) {
   const supabase = await createClient()
   const serviceClient = createServiceClient()
