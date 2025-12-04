@@ -310,7 +310,7 @@ export async function deleteUser(userId: string) {
     .from('profiles')
     .select('*')
     .eq('id', userId)
-    .single()
+    .single() as { data: { full_name: string | null } | null }
 
   // Soft delete - mark as deleted rather than hard delete
   // This preserves data integrity with foreign keys
