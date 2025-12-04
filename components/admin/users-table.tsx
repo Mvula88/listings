@@ -164,12 +164,16 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
   const handleRestore = async (userId: string) => {
     setIsLoading(true)
     try {
-      await restoreUser(userId)
-      toast.success('User restored successfully')
-      router.refresh()
-    } catch (error) {
-      toast.error('Failed to restore user')
-      console.error(error)
+      const result = await restoreUser(userId)
+      if (result?.success) {
+        toast.success('User restored successfully')
+        router.refresh()
+      } else {
+        toast.error('Failed to restore user')
+      }
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to restore user')
+      console.error('Restore error:', error)
     } finally {
       setIsLoading(false)
     }
