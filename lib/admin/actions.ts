@@ -420,35 +420,45 @@ export async function updateUser(
   return { success: true }
 }
 
-export async function restoreUser(userId: string) {
+export async function restoreUser(userId: string): Promise<{ success?: boolean; error?: string }> {
   const supabase = await createClient()
   const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
-  if (!admin) throw new Error('Not authenticated')
+  if (!admin) return { error: 'Not authenticated' }
 
-  // Verify admin has permission
-  const { data: adminProfile } = await (supabase
-    .from('admin_profiles') as any)
+  // Verify admin has permission using service client to bypass RLS
+  const { data: adminProfile, error: adminError } = await serviceClient
+    .from('admin_profiles')
     .select('role')
     .eq('id', admin.id)
     .eq('is_active', true)
-    .single() as { data: { role: string } | null }
+    .single()
+
+  if (adminError) {
+    console.error('Failed to get admin profile:', adminError)
+    return { error: 'Failed to verify admin permissions' }
+  }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
-    throw new Error('Not authorized to restore users')
+    return { error: 'Not authorized to restore users' }
   }
 
   // Get user data to restore original name
-  const { data: user } = await serviceClient
+  const { data: user, error: userError } = await serviceClient
     .from('profiles')
-    .select('*')
+    .select('original_name, full_name')
     .eq('id', userId)
-    .single() as { data: { original_name: string | null; full_name: string | null } | null }
+    .single()
+
+  if (userError) {
+    console.error('Failed to get user data:', userError)
+    return { error: 'Failed to get user data' }
+  }
 
   // Restore user - undelete and unsuspend
-  const { error } = await (serviceClient
-    .from('profiles') as any)
+  const { error } = await serviceClient
+    .from('profiles')
     .update({
       is_suspended: false,
       is_deleted: false,
@@ -461,13 +471,13 @@ export async function restoreUser(userId: string) {
 
   if (error) {
     console.error('Failed to restore user:', error)
-    throw new Error(`Failed to restore user: ${error.message}`)
+    return { error: `Failed to restore user: ${error.message}` }
   }
 
   // Log action (optional)
   try {
     await logAdminAction(
-      supabase,
+      serviceClient,
       admin.id,
       'user.restore',
       'user',

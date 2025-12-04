@@ -168,6 +168,9 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
       if (result?.success) {
         toast.success('User restored successfully')
         router.refresh()
+      } else if (result?.error) {
+        toast.error(result.error)
+        console.error('Restore error:', result.error)
       } else {
         toast.error('Failed to restore user')
       }
