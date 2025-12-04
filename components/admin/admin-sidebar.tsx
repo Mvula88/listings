@@ -18,6 +18,7 @@ import {
   Mail,
   Activity,
   UserCog,
+  Globe,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
@@ -87,6 +88,12 @@ const navigation: NavigationItem[] = [
     href: '/admin/audit',
     icon: Activity,
     permission: 'audit.view',
+  },
+  {
+    name: 'Countries',
+    href: '/admin/countries',
+    icon: Globe,
+    permission: 'settings.edit', // Only admins who can edit settings
   },
   {
     name: 'Settings',

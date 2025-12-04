@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -23,11 +23,17 @@ import {
   X,
   AlertCircle
 } from 'lucide-react'
+import {
+  getActiveCountriesForOnboarding,
+  getCountryDocumentRequirementsForOnboarding,
+  type DocumentRequirement
+} from '@/lib/actions/lawyer-onboarding'
 
 interface Country {
   id: string
   name: string
   code: string
+  flag_emoji: string | null
 }
 
 interface UploadedFile {
@@ -41,27 +47,23 @@ export default function LawyerOnboardingPage() {
   const [uploadingDoc, setUploadingDoc] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [countries, setCountries] = useState<Country[]>([])
+  const [documentRequirements, setDocumentRequirements] = useState<DocumentRequirement[]>([])
+  const [loadingRequirements, setLoadingRequirements] = useState(false)
+  const [countryInfo, setCountryInfo] = useState<{ name: string; currency: string; currency_symbol: string } | null>(null)
   const router = useRouter()
   const supabase: any = createClient()
 
-  // File input refs
-  const practicingCertRef = useRef<HTMLInputElement>(null)
-  const idDocRef = useRef<HTMLInputElement>(null)
-  const insuranceRef = useRef<HTMLInputElement>(null)
+  // Dynamic file input refs
+  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
 
   // Fetch countries on mount
   useEffect(() => {
     async function fetchCountries() {
-      const { data } = await supabase
-        .from('countries')
-        .select('id, name, code')
-        .order('name')
-      if (data) {
-        setCountries(data)
-      }
+      const { countries: data } = await getActiveCountriesForOnboarding()
+      setCountries(data)
     }
     fetchCountries()
-  }, [supabase])
+  }, [])
 
   const [formData, setFormData] = useState({
     firmName: '',
@@ -78,54 +80,79 @@ export default function LawyerOnboardingPage() {
     agreedToTerms: false
   })
 
-  // Document uploads state
-  const [documents, setDocuments] = useState<{
-    practicingCertificate: UploadedFile | null
-    idDocument: UploadedFile | null
-    insuranceCertificate: UploadedFile | null
-  }>({
-    practicingCertificate: null,
-    idDocument: null,
-    insuranceCertificate: null
-  })
+  // Dynamic document uploads state - keyed by requirement ID
+  const [documents, setDocuments] = useState<{ [key: string]: UploadedFile | null }>({})
 
   const totalSteps = 5
 
-  // Handle file selection
-  function handleFileSelect(type: 'practicingCertificate' | 'idDocument' | 'insuranceCertificate', file: File | null) {
-    if (!file) return
-
-    // Validate file type
-    const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg']
-    if (!allowedTypes.includes(file.type)) {
-      setError('Please upload a PDF or image file (JPEG, PNG)')
+  // Fetch document requirements when country changes
+  const fetchDocumentRequirements = useCallback(async (countryId: string) => {
+    if (!countryId) {
+      setDocumentRequirements([])
+      setCountryInfo(null)
       return
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError('File size must be less than 5MB')
+    setLoadingRequirements(true)
+    try {
+      const { requirements, country, error } = await getCountryDocumentRequirementsForOnboarding(countryId)
+      if (error) {
+        console.error('Error fetching requirements:', error)
+      }
+      setDocumentRequirements(requirements)
+      setCountryInfo(country || null)
+      // Reset documents when country changes
+      setDocuments({})
+    } catch (err) {
+      console.error('Error:', err)
+    } finally {
+      setLoadingRequirements(false)
+    }
+  }, [])
+
+  // Handle country change
+  function handleCountryChange(countryId: string) {
+    setFormData({ ...formData, country: countryId })
+    fetchDocumentRequirements(countryId)
+  }
+
+  // Handle file selection
+  function handleFileSelect(requirementId: string, file: File | null, requirement: DocumentRequirement) {
+    if (!file) return
+
+    // Validate file type
+    const allowedTypes = requirement.accepted_file_types || ['application/pdf', 'image/jpeg', 'image/png']
+    if (!allowedTypes.includes(file.type)) {
+      const extensions = allowedTypes.map(t => t.split('/')[1]).join(', ')
+      setError(`Please upload a valid file type: ${extensions}`)
+      return
+    }
+
+    // Validate file size
+    const maxSize = (requirement.max_file_size_mb || 5) * 1024 * 1024
+    if (file.size > maxSize) {
+      setError(`File size must be less than ${requirement.max_file_size_mb || 5}MB`)
       return
     }
 
     setDocuments(prev => ({
       ...prev,
-      [type]: { file, preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined }
+      [requirementId]: { file, preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined }
     }))
     setError(null)
   }
 
-  function removeFile(type: 'practicingCertificate' | 'idDocument' | 'insuranceCertificate') {
+  function removeFile(requirementId: string) {
     setDocuments(prev => ({
       ...prev,
-      [type]: null
+      [requirementId]: null
     }))
   }
 
   // Upload file to Supabase Storage - returns file path (not URL) for secure storage
-  async function uploadDocument(file: File, userId: string, docType: string): Promise<string | null> {
+  async function uploadDocument(file: File, userId: string, docKey: string): Promise<string | null> {
     const fileExt = file.name.split('.').pop()
-    const filePath = `${userId}/${docType}_${Date.now()}.${fileExt}`
+    const filePath = `${userId}/${docKey}_${Date.now()}.${fileExt}`
 
     const { data, error } = await supabase.storage
       .from('lawyer-documents')
@@ -143,6 +170,12 @@ export default function LawyerOnboardingPage() {
     return filePath
   }
 
+  // Check if all required documents are uploaded
+  function areRequiredDocsUploaded(): boolean {
+    const requiredDocs = documentRequirements.filter(r => r.is_required)
+    return requiredDocs.every(r => documents[r.id]?.file)
+  }
+
   async function handleSubmit() {
     setLoading(true)
     setError(null)
@@ -156,37 +189,32 @@ export default function LawyerOnboardingPage() {
       }
 
       // Validate required documents
-      if (!documents.practicingCertificate || !documents.idDocument) {
-        setError('Please upload your Practicing Certificate and ID Document')
+      if (!areRequiredDocsUploaded()) {
+        setError('Please upload all required documents')
         setLoading(false)
         return
       }
 
-      // Upload documents
-      let practicingCertUrl: string | null = null
-      let idDocUrl: string | null = null
-      let insuranceUrl: string | null = null
+      // Upload all documents
+      const uploadedDocs: { requirementId: string; filePath: string }[] = []
 
-      setUploadingDoc('practicing certificate')
-      practicingCertUrl = await uploadDocument(documents.practicingCertificate.file, user.id, 'practicing_certificate')
-      if (!practicingCertUrl) {
-        throw new Error('Failed to upload practicing certificate')
-      }
-
-      setUploadingDoc('ID document')
-      idDocUrl = await uploadDocument(documents.idDocument.file, user.id, 'id_document')
-      if (!idDocUrl) {
-        throw new Error('Failed to upload ID document')
-      }
-
-      if (documents.insuranceCertificate) {
-        setUploadingDoc('insurance certificate')
-        insuranceUrl = await uploadDocument(documents.insuranceCertificate.file, user.id, 'insurance_certificate')
+      for (const requirement of documentRequirements) {
+        const doc = documents[requirement.id]
+        if (doc?.file) {
+          setUploadingDoc(requirement.document_name)
+          const filePath = await uploadDocument(doc.file, user.id, requirement.document_key)
+          if (!filePath && requirement.is_required) {
+            throw new Error(`Failed to upload ${requirement.document_name}`)
+          }
+          if (filePath) {
+            uploadedDocs.push({ requirementId: requirement.id, filePath })
+          }
+        }
       }
 
       setUploadingDoc(null)
 
-      // Create lawyer profile with document URLs
+      // Create lawyer profile with document records
       const { error: lawyerError } = await supabase
         .from('lawyers')
         .insert({
@@ -204,13 +232,33 @@ export default function LawyerOnboardingPage() {
           payment_method: formData.paymentMethod,
           verified: false,
           available: true,
-          practicing_certificate_url: practicingCertUrl,
-          id_document_url: idDocUrl,
-          insurance_certificate_url: insuranceUrl,
           verification_submitted_at: new Date().toISOString()
         })
 
       if (lawyerError) throw lawyerError
+
+      // Get the created lawyer ID
+      const { data: lawyer } = await supabase
+        .from('lawyers')
+        .select('id')
+        .eq('profile_id', user.id)
+        .single()
+
+      // Insert document records if we have the lawyer_documents table
+      if (lawyer && uploadedDocs.length > 0) {
+        const documentRecords = uploadedDocs.map(doc => ({
+          lawyer_id: lawyer.id,
+          requirement_id: doc.requirementId,
+          file_path: doc.filePath,
+          status: 'pending'
+        }))
+
+        // Try to insert, but don't fail if table doesn't exist yet
+        await supabase
+          .from('lawyer_documents')
+          .insert(documentRecords)
+          .catch((err: any) => console.log('Document records insert skipped:', err.message))
+      }
 
       // Update user profile type
       await supabase
@@ -219,7 +267,6 @@ export default function LawyerOnboardingPage() {
         .eq('id', user.id)
 
       // Redirect to verification pending page
-      // Lawyers need admin approval before accessing the dashboard
       router.push('/lawyer/verification-pending')
     } catch (err: any) {
       setError(err.message)
@@ -228,6 +275,9 @@ export default function LawyerOnboardingPage() {
       setUploadingDoc(null)
     }
   }
+
+  // Get currency symbol for display
+  const currencySymbol = countryInfo?.currency_symbol || '$'
 
   const renderStep = () => {
     switch (step) {
@@ -244,7 +294,7 @@ export default function LawyerOnboardingPage() {
                 required
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="registrationNumber">Registration/License Number</Label>
               <Input
@@ -255,13 +305,13 @@ export default function LawyerOnboardingPage() {
                 required
               />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="country">Country</Label>
                 <Select
                   value={formData.country}
-                  onValueChange={(value) => setFormData({...formData, country: value})}
+                  onValueChange={handleCountryChange}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select country" />
@@ -269,13 +319,13 @@ export default function LawyerOnboardingPage() {
                   <SelectContent>
                     {countries.map((country) => (
                       <SelectItem key={country.id} value={country.id}>
-                        {country.name}
+                        {country.flag_emoji && `${country.flag_emoji} `}{country.name}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="city">City</Label>
                 <Input
@@ -287,7 +337,7 @@ export default function LawyerOnboardingPage() {
                 />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="yearsExperience">Years of Experience</Label>
               <Input
@@ -301,14 +351,16 @@ export default function LawyerOnboardingPage() {
             </div>
           </div>
         )
-      
+
       case 2:
         return (
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="flatFeeBuyer">Flat Fee for Buyers (in local currency)</Label>
+              <Label htmlFor="flatFeeBuyer">Flat Fee for Buyers {countryInfo && `(${countryInfo.currency})`}</Label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+                  {currencySymbol}
+                </span>
                 <Input
                   id="flatFeeBuyer"
                   type="number"
@@ -323,11 +375,13 @@ export default function LawyerOnboardingPage() {
                 Your standard fee for representing property buyers
               </p>
             </div>
-            
+
             <div className="space-y-2">
-              <Label htmlFor="flatFeeSeller">Flat Fee for Sellers (in local currency)</Label>
+              <Label htmlFor="flatFeeSeller">Flat Fee for Sellers {countryInfo && `(${countryInfo.currency})`}</Label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+                  {currencySymbol}
+                </span>
                 <Input
                   id="flatFeeSeller"
                   type="number"
@@ -342,7 +396,7 @@ export default function LawyerOnboardingPage() {
                 Your standard fee for representing property sellers
               </p>
             </div>
-            
+
             <Alert>
               <AlertDescription>
                 PropLinka promotes transparent, flat-fee pricing. Your fees will be clearly displayed to clients before they select you.
@@ -350,7 +404,7 @@ export default function LawyerOnboardingPage() {
             </Alert>
           </div>
         )
-      
+
       case 3:
         return (
           <div className="space-y-4">
@@ -364,7 +418,7 @@ export default function LawyerOnboardingPage() {
                 rows={4}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label>Languages Spoken</Label>
               <div className="grid grid-cols-2 gap-2">
@@ -385,7 +439,7 @@ export default function LawyerOnboardingPage() {
                 ))}
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <Label>Specializations</Label>
               <div className="grid grid-cols-2 gap-2">
@@ -408,7 +462,7 @@ export default function LawyerOnboardingPage() {
             </div>
           </div>
         )
-      
+
       case 4:
         return (
           <div className="space-y-4">
@@ -420,158 +474,79 @@ export default function LawyerOnboardingPage() {
               </AlertDescription>
             </Alert>
 
-            {/* Practicing Certificate - Required */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                Practicing Certificate / Fidelity Fund Certificate
-                <span className="text-red-500">*</span>
-              </Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                Your current practicing certificate from the Law Society
-              </p>
-              {documents.practicingCertificate ? (
-                <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/50">
-                  <FileText className="h-8 w-8 text-primary" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {documents.practicingCertificate.file.name}
+            {loadingRequirements ? (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+                <span className="ml-2 text-muted-foreground">Loading requirements...</span>
+              </div>
+            ) : documentRequirements.length === 0 ? (
+              <Alert>
+                <AlertDescription>
+                  {formData.country
+                    ? 'No document requirements configured for this country yet. Please contact support.'
+                    : 'Please select a country in step 1 to see required documents.'
+                  }
+                </AlertDescription>
+              </Alert>
+            ) : (
+              documentRequirements.map((requirement) => (
+                <div key={requirement.id} className="space-y-2">
+                  <Label className="flex items-center gap-2">
+                    {requirement.document_name}
+                    {requirement.is_required ? (
+                      <span className="text-red-500">*</span>
+                    ) : (
+                      <span className="text-muted-foreground text-xs">(Optional)</span>
+                    )}
+                  </Label>
+                  {(requirement.description || requirement.help_text) && (
+                    <p className="text-xs text-muted-foreground mb-2">
+                      {requirement.help_text || requirement.description}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {(documents.practicingCertificate.file.size / 1024).toFixed(1)} KB
-                    </p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeFile('practicingCertificate')}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
+                  )}
+                  {documents[requirement.id] ? (
+                    <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/50">
+                      <FileText className="h-8 w-8 text-primary" />
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          {documents[requirement.id]!.file.name}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {(documents[requirement.id]!.file.size / 1024).toFixed(1)} KB
+                        </p>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeFile(requirement.id)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div
+                      className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-primary hover:bg-muted/50 transition-colors"
+                      onClick={() => fileInputRefs.current[requirement.id]?.click()}
+                    >
+                      <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
+                      <p className="text-sm text-muted-foreground">
+                        Click to upload or drag and drop
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">
+                        Max {requirement.max_file_size_mb}MB
+                      </p>
+                    </div>
+                  )}
+                  <input
+                    ref={(el) => { fileInputRefs.current[requirement.id] = el }}
+                    type="file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    className="hidden"
+                    onChange={(e) => handleFileSelect(requirement.id, e.target.files?.[0] || null, requirement)}
+                  />
                 </div>
-              ) : (
-                <div
-                  className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-primary hover:bg-muted/50 transition-colors"
-                  onClick={() => practicingCertRef.current?.click()}
-                >
-                  <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    PDF, JPEG, or PNG (max 5MB)
-                  </p>
-                </div>
-              )}
-              <input
-                ref={practicingCertRef}
-                type="file"
-                accept=".pdf,.jpg,.jpeg,.png"
-                className="hidden"
-                onChange={(e) => handleFileSelect('practicingCertificate', e.target.files?.[0] || null)}
-              />
-            </div>
-
-            {/* ID Document - Required */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                Government-Issued ID
-                <span className="text-red-500">*</span>
-              </Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                National ID card or Passport (identity page)
-              </p>
-              {documents.idDocument ? (
-                <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/50">
-                  <FileText className="h-8 w-8 text-primary" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {documents.idDocument.file.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {(documents.idDocument.file.size / 1024).toFixed(1)} KB
-                    </p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeFile('idDocument')}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
-                <div
-                  className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-primary hover:bg-muted/50 transition-colors"
-                  onClick={() => idDocRef.current?.click()}
-                >
-                  <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    PDF, JPEG, or PNG (max 5MB)
-                  </p>
-                </div>
-              )}
-              <input
-                ref={idDocRef}
-                type="file"
-                accept=".pdf,.jpg,.jpeg,.png"
-                className="hidden"
-                onChange={(e) => handleFileSelect('idDocument', e.target.files?.[0] || null)}
-              />
-            </div>
-
-            {/* Insurance Certificate - Optional */}
-            <div className="space-y-2">
-              <Label className="flex items-center gap-2">
-                Professional Indemnity Insurance
-                <span className="text-muted-foreground text-xs">(Optional)</span>
-              </Label>
-              <p className="text-xs text-muted-foreground mb-2">
-                Your current professional indemnity insurance certificate
-              </p>
-              {documents.insuranceCertificate ? (
-                <div className="flex items-center gap-3 p-3 border rounded-lg bg-muted/50">
-                  <FileText className="h-8 w-8 text-primary" />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
-                      {documents.insuranceCertificate.file.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {(documents.insuranceCertificate.file.size / 1024).toFixed(1)} KB
-                    </p>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => removeFile('insuranceCertificate')}
-                  >
-                    <X className="h-4 w-4" />
-                  </Button>
-                </div>
-              ) : (
-                <div
-                  className="border-2 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-primary hover:bg-muted/50 transition-colors"
-                  onClick={() => insuranceRef.current?.click()}
-                >
-                  <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-                  <p className="text-sm text-muted-foreground">
-                    Click to upload or drag and drop
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    PDF, JPEG, or PNG (max 5MB)
-                  </p>
-                </div>
-              )}
-              <input
-                ref={insuranceRef}
-                type="file"
-                accept=".pdf,.jpg,.jpeg,.png"
-                className="hidden"
-                onChange={(e) => handleFileSelect('insuranceCertificate', e.target.files?.[0] || null)}
-              />
-            </div>
+              ))
+            )}
 
             {error && (
               <Alert variant="destructive">
@@ -594,7 +569,7 @@ export default function LawyerOnboardingPage() {
                 <p className="text-sm font-semibold mb-2">How It Works:</p>
                 <ul className="text-sm text-muted-foreground space-y-1">
                   <li>• You collect the full platform fee from the seller at closing</li>
-                  <li>• You keep 10% as your commission (e.g., R750 from R7,500 fee)</li>
+                  <li>• You keep 10% as your commission (e.g., {currencySymbol}750 from {currencySymbol}7,500 fee)</li>
                   <li>• You remit the remaining 90% to PropLinka within 30 days</li>
                 </ul>
               </div>
@@ -645,7 +620,7 @@ export default function LawyerOnboardingPage() {
                 I agree to PropLinka's terms of service for conveyancers, including earning a 10% commission on platform fees and remitting the net 90% within 30 days of closing
               </Label>
             </div>
-            
+
             {error && (
               <Alert variant="destructive">
                 <AlertDescription>{error}</AlertDescription>
@@ -654,6 +629,15 @@ export default function LawyerOnboardingPage() {
           </div>
         )
     }
+  }
+
+  // Check if can proceed to next step
+  const canProceedFromStep4 = () => {
+    if (documentRequirements.length === 0 && formData.country) {
+      // No requirements configured, allow to proceed
+      return true
+    }
+    return areRequiredDocsUploaded()
   }
 
   return (
@@ -703,7 +687,7 @@ export default function LawyerOnboardingPage() {
           </CardHeader>
           <CardContent>
             {renderStep()}
-            
+
             <div className="flex justify-between mt-6">
               <Button
                 variant="outline"
@@ -712,11 +696,11 @@ export default function LawyerOnboardingPage() {
               >
                 Previous
               </Button>
-              
+
               {step < totalSteps ? (
                 <Button
                   onClick={() => setStep(step + 1)}
-                  disabled={step === 4 && (!documents.practicingCertificate || !documents.idDocument)}
+                  disabled={step === 4 && !canProceedFromStep4()}
                 >
                   Next
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -724,7 +708,7 @@ export default function LawyerOnboardingPage() {
               ) : (
                 <Button
                   onClick={handleSubmit}
-                  disabled={!formData.agreedToTerms || loading || !documents.practicingCertificate || !documents.idDocument}
+                  disabled={!formData.agreedToTerms || loading || !canProceedFromStep4()}
                 >
                   {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   {uploadingDoc ? `Uploading ${uploadingDoc}...` : 'Complete Registration'}
