@@ -37,10 +37,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
-import { MoreHorizontal, Search, Ban, CheckCircle, Trash, Eye } from 'lucide-react'
+import { MoreHorizontal, Search, Ban, CheckCircle, Trash, Eye, RotateCcw } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { suspendUser, unsuspendUser, deleteUser } from '@/lib/admin/actions'
+import { suspendUser, unsuspendUser, deleteUser, restoreUser } from '@/lib/admin/actions'
 import { toast } from 'sonner'
 
 interface UsersTableProps {
@@ -146,6 +146,25 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
     }
   }
 
+  const handleRestore = async (userId: string) => {
+    setIsLoading(true)
+    try {
+      await restoreUser(userId)
+      toast.success('User restored successfully')
+      router.refresh()
+    } catch (error) {
+      toast.error('Failed to restore user')
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Helper to determine if user is deleted (by checking if name is [Deleted User] or is_deleted flag)
+  const isUserDeleted = (user: any) => {
+    return user.is_deleted || user.full_name === '[Deleted User]'
+  }
+
   return (
     <div className="space-y-4">
       {/* Filters */}
@@ -179,8 +198,10 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="active">Active Only</SelectItem>
             <SelectItem value="false">Active</SelectItem>
             <SelectItem value="true">Suspended</SelectItem>
+            <SelectItem value="deleted">Deleted</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -220,7 +241,9 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                   </TableCell>
                   <TableCell>{user.country?.name || 'N/A'}</TableCell>
                   <TableCell>
-                    {user.is_suspended ? (
+                    {isUserDeleted(user) ? (
+                      <Badge variant="outline" className="bg-gray-100 text-gray-600 border-gray-300">Deleted</Badge>
+                    ) : user.is_suspended ? (
                       <Badge variant="destructive">Suspended</Badge>
                     ) : (
                       <Badge variant="default">Active</Badge>
@@ -245,7 +268,16 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                             View Details
                           </Link>
                         </DropdownMenuItem>
-                        {user.is_suspended ? (
+                        {isUserDeleted(user) ? (
+                          <DropdownMenuItem
+                            onClick={() => handleRestore(user.id)}
+                            disabled={isLoading}
+                            className="text-green-600"
+                          >
+                            <RotateCcw className="h-4 w-4 mr-2" />
+                            Restore User
+                          </DropdownMenuItem>
+                        ) : user.is_suspended ? (
                           <DropdownMenuItem
                             onClick={() => handleUnsuspend(user.id)}
                             disabled={isLoading}
@@ -265,18 +297,22 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                             Suspend
                           </DropdownMenuItem>
                         )}
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => {
-                            setSelectedUser(user)
-                            setDeleteDialogOpen(true)
-                          }}
-                          disabled={isLoading}
-                          className="text-red-600"
-                        >
-                          <Trash className="h-4 w-4 mr-2" />
-                          Delete User
-                        </DropdownMenuItem>
+                        {!isUserDeleted(user) && (
+                          <>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => {
+                                setSelectedUser(user)
+                                setDeleteDialogOpen(true)
+                              }}
+                              disabled={isLoading}
+                              className="text-red-600"
+                            >
+                              <Trash className="h-4 w-4 mr-2" />
+                              Delete User
+                            </DropdownMenuItem>
+                          </>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </TableCell>

@@ -314,11 +314,15 @@ export async function deleteUser(userId: string) {
 
   // Soft delete - mark as deleted rather than hard delete
   // This preserves data integrity with foreign keys
-  // Only update columns that are guaranteed to exist
+  // Store original name for potential recovery
   const { error } = await (serviceClient
     .from('profiles') as any)
     .update({
       is_suspended: true,
+      is_deleted: true,
+      deleted_at: new Date().toISOString(),
+      deleted_by: admin.id,
+      original_name: user?.full_name || null,
       full_name: '[Deleted User]',
     })
     .eq('id', userId)
@@ -338,6 +342,69 @@ export async function deleteUser(userId: string) {
       userId,
       user,
       null
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
+
+  revalidatePath('/admin/users')
+  return { success: true }
+}
+
+export async function restoreUser(userId: string) {
+  const supabase = await createClient()
+  const serviceClient = createServiceClient()
+
+  const { data: { user: admin } } = await supabase.auth.getUser()
+  if (!admin) throw new Error('Not authenticated')
+
+  // Verify admin has permission
+  const { data: adminProfile } = await (supabase
+    .from('admin_profiles') as any)
+    .select('role')
+    .eq('id', admin.id)
+    .eq('is_active', true)
+    .single() as { data: { role: string } | null }
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    throw new Error('Not authorized to restore users')
+  }
+
+  // Get user data to restore original name
+  const { data: user } = await serviceClient
+    .from('profiles')
+    .select('*')
+    .eq('id', userId)
+    .single()
+
+  // Restore user - undelete and unsuspend
+  const { error } = await (serviceClient
+    .from('profiles') as any)
+    .update({
+      is_suspended: false,
+      is_deleted: false,
+      deleted_at: null,
+      deleted_by: null,
+      full_name: user?.original_name || user?.full_name || 'Restored User',
+      original_name: null,
+    })
+    .eq('id', userId)
+
+  if (error) {
+    console.error('Failed to restore user:', error)
+    throw new Error(`Failed to restore user: ${error.message}`)
+  }
+
+  // Log action (optional)
+  try {
+    await logAdminAction(
+      supabase,
+      admin.id,
+      'user.restore',
+      'user',
+      userId,
+      { is_deleted: true },
+      { is_deleted: false }
     )
   } catch (err) {
     console.warn('Could not log admin action:', err)
