@@ -51,6 +51,8 @@ export async function getFeaturedProperties(limit: number = 8) {
     `)
     .eq('status', 'active')
     .eq('featured', true)
+    .order('premium', { ascending: false })  // Premium listings first
+    .order('featured_until', { ascending: false, nullsFirst: false })  // 30-day featured before 7-day (longer expiry = later date)
     .order('created_at', { ascending: false })
     .limit(limit)
 
@@ -103,6 +105,7 @@ export async function getAllActiveProperties() {
     .eq('status', 'active')
     .order('premium', { ascending: false })  // Premium first
     .order('featured', { ascending: false }) // Then featured
+    .order('featured_until', { ascending: false, nullsFirst: false })  // 30-day featured before 7-day
     .order('created_at', { ascending: false })
 
   if (error) {
