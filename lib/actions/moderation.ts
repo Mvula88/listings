@@ -39,8 +39,8 @@ async function checkModeratorAccess(): Promise<{ userId: string } | { error: str
   }
 
   // Update last_active timestamp using service client
-  await serviceClient
-    .from('admin_profiles')
+  await (serviceClient
+    .from('admin_profiles') as any)
     .update({ last_active: new Date().toISOString() })
     .eq('id', user.id)
 
