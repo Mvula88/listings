@@ -139,10 +139,11 @@ export async function rejectProperty(
     .eq('id', propertyId)
     .single()
 
-  // Update property moderation status
+  // Update property moderation status AND set status to rejected (hides from browse)
   const { error: updateError } = await (serviceClient
     .from('properties') as any)
     .update({
+      status: 'rejected', // Hide from public browse page
       moderation_status: 'rejected',
       moderation_notes: reason,
       moderated_by: access.userId,
@@ -324,8 +325,8 @@ export async function getListingsForReview(filter: ModerationFilter = 'all') {
         currency_symbol
       )
     `)
-    // Include both active and pending_review status properties
-    .in('status', ['active', 'pending_review'])
+    // Include active, pending_review, and rejected status properties for moderators
+    .in('status', ['active', 'pending_review', 'rejected'])
     .order('created_at', { ascending: false })
 
   // Apply filter
