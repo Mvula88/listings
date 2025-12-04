@@ -449,7 +449,7 @@ export async function restoreUser(userId: string): Promise<{ success?: boolean; 
     .from('profiles')
     .select('original_name, full_name')
     .eq('id', userId)
-    .single()
+    .single() as { data: { original_name: string | null; full_name: string | null } | null; error: any }
 
   if (userError) {
     console.error('Failed to get user data:', userError)
