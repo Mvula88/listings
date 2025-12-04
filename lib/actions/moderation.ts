@@ -1,6 +1,6 @@
 'use server'
 
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import type { ModerationAction, ModerationStatus } from '@/lib/types/database'
 import { createNotification } from './notifications'
@@ -15,6 +15,7 @@ interface ActionResult {
 
 /**
  * Check if current user is a moderator or admin
+ * Uses service client to bypass RLS on admin_profiles table
  */
 async function checkModeratorAccess(): Promise<{ userId: string } | { error: string }> {
   const supabase = await createClient()
@@ -24,19 +25,22 @@ async function checkModeratorAccess(): Promise<{ userId: string } | { error: str
     return { error: 'Not authenticated' }
   }
 
-  const { data: adminProfile } = await supabase
+  // Use service client to bypass RLS on admin_profiles
+  const serviceClient = createServiceClient()
+  const { data: adminProfile } = await serviceClient
     .from('admin_profiles')
-    .select('role')
+    .select('role, is_active')
     .eq('id', user.id)
-    .single<{ role: string }>()
+    .eq('is_active', true)
+    .single<{ role: string; is_active: boolean }>()
 
   if (!adminProfile) {
     return { error: 'Not authorized - moderator access required' }
   }
 
-  // Update last_active timestamp
-  await (supabase
-    .from('admin_profiles') as any)
+  // Update last_active timestamp using service client
+  await serviceClient
+    .from('admin_profiles')
     .update({ last_active: new Date().toISOString() })
     .eq('id', user.id)
 
