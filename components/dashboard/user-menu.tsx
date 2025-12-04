@@ -54,6 +54,18 @@ export function UserMenu({ user, profile, adminRole }: UserMenuProps) {
     }
   }
 
+  const getAdminUrl = () => {
+    switch (adminRole) {
+      case 'super_admin':
+      case 'admin':
+        return '/admin'
+      case 'moderator':
+        return '/moderator'
+      default:
+        return '/admin'
+    }
+  }
+
   async function handleSignOut() {
     setLoading(true)
     await supabase.auth.signOut()
@@ -96,7 +108,7 @@ export function UserMenu({ user, profile, adminRole }: UserMenuProps) {
             <>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => router.push('/admin')}
+                onClick={() => router.push(getAdminUrl())}
                 className="bg-gradient-to-r from-primary/10 to-transparent"
               >
                 {getAdminIcon()}
