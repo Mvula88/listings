@@ -172,7 +172,7 @@ export async function submitLawyerOnboarding(data: {
     }
 
     // Update user profile type
-    await supabase
+    await (supabase as any)
       .from('profiles')
       .update({ user_type: 'lawyer' })
       .eq('id', user.id)
