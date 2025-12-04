@@ -118,17 +118,6 @@ export default async function AdminCountriesPage() {
                         <Badge variant="outline" className="font-mono">
                           {country.code}
                         </Badge>
-                        {country.is_active ? (
-                          <Badge className="bg-green-500/10 text-green-600">
-                            <CheckCircle className="h-3 w-3 mr-1" />
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary">
-                            <XCircle className="h-3 w-3 mr-1" />
-                            Inactive
-                          </Badge>
-                        )}
                       </div>
                       <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
                         <span className="flex items-center gap-1">
