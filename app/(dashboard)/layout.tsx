@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { DashboardNav } from '@/components/dashboard/nav'
 import { UserMenu } from '@/components/dashboard/user-menu'
@@ -58,7 +58,9 @@ export default async function DashboardLayout({
   const activeRole = (profile?.user_type || 'buyer') as UserRole
 
   // Check if user is an admin (for showing admin panel link)
-  const { data: adminProfile } = await supabase
+  // Use service client to bypass RLS policies on admin_profiles
+  const serviceClient = createServiceClient()
+  const { data: adminProfile } = await serviceClient
     .from('admin_profiles')
     .select('role, is_active')
     .eq('id', user.id)

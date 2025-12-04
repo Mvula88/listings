@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
 import { AdminHeader } from '@/components/admin/admin-header'
@@ -17,8 +17,12 @@ export default async function AdminLayout({
     redirect('/login?redirectTo=/admin&error=admin_access_required')
   }
 
-  // Check if user is admin
-  const { data: adminProfile, error: adminError } = await supabase
+  // Use service client to bypass RLS for admin check
+  // This is safe because we've already verified the user is authenticated
+  const serviceClient = createServiceClient()
+
+  // Check if user is admin using service client (bypasses RLS)
+  const { data: adminProfile, error: adminError } = await serviceClient
     .from('admin_profiles')
     .select('*')
     .eq('id', user.id)
@@ -35,7 +39,7 @@ export default async function AdminLayout({
     redirect('/dashboard?error=insufficient_permissions')
   }
 
-  // Get the full profile separately
+  // Get the full profile separately (can use regular client since profiles table has different RLS)
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
