@@ -322,7 +322,10 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                         </DropdownMenuItem>
                         {!isUserDeleted(user) && (
                           <DropdownMenuItem
-                            onClick={() => openEditDialog(user)}
+                            onSelect={(e) => {
+                              e.preventDefault()
+                              openEditDialog(user)
+                            }}
                             disabled={isLoading}
                           >
                             <Pencil className="h-4 w-4 mr-2" />

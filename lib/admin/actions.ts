@@ -367,13 +367,18 @@ export async function updateUser(
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) return { error: 'Not authenticated' }
 
-  // Verify admin has permission
-  const { data: adminProfile } = await (supabase
-    .from('admin_profiles') as any)
+  // Verify admin has permission using service client to bypass RLS
+  const { data: adminProfile, error: adminError } = await serviceClient
+    .from('admin_profiles')
     .select('role')
     .eq('id', admin.id)
     .eq('is_active', true)
-    .single() as { data: { role: string } | null }
+    .single() as { data: { role: string } | null; error: any }
+
+  if (adminError) {
+    console.error('Failed to get admin profile:', adminError)
+    return { error: 'Failed to verify admin permissions' }
+  }
 
   if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
     return { error: 'Not authorized to update users' }
