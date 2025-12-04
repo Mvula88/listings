@@ -141,9 +141,10 @@ export function SettingsForm({ settings }: SettingsFormProps) {
   function renderSettingInput(setting: PlatformSetting) {
     const value = values[setting.key]
     const isBoolean = typeof value === 'boolean' || value === 'true' || value === 'false'
-    const isNumber = typeof value === 'number' || (!isNaN(Number(value)) && setting.key.includes('limit') || setting.key.includes('price') || setting.key.includes('percent') || setting.key.includes('max_') || setting.key.includes('threshold') || setting.key.includes('quality') || setting.key.includes('discount'))
+    const isObject = typeof value === 'object' && value !== null
+    const isNumber = !isObject && (typeof value === 'number' || (!isNaN(Number(value)) && setting.key.includes('limit') || setting.key.includes('price') || setting.key.includes('percent') || setting.key.includes('max_') || setting.key.includes('threshold') || setting.key.includes('quality') || setting.key.includes('discount')))
     const isSaving = saving === setting.key
-    const hasChanged = values[setting.key] !== setting.value
+    const hasChanged = JSON.stringify(values[setting.key]) !== JSON.stringify(setting.value)
 
     // Boolean toggle
     if (isBoolean) {
@@ -176,6 +177,59 @@ export function SettingsForm({ settings }: SettingsFormProps) {
               onClick={() => handleSave(setting.key)}
               disabled={isSaving || !hasChanged}
               variant={hasChanged ? "default" : "outline"}
+            >
+              {isSaving ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4" />
+              )}
+            </Button>
+          </div>
+        </div>
+      )
+    }
+
+    // JSON object (like maintenance_message)
+    if (isObject) {
+      const jsonString = JSON.stringify(value, null, 2)
+      return (
+        <div className="space-y-2 p-4 border rounded-lg bg-card">
+          <div className="flex items-center gap-2">
+            <Label htmlFor={setting.key} className="font-medium">
+              {getLabel(setting.key)}
+            </Label>
+            {hasChanged && (
+              <Badge variant="outline" className="text-xs">Modified</Badge>
+            )}
+            <Badge variant="secondary" className="text-xs">JSON</Badge>
+          </div>
+          {setting.description && (
+            <p className="text-sm text-muted-foreground">
+              {setting.description}
+            </p>
+          )}
+          <div className="flex gap-2">
+            <textarea
+              id={setting.key}
+              value={jsonString}
+              onChange={(e) => {
+                try {
+                  const parsed = JSON.parse(e.target.value)
+                  handleChange(setting.key, parsed)
+                } catch {
+                  // Keep the raw string if invalid JSON - will show error on save
+                  handleChange(setting.key, e.target.value)
+                }
+              }}
+              className="flex-1 min-h-[100px] p-3 border rounded-md bg-background font-mono text-sm resize-y"
+              placeholder="Enter valid JSON"
+            />
+            <Button
+              size="sm"
+              onClick={() => handleSave(setting.key)}
+              disabled={isSaving || !hasChanged}
+              variant={hasChanged ? "default" : "outline"}
+              className="self-start"
             >
               {isSaving ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
