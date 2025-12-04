@@ -14,6 +14,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 interface ModeratorHeaderProps {
   moderator: {
@@ -28,6 +29,8 @@ interface ModeratorHeaderProps {
 export function ModeratorHeader({ moderator }: ModeratorHeaderProps) {
   const router = useRouter()
   const [isRefreshing, setIsRefreshing] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const supabase = createClient()
 
   const handleRefresh = () => {
     setIsRefreshing(true)
@@ -36,7 +39,10 @@ export function ModeratorHeader({ moderator }: ModeratorHeaderProps) {
   }
 
   const handleLogout = async () => {
-    window.location.href = '/logout'
+    setIsLoggingOut(true)
+    await supabase.auth.signOut()
+    router.push('/moderator-login')
+    router.refresh()
   }
 
   return (
@@ -103,9 +109,9 @@ export function ModeratorHeader({ moderator }: ModeratorHeaderProps) {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="text-red-600">
+            <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut} className="text-red-600">
               <LogOut className="h-4 w-4 mr-2" />
-              Logout
+              {isLoggingOut ? 'Logging out...' : 'Logout'}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
