@@ -46,7 +46,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
-import { MoreHorizontal, Search, CheckCircle, XCircle, Star, Trash, Eye, StarOff } from 'lucide-react'
+import { MoreHorizontal, Search, CheckCircle, XCircle, Star, Trash, Eye, StarOff, Zap } from 'lucide-react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -75,8 +75,43 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
   const [isLoading, setIsLoading] = useState(false)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const [rejectDialogOpen, setRejectDialogOpen] = useState(false)
+  const [featureDialogOpen, setFeatureDialogOpen] = useState(false)
   const [selectedProperty, setSelectedProperty] = useState<any>(null)
   const [rejectionReason, setRejectionReason] = useState('')
+
+  // Feature plan options
+  const featurePlans = [
+    {
+      id: 'featured_7',
+      name: 'Featured',
+      duration: '7 Days',
+      days: 7,
+      premium: false,
+      icon: Star,
+      color: 'text-blue-600',
+      description: 'Highlighted in search results with featured badge'
+    },
+    {
+      id: 'featured_30',
+      name: 'Featured',
+      duration: '30 Days',
+      days: 30,
+      premium: false,
+      icon: Star,
+      color: 'text-blue-600',
+      description: 'Extended visibility with featured badge'
+    },
+    {
+      id: 'premium_30',
+      name: 'Premium',
+      duration: '30 Days',
+      days: 30,
+      premium: true,
+      icon: Zap,
+      color: 'text-yellow-600',
+      description: 'Top placement + homepage feature + premium badge'
+    }
+  ]
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '')
   const [statusFilter, setStatusFilter] = useState(
     searchParams.get('status') || 'all'
@@ -149,13 +184,17 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
     }
   }
 
-  const handleFeature = async (propertyId: string) => {
+  const handleFeature = async (propertyId: string, days: number, premium: boolean) => {
     setIsLoading(true)
     try {
-      const result = await featureProperty(propertyId)
+      const featuredUntil = new Date()
+      featuredUntil.setDate(featuredUntil.getDate() + days)
+
+      const result = await featureProperty(propertyId, featuredUntil.toISOString(), premium)
       if (result?.success) {
-        toast.success('Property featured successfully')
+        toast.success(`Property ${premium ? 'premium' : 'featured'} for ${days} days`)
         router.refresh()
+        setFeatureDialogOpen(false)
       } else if (result?.error) {
         toast.error(result.error)
       } else {
@@ -393,7 +432,18 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                           </>
                         )}
                         <DropdownMenuSeparator />
-                        {property.featured ? (
+                        <DropdownMenuItem
+                          onSelect={(e) => {
+                            e.preventDefault()
+                            setSelectedProperty(property)
+                            setFeatureDialogOpen(true)
+                          }}
+                          disabled={isLoading}
+                        >
+                          <Star className="h-4 w-4 mr-2" />
+                          {property.featured ? 'Change Feature Plan' : 'Feature Property'}
+                        </DropdownMenuItem>
+                        {property.featured && (
                           <DropdownMenuItem
                             onSelect={(e) => {
                               e.preventDefault()
@@ -402,18 +452,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                             disabled={isLoading}
                           >
                             <StarOff className="h-4 w-4 mr-2" />
-                            Unfeature
-                          </DropdownMenuItem>
-                        ) : (
-                          <DropdownMenuItem
-                            onSelect={(e) => {
-                              e.preventDefault()
-                              handleFeature(property.id)
-                            }}
-                            disabled={isLoading}
-                          >
-                            <Star className="h-4 w-4 mr-2" />
-                            Feature Property
+                            Remove Featured
                           </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
@@ -527,6 +566,52 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Feature Dialog */}
+      <Dialog open={featureDialogOpen} onOpenChange={setFeatureDialogOpen}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>Feature Property</DialogTitle>
+            <DialogDescription>
+              Select a feature plan for &quot;{selectedProperty?.title}&quot;
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            {featurePlans.map((plan) => {
+              const Icon = plan.icon
+              return (
+                <button
+                  key={plan.id}
+                  onClick={() => handleFeature(selectedProperty?.id, plan.days, plan.premium)}
+                  disabled={isLoading}
+                  className="flex items-start gap-4 p-4 rounded-lg border hover:bg-accent transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <div className={`p-2 rounded-full bg-muted ${plan.color}`}>
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{plan.name}</span>
+                      <Badge variant={plan.premium ? 'default' : 'secondary'}>
+                        {plan.duration}
+                      </Badge>
+                      {plan.premium && (
+                        <Badge className="bg-yellow-500 hover:bg-yellow-600">Premium</Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-muted-foreground mt-1">{plan.description}</p>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setFeatureDialogOpen(false)}>
+              Cancel
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

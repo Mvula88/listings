@@ -676,7 +676,7 @@ export async function rejectProperty(propertyId: string, reason: string) {
   return { success: true }
 }
 
-export async function featureProperty(propertyId: string, featuredUntil?: string): Promise<{ success?: boolean; error?: string }> {
+export async function featureProperty(propertyId: string, featuredUntil?: string, premium?: boolean): Promise<{ success?: boolean; error?: string }> {
   const supabase = await createClient()
   const serviceClient = createServiceClient()
 
@@ -688,6 +688,7 @@ export async function featureProperty(propertyId: string, featuredUntil?: string
     .update({
       featured: true,
       featured_until: featuredUntil,
+      is_premium: premium || false,
     })
     .eq('id', propertyId)
 
@@ -725,6 +726,7 @@ export async function unfeatureProperty(propertyId: string): Promise<{ success?:
     .update({
       featured: false,
       featured_until: null,
+      is_premium: false,
     })
     .eq('id', propertyId)
 
