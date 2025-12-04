@@ -457,8 +457,8 @@ export async function restoreUser(userId: string): Promise<{ success?: boolean; 
   }
 
   // Restore user - undelete and unsuspend
-  const { error } = await serviceClient
-    .from('profiles')
+  const { error } = await (serviceClient
+    .from('profiles') as any)
     .update({
       is_suspended: false,
       is_deleted: false,
