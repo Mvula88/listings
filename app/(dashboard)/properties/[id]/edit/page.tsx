@@ -47,6 +47,7 @@ export default async function EditPropertyPage({ params }: EditPropertyPageProps
   const { data: countries } = await supabase
     .from('countries')
     .select('*')
+    .eq('is_active', true)
     .order('name')
 
   return (

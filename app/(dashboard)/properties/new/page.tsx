@@ -18,6 +18,7 @@ export default async function NewPropertyPage() {
   const { data: countries } = await supabase
     .from('countries')
     .select('*')
+    .eq('is_active', true)
     .order('name')
 
   return (

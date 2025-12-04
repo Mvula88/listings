@@ -140,6 +140,8 @@ export default async function BrowsePropertiesPage({
   const { data: countries } = await supabase
     .from('countries')
     .select('*')
+    .eq('is_active', true)
+    .order('name')
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
