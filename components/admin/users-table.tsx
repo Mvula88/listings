@@ -301,7 +301,7 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                       <Badge variant="default">Active</Badge>
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell suppressHydrationWarning>
                     {new Date(user.created_at).toLocaleDateString()}
                   </TableCell>
                   <TableCell className="text-right">
@@ -331,7 +331,10 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                         )}
                         {isUserDeleted(user) ? (
                           <DropdownMenuItem
-                            onClick={() => handleRestore(user.id)}
+                            onSelect={(e) => {
+                              e.preventDefault()
+                              handleRestore(user.id)
+                            }}
                             disabled={isLoading}
                             className="text-green-600"
                           >
