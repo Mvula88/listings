@@ -999,6 +999,154 @@ export async function cancelTransaction(transactionId: string, reason: string) {
   return { success: true }
 }
 
+export async function getTransactionDetails(transactionId: string) {
+  const supabase = await createClient()
+  const serviceClient = createServiceClient()
+
+  // Verify admin access
+  const { data: { user: admin } } = await supabase.auth.getUser()
+  if (!admin) throw new Error('Not authenticated')
+
+  const { data: adminProfile } = await serviceClient
+    .from('admin_profiles')
+    .select('role')
+    .eq('id', admin.id)
+    .eq('is_active', true)
+    .single() as { data: { role: string } | null }
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    throw new Error('Not authorized to view transaction details')
+  }
+
+  // Get full transaction details
+  const { data: transaction, error } = await serviceClient
+    .from('transactions')
+    .select(`
+      *,
+      property:properties(
+        id, title, city, country_id, price, currency, description, bedrooms, bathrooms,
+        property_images(url)
+      ),
+      buyer:profiles!buyer_id(id, full_name, email, phone, avatar_url),
+      seller:profiles!seller_id(id, full_name, email, phone, avatar_url),
+      buyer_lawyer:lawyers!buyer_lawyer_id(id, firm_name, profile:profiles!profile_id(full_name, email)),
+      seller_lawyer:lawyers!seller_lawyer_id(id, firm_name, profile:profiles!profile_id(full_name, email))
+    `)
+    .eq('id', transactionId)
+    .single()
+
+  if (error) throw error
+
+  // Log admin access
+  try {
+    await logAdminAction(
+      serviceClient,
+      admin.id,
+      'transaction.view_details',
+      'transaction',
+      transactionId,
+      null,
+      { accessed_at: new Date().toISOString() }
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
+
+  return transaction
+}
+
+export async function getTransactionMessages(transactionId: string) {
+  const supabase = await createClient()
+  const serviceClient = createServiceClient()
+
+  // Verify admin access
+  const { data: { user: admin } } = await supabase.auth.getUser()
+  if (!admin) throw new Error('Not authenticated')
+
+  const { data: adminProfile } = await serviceClient
+    .from('admin_profiles')
+    .select('role')
+    .eq('id', admin.id)
+    .eq('is_active', true)
+    .single() as { data: { role: string } | null }
+
+  if (!adminProfile || !['super_admin', 'admin'].includes(adminProfile.role)) {
+    throw new Error('Not authorized to view messages')
+  }
+
+  // Get transaction to find related conversation/property
+  const { data: transaction } = await serviceClient
+    .from('transactions')
+    .select('id, property_id, buyer_id, seller_id')
+    .eq('id', transactionId)
+    .single() as { data: { id: string; property_id: string; buyer_id: string; seller_id: string } | null }
+
+  if (!transaction) throw new Error('Transaction not found')
+
+  // Get messages directly linked to transaction OR from conversations about the property between buyer/seller
+  const { data: messages, error } = await serviceClient
+    .from('messages')
+    .select(`
+      id,
+      content,
+      created_at,
+      read,
+      sender:profiles!sender_id(id, full_name, email, avatar_url),
+      recipient:profiles!recipient_id(id, full_name, email, avatar_url)
+    `)
+    .or(`transaction_id.eq.${transactionId},and(conversation_id.in.(select id from conversations where property_id='${transaction.property_id}'),or(sender_id.eq.${transaction.buyer_id},sender_id.eq.${transaction.seller_id}))`)
+    .order('created_at', { ascending: true })
+
+  // Fallback: if the complex query doesn't work, try simpler approach
+  let finalMessages = messages
+  if (error || !messages) {
+    // Try getting messages from conversations about this property between buyer and seller
+    const { data: conversations } = await serviceClient
+      .from('conversations')
+      .select('id')
+      .eq('property_id', transaction.property_id) as { data: { id: string }[] | null }
+
+    if (conversations && conversations.length > 0) {
+      const conversationIds = conversations.map(c => c.id)
+      const { data: convMessages } = await serviceClient
+        .from('messages')
+        .select(`
+          id,
+          content,
+          created_at,
+          read,
+          sender:profiles!sender_id(id, full_name, email, avatar_url),
+          recipient:profiles!recipient_id(id, full_name, email, avatar_url)
+        `)
+        .in('conversation_id', conversationIds)
+        .order('created_at', { ascending: true })
+
+      finalMessages = convMessages
+    }
+  }
+
+  // Log admin access to messages
+  try {
+    await logAdminAction(
+      serviceClient,
+      admin.id,
+      'transaction.view_messages',
+      'transaction',
+      transactionId,
+      null,
+      {
+        accessed_at: new Date().toISOString(),
+        message_count: finalMessages?.length || 0,
+        reason: 'admin_oversight'
+      }
+    )
+  } catch (err) {
+    console.warn('Could not log admin action:', err)
+  }
+
+  return finalMessages || []
+}
+
 // ============================================================================
 // ANALYTICS & STATS
 // ============================================================================

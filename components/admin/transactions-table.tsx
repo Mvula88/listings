@@ -30,7 +30,8 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Search, X, ExternalLink } from 'lucide-react'
+import { Loader2, Search, X, ExternalLink, Eye, MessageSquare } from 'lucide-react'
+import Link from 'next/link'
 import { toast } from 'sonner'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -245,6 +246,16 @@ export function TransactionsTable({ initialData }: { initialData: any }) {
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
+                      <Link href={`/admin/transactions/${transaction.id}`}>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="gap-1"
+                        >
+                          <Eye className="h-4 w-4" />
+                          <span className="hidden sm:inline">Details</span>
+                        </Button>
+                      </Link>
                       {transaction.property && (
                         <Button
                           variant="ghost"
