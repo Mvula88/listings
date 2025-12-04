@@ -101,16 +101,16 @@ export async function createUser(params: {
     return { error: 'Failed to create user' }
   }
 
-  // Create profile
+  // Create or update profile (use upsert in case a trigger already created the profile)
   const { error: profileError } = await (serviceClient
     .from('profiles') as any)
-    .insert({
+    .upsert({
       id: authData.user.id,
       email: params.email,
       full_name: params.full_name,
       phone: params.phone || null,
       user_type: params.user_type,
-    })
+    }, { onConflict: 'id' })
 
   if (profileError) {
     console.error('Failed to create profile:', profileError)
