@@ -75,7 +75,7 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
   // Get review history using service client to bypass RLS
   const serviceClient = createServiceClient()
   const { data: reviews } = await (serviceClient as any)
-    .from('property_reviews')
+    .from('moderation_audit')
     .select(`
       *,
       reviewer:profiles!reviewer_id (

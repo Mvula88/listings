@@ -591,8 +591,8 @@ export async function approveProperty(propertyId: string, notes?: string) {
 
   if (error) throw error
 
-  // Create review record for audit trail
-  await (serviceClient.from('property_reviews') as any).insert({
+  // Create audit record for audit trail
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: admin.id,
     action: 'approved',
@@ -661,8 +661,8 @@ export async function rejectProperty(propertyId: string, reason: string) {
 
   if (error) throw error
 
-  // Create review record for audit trail
-  await (serviceClient.from('property_reviews') as any).insert({
+  // Create audit record for audit trail
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: admin.id,
     action: 'rejected',

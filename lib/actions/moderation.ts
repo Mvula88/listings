@@ -83,8 +83,8 @@ export async function approveProperty(propertyId: string, notes?: string): Promi
     return { success: false, error: 'Failed to approve property' }
   }
 
-  // Create review record
-  await (serviceClient.from('property_reviews') as any).insert({
+  // Create audit record
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'approved',
@@ -156,8 +156,8 @@ export async function rejectProperty(
     return { success: false, error: 'Failed to reject property' }
   }
 
-  // Create review record
-  await (serviceClient.from('property_reviews') as any).insert({
+  // Create audit record
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'rejected',
@@ -222,8 +222,8 @@ export async function flagProperty(propertyId: string, reason: string): Promise<
     return { success: false, error: 'Failed to flag property' }
   }
 
-  // Create review record
-  await (serviceClient.from('property_reviews') as any).insert({
+  // Create audit record
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'flagged',
@@ -279,8 +279,8 @@ export async function unflagProperty(propertyId: string): Promise<ActionResult> 
     return { success: false, error: 'Failed to unflag property' }
   }
 
-  // Create review record
-  await (serviceClient.from('property_reviews') as any).insert({
+  // Create audit record
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'unflagged'
@@ -402,11 +402,11 @@ export async function getPropertyReviewHistory(propertyId: string) {
     return { reviews: [], error: access.error }
   }
 
-  // Use service client to bypass RLS on property_reviews table
+  // Use service client to bypass RLS on moderation_audit table
   const serviceClient = createServiceClient()
 
   const { data: reviews, error } = await (serviceClient
-    .from('property_reviews') as any)
+    .from('moderation_audit') as any)
     .select(`
       *,
       reviewer:profiles!reviewer_id (
@@ -438,7 +438,7 @@ export async function getMyReviews(limit = 50) {
   const serviceClient = createServiceClient()
 
   const { data: reviews, error } = await (serviceClient
-    .from('property_reviews') as any)
+    .from('moderation_audit') as any)
     .select(`
       *,
       property:properties (
@@ -505,7 +505,8 @@ export async function deletePropertyImage(propertyId: string, imageId: string): 
   }
 
   // Log the action
-  await (supabase.from('property_reviews') as any).insert({
+  const serviceClient = createServiceClient()
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'image_deleted',
@@ -563,8 +564,9 @@ export async function updatePropertyAsModerator(
   }
 
   // Log the changes
+  const serviceClient = createServiceClient()
   const changedFields = Object.keys(updates).join(', ')
-  await (supabase.from('property_reviews') as any).insert({
+  await (serviceClient.from('moderation_audit') as any).insert({
     property_id: propertyId,
     reviewer_id: access.userId,
     action: 'edited',
