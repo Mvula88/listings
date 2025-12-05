@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 import { notFound } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -17,6 +17,8 @@ import {
   Bed,
   Bath,
   Square,
+  AlertCircle,
+  History,
 } from 'lucide-react'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -67,6 +69,19 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
   const { data: transactions } = await (supabase as any)
     .from('transactions')
     .select('id, status, created_at')
+    .eq('property_id', id)
+    .order('created_at', { ascending: false })
+
+  // Get review history using service client to bypass RLS
+  const serviceClient = createServiceClient()
+  const { data: reviews } = await (serviceClient as any)
+    .from('property_reviews')
+    .select(`
+      *,
+      reviewer:profiles!reviewer_id (
+        full_name
+      )
+    `)
     .eq('property_id', id)
     .order('created_at', { ascending: false })
 
@@ -130,6 +145,21 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
           )}
         </div>
       </FadeIn>
+
+      {/* Rejection Notice */}
+      {property.moderation_status === 'rejected' && property.moderation_notes && (
+        <FadeIn delay={0.15}>
+          <Card className="border-red-200 bg-red-50">
+            <CardContent className="flex items-start gap-3 pt-6">
+              <AlertCircle className="h-5 w-5 text-red-600 mt-0.5" />
+              <div>
+                <p className="font-medium text-red-800">Rejection Reason</p>
+                <p className="text-red-700">{property.moderation_notes}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </FadeIn>
+      )}
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Main Info */}
@@ -312,8 +342,66 @@ export default async function AdminPropertyDetailPage({ params }: PageProps) {
             </FadeIn>
           )}
 
-          {/* Dates */}
+          {/* Review History */}
           <FadeIn delay={0.6}>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <History className="h-5 w-5" />
+                  Review History
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {!reviews || reviews.length === 0 ? (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    No review history
+                  </p>
+                ) : (
+                  <div className="space-y-3">
+                    {reviews.map((review: any) => (
+                      <div
+                        key={review.id}
+                        className="p-3 rounded-lg border bg-muted/50 space-y-1"
+                      >
+                        <div className="flex items-center justify-between">
+                          <Badge
+                            className={
+                              review.action === 'approved'
+                                ? 'bg-green-100 text-green-700'
+                                : review.action === 'rejected'
+                                  ? 'bg-red-100 text-red-700'
+                                  : 'bg-yellow-100 text-yellow-700'
+                            }
+                          >
+                            {review.action}
+                          </Badge>
+                          <span className="text-xs text-muted-foreground">
+                            {new Date(review.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm">
+                          By {review.reviewer?.full_name || 'Unknown'}
+                        </p>
+                        {review.reason && (
+                          <p className="text-sm text-muted-foreground">
+                            {review.reason}
+                          </p>
+                        )}
+                        {review.notes && (
+                          <p className="text-sm text-muted-foreground italic">
+                            Note: {review.notes}
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </FadeIn>
+
+          {/* Dates */}
+          <FadeIn delay={0.7}>
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">

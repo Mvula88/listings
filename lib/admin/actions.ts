@@ -557,6 +557,7 @@ export async function getProperties(params: {
 
 export async function approveProperty(propertyId: string, notes?: string) {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
@@ -577,18 +578,26 @@ export async function approveProperty(propertyId: string, notes?: string) {
       error: any
     }
 
-  const { error } = await (supabase
+  const { error } = await (serviceClient
     .from('properties') as any)
     .update({
       moderation_status: 'approved',
       status: 'active',
-      moderation_notes: notes,
+      moderation_notes: notes || null,
       moderated_by: admin.id,
       moderated_at: new Date().toISOString(),
     })
     .eq('id', propertyId)
 
   if (error) throw error
+
+  // Create review record for audit trail
+  await (serviceClient.from('property_reviews') as any).insert({
+    property_id: propertyId,
+    reviewer_id: admin.id,
+    action: 'approved',
+    notes,
+  })
 
   await logAdminAction(
     supabase,
@@ -619,6 +628,7 @@ export async function approveProperty(propertyId: string, notes?: string) {
 
 export async function rejectProperty(propertyId: string, reason: string) {
   const supabase = await createClient()
+  const serviceClient = createServiceClient()
 
   const { data: { user: admin } } = await supabase.auth.getUser()
   if (!admin) throw new Error('Not authenticated')
@@ -638,11 +648,11 @@ export async function rejectProperty(propertyId: string, reason: string) {
       error: any
     }
 
-  const { error } = await (supabase
+  const { error } = await (serviceClient
     .from('properties') as any)
     .update({
       moderation_status: 'rejected',
-      status: 'draft',
+      status: 'rejected',
       moderation_notes: reason,
       moderated_by: admin.id,
       moderated_at: new Date().toISOString(),
@@ -650,6 +660,14 @@ export async function rejectProperty(propertyId: string, reason: string) {
     .eq('id', propertyId)
 
   if (error) throw error
+
+  // Create review record for audit trail
+  await (serviceClient.from('property_reviews') as any).insert({
+    property_id: propertyId,
+    reviewer_id: admin.id,
+    action: 'rejected',
+    reason,
+  })
 
   await logAdminAction(
     supabase,

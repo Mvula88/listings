@@ -402,10 +402,11 @@ export async function getPropertyReviewHistory(propertyId: string) {
     return { reviews: [], error: access.error }
   }
 
-  const supabase = await createClient()
+  // Use service client to bypass RLS on property_reviews table
+  const serviceClient = createServiceClient()
 
-  const { data: reviews, error } = await supabase
-    .from('property_reviews')
+  const { data: reviews, error } = await (serviceClient
+    .from('property_reviews') as any)
     .select(`
       *,
       reviewer:profiles!reviewer_id (
@@ -417,6 +418,7 @@ export async function getPropertyReviewHistory(propertyId: string) {
     .order('created_at', { ascending: false })
 
   if (error) {
+    console.error('Error fetching property review history:', error)
     return { reviews: [], error: 'Failed to fetch review history' }
   }
 
