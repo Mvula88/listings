@@ -1018,7 +1018,7 @@ export async function getTransactionDetails(transactionId: string) {
     throw new Error('Not authorized to view transaction details')
   }
 
-  // Get full transaction details
+  // Get full transaction details - using simpler query to avoid relationship issues
   const { data: transaction, error } = await serviceClient
     .from('transactions')
     .select(`
@@ -1027,15 +1027,20 @@ export async function getTransactionDetails(transactionId: string) {
         id, title, city, country_id, price, currency, description, bedrooms, bathrooms,
         property_images(url)
       ),
-      buyer:profiles!buyer_id(id, full_name, email, phone, avatar_url),
-      seller:profiles!seller_id(id, full_name, email, phone, avatar_url),
-      buyer_lawyer:lawyers!buyer_lawyer_id(id, firm_name, profile:profiles!profile_id(full_name, email)),
-      seller_lawyer:lawyers!seller_lawyer_id(id, firm_name, profile:profiles!profile_id(full_name, email))
+      buyer:profiles!transactions_buyer_id_fkey(id, full_name, email, phone, avatar_url),
+      seller:profiles!transactions_seller_id_fkey(id, full_name, email, phone, avatar_url)
     `)
     .eq('id', transactionId)
     .single()
 
-  if (error) throw error
+  if (error) {
+    console.error('Transaction fetch error:', error)
+    throw new Error(`Failed to fetch transaction: ${error.message || error.code || 'Unknown error'}`)
+  }
+
+  if (!transaction) {
+    throw new Error('Transaction not found')
+  }
 
   // Log admin access
   try {
