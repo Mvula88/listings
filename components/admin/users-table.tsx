@@ -41,6 +41,7 @@ import { MoreHorizontal, Search, Ban, CheckCircle, Trash, Eye, RotateCcw, Pencil
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { suspendUser, unsuspendUser, deleteUser, restoreUser, updateUser } from '@/lib/admin/actions'
+import { getActiveCountries } from '@/lib/actions/admin-countries'
 import {
   Dialog,
   DialogContent,
@@ -74,7 +75,9 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
     full_name: '',
     phone: '',
     user_type: '',
+    country_id: '',
   })
+  const [countries, setCountries] = useState<any[]>([])
   const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '')
   const [userTypeFilter, setUserTypeFilter] = useState(
     searchParams.get('userType') || 'all'
@@ -182,13 +185,17 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
     }
   }
 
-  const openEditDialog = (user: any) => {
+  const openEditDialog = async (user: any) => {
     setSelectedUser(user)
     setEditForm({
       full_name: user.full_name || '',
       phone: user.phone || '',
       user_type: user.user_type || 'buyer',
+      country_id: user.country_id || '',
     })
+    // Fetch countries for the dropdown
+    const { countries: countryList } = await getActiveCountries()
+    setCountries(countryList)
     setEditDialogOpen(true)
   }
 
@@ -516,6 +523,26 @@ export function UsersTable({ users, pagination }: UsersTableProps) {
                   <SelectItem value="buyer">Buyer</SelectItem>
                   <SelectItem value="seller">Seller</SelectItem>
                   <SelectItem value="lawyer">Lawyer</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="country" className="text-right">
+                Country
+              </Label>
+              <Select
+                value={editForm.country_id}
+                onValueChange={(v) => setEditForm({ ...editForm, country_id: v })}
+              >
+                <SelectTrigger className="col-span-3">
+                  <SelectValue placeholder="Select country" />
+                </SelectTrigger>
+                <SelectContent>
+                  {countries.map((country) => (
+                    <SelectItem key={country.id} value={country.id}>
+                      {country.flag_emoji} {country.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
