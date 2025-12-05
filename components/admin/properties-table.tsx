@@ -306,7 +306,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
               <TableHead>Moderation</TableHead>
               <TableHead>Views</TableHead>
               <TableHead>Created</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead className="text-right sticky right-0 bg-background">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -404,7 +404,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                   <TableCell>
                     {new Date(property.created_at).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right sticky right-0 bg-background">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
