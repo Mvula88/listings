@@ -295,18 +295,18 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
 
       {/* Table */}
       <div className="border rounded-lg overflow-x-auto">
-        <Table className="min-w-[1000px]">
+        <Table className="min-w-[1100px]">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Image</TableHead>
-              <TableHead>Property</TableHead>
-              <TableHead>Seller</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Moderation</TableHead>
-              <TableHead>Views</TableHead>
-              <TableHead>Created</TableHead>
-              <TableHead className="text-right sticky right-0 bg-background">Actions</TableHead>
+              <TableHead className="w-[60px]">Image</TableHead>
+              <TableHead className="min-w-[200px]">Property</TableHead>
+              <TableHead className="w-[120px]">Seller</TableHead>
+              <TableHead className="w-[120px]">Price</TableHead>
+              <TableHead className="w-[80px]">Status</TableHead>
+              <TableHead className="w-[140px]">Moderation</TableHead>
+              <TableHead className="w-[60px]">Views</TableHead>
+              <TableHead className="w-[100px]">Created</TableHead>
+              <TableHead className="text-right sticky right-0 bg-background shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)] w-[80px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -404,7 +404,7 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                   <TableCell>
                     {new Date(property.created_at).toLocaleDateString()}
                   </TableCell>
-                  <TableCell className="text-right sticky right-0 bg-background">
+                  <TableCell className="text-right sticky right-0 bg-background shadow-[-4px_0_8px_-4px_rgba(0,0,0,0.1)]">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
