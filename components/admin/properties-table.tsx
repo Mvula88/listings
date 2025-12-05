@@ -381,17 +381,24 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge
-                      variant={
-                        property.moderation_status === 'approved'
-                          ? 'default'
-                          : property.moderation_status === 'pending'
-                            ? 'secondary'
-                            : 'destructive'
-                      }
-                    >
-                      {property.moderation_status || 'pending'}
-                    </Badge>
+                    <div className="space-y-1">
+                      <Badge
+                        variant={
+                          property.moderation_status === 'approved'
+                            ? 'default'
+                            : property.moderation_status === 'pending'
+                              ? 'secondary'
+                              : 'destructive'
+                        }
+                      >
+                        {property.moderation_status || 'pending'}
+                      </Badge>
+                      {property.moderation_status === 'rejected' && property.moderation_notes && (
+                        <p className="text-xs text-muted-foreground max-w-[150px] truncate" title={property.moderation_notes}>
+                          {property.moderation_notes}
+                        </p>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>{property.view_count || 0}</TableCell>
                   <TableCell>
