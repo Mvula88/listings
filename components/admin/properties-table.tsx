@@ -420,30 +420,32 @@ export function PropertiesTable({ properties, pagination }: PropertiesTableProps
                             View Property
                           </Link>
                         </DropdownMenuItem>
-                        {property.moderation_status === 'pending' && (
-                          <>
-                            <DropdownMenuItem
-                              onSelect={(e) => {
-                                e.preventDefault()
-                                handleApprove(property.id)
-                              }}
-                              disabled={isLoading}
-                            >
-                              <CheckCircle className="h-4 w-4 mr-2" />
-                              Approve
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onSelect={(e) => {
-                                e.preventDefault()
-                                setSelectedProperty(property)
-                                setRejectDialogOpen(true)
-                              }}
-                              disabled={isLoading}
-                            >
-                              <XCircle className="h-4 w-4 mr-2" />
-                              Reject
-                            </DropdownMenuItem>
-                          </>
+                        {/* Show Approve option for pending or rejected properties */}
+                        {(property.moderation_status === 'pending' || property.moderation_status === 'rejected' || !property.moderation_status) && (
+                          <DropdownMenuItem
+                            onSelect={(e) => {
+                              e.preventDefault()
+                              handleApprove(property.id)
+                            }}
+                            disabled={isLoading}
+                          >
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Approve
+                          </DropdownMenuItem>
+                        )}
+                        {/* Show Reject option for pending or approved properties */}
+                        {(property.moderation_status === 'pending' || property.moderation_status === 'approved' || !property.moderation_status) && (
+                          <DropdownMenuItem
+                            onSelect={(e) => {
+                              e.preventDefault()
+                              setSelectedProperty(property)
+                              setRejectDialogOpen(true)
+                            }}
+                            disabled={isLoading}
+                          >
+                            <XCircle className="h-4 w-4 mr-2" />
+                            Reject
+                          </DropdownMenuItem>
                         )}
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
