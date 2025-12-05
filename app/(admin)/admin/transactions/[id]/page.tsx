@@ -54,22 +54,54 @@ function getStatusIcon(status: string) {
 
 async function TransactionDetailContent({ id }: { id: string }) {
   let transaction: any
-  let messages: any[]
+  let messages: any[] = []
+  let fetchError: string | null = null
 
   try {
-    const [transactionData, messagesData] = await Promise.all([
-      getTransactionDetails(id),
-      getTransactionMessages(id),
-    ])
-    transaction = transactionData
-    messages = messagesData
+    transaction = await getTransactionDetails(id)
   } catch (error) {
-    console.error('Error fetching transaction:', error)
+    console.error('Error fetching transaction details:', error)
+    fetchError = error instanceof Error ? error.message : 'Failed to fetch transaction'
+  }
+
+  if (!transaction && !fetchError) {
     notFound()
   }
 
-  if (!transaction) {
-    notFound()
+  // Try to get messages separately - don't fail the whole page if messages fail
+  if (transaction) {
+    try {
+      messages = await getTransactionMessages(id)
+    } catch (error) {
+      console.error('Error fetching messages:', error)
+      // Continue without messages
+    }
+  }
+
+  // Show error state if we couldn't get the transaction
+  if (fetchError) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center gap-4">
+          <Link href="/admin/transactions">
+            <Button variant="ghost" size="icon">
+              <ArrowLeft className="h-4 w-4" />
+            </Button>
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Transaction Details</h1>
+            <p className="text-muted-foreground text-sm">ID: {id}</p>
+          </div>
+        </div>
+        <Alert variant="destructive">
+          <AlertTriangle className="h-4 w-4" />
+          <AlertTitle>Error Loading Transaction</AlertTitle>
+          <AlertDescription>
+            {fetchError}
+          </AlertDescription>
+        </Alert>
+      </div>
+    )
   }
 
   return (
